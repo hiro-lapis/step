@@ -13,8 +13,6 @@ services:
       - step-network
   mysql:
     build: ./docker/mysql
-    env_file:
-      - ./docker/mysql/.env
     ports:
       - 3306:3306
     environment:
