@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  server:
+    build: ./docker/server
+    ports:
+      - 80:80
+    volumes:
+      - ./back:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - step-network
+  mysql:
+    build: ./docker/mysql
+    env_file:
+      - ./docker/mysql/.env
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pw
+    volumes:
+      - mysql-db:/var/lib/mysql
+    networks:
+      - step-network
+networks:
+  step-network:
+    driver: bridge
+volumes:
+  mysql-db:
