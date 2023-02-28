@@ -1,8 +1,16 @@
+/.serverless
 /node_modules
+/bootstrap/cache
 /public/build
 /public/hot
 /public/storage
+/public/fonts
+/public/css
+/public/js
+/public/mix-manifest.json
 /storage/*.key
+/storage/debugbar/*
+/storage/framework/*
 /vendor
 .env
 .env.backup
