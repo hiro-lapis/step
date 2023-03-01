@@ -1,0 +1,28 @@
+// tsに関する設定ファイル
+// 公式: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
+// 項目詳細: https://qiita.com/ryokkkke/items/390647a7c26933940470#target
+{
+    "compilerOptions": { // コンパイル時のオプション
+        // import Vue from 'vue' の書き方を許容する
+        "allowSyntheticDefaultImports": true,
+        "target": "ES6", // 出力するjsバージョン
+        "sourceMap": true, // ソースマップの有効化
+        "strict": true, // 厳格モードON
+        "noImplicitAny": false, // 暗黙anyをコンパイルエラーにするか
+        "module": "es2015",
+        "moduleResolution": "node", // tscのモジュール解決の方法
+        "types": [ // importなしで型解決するパッケージの指定
+            "node",
+            "webpack-env"
+        ],
+        "baseUrl": "./resources/", // non-relativeなimportにおいて、相対的なカレントディレクトリをどこにするか指定
+        "paths": {
+            "@models/*": [ // @models とした時の参照alias
+                "./assets/ts/models/*"
+            ]
+        },
+    },
+    "include": [ // tsコンパイルでどのファイルをコンパイルするか(未指定時はtsconfig配下全てのtsをコンパイル)
+        "resources/assets/ts/**/*"
+    ]
+}

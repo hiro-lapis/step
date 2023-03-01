@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const glob = require('glob');
 
 /*
  |--------------------------------------------------------------------------
@@ -6,14 +7,44 @@ const mix = require('laravel-mix');
  |--------------------------------------------------------------------------
  |
  | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel applications. By default, we are compiling the CSS
+ | for your Laravel application. By default, we are compiling the Sass
  | file for the application as well as bundling up all the JS files.
  |
  */
 
- // https://github.com/laravel/vite-plugin/blob/main/UPGRADE.md#migrating-from-vite-to-laravel-mix
- mix.js('resources/js/app.js', 'public/js')
- .vue()
- .postCss('resources/css/app.css', 'public/css', [
-     //
- ]);
+// エントリーポイント, 出力先 の指定
+glob.sync('resources/assets/ts/app/**/*.ts').map(function(file) {
+    mix.ts(file, 'public/js').vue();
+});
+
+mix.sass('resources/assets/sass/app.scss', 'public/css');
+
+mix.webpackConfig({
+    module: {
+        // rules: [
+        //     {
+        //         test: /\.styl$/,
+        //         use: ['style-loader', 'css-loader', 'stylus-loader']
+        //     }
+        // ]
+    },
+    optimization: { // ライブラリの分割コンパイル
+        splitChunks: {
+            chunks: 'all',
+            minSize: 0,
+            cacheGroups: {
+                vendor: {
+                    name: 'js/vendor',
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10
+                },
+                default: false
+            }
+        }
+    }
+})
+
+// 本番ではversioningしてブラウザキャッシュを防ぐ
+if (mix.inProduction()) {
+    mix.version();
+}

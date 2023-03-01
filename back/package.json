@@ -7,14 +7,31 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "eslint": "eslint resources/assets/ts --ext .vue,.js",
+        "eslint:fix": "eslint resources/assets/ts --fix --ext .vue,.js"
     },
     "devDependencies": {
-        "axios": "^1.1.2",
+        "@types/lodash": "^4.14.191",
+        "@types/webpack-env": "^1.18.0",
+        "@typescript-eslint/eslint-plugin": "^5.54.0",
+        "@typescript-eslint/parser": "^5.54.0",
+        "@vue/compiler-sfc": "^3.2.47",
+        "@vuepic/vue-datepicker": "^3.6.7",
+        "axios": "^1.2.2",
+        "eslint": "^8.35.0",
+        "eslint-plugin-vue": "^9.9.0",
+        "eslint-webpack-plugin": "^4.0.0",
         "laravel-mix": "^6.0.49",
-        "lodash": "^4.17.19",
+        "lodash": "^4.17.21",
         "postcss": "^8.1.14",
+        "resolve-url-loader": "^5.0.0",
+        "sass": "^1.58.3",
+        "sass-loader": "^12.6.0",
+        "ts-loader": "^9.4.2",
+        "typescript": "^4.9.5",
         "vue": "^3.2.47",
+        "vue-eslint-parser": "^9.1.0",
         "vue-loader": "^17.0.1"
     }
 }
