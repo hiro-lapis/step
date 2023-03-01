@@ -13,6 +13,7 @@ const mix = require('laravel-mix');
 
  // https://github.com/laravel/vite-plugin/blob/main/UPGRADE.md#migrating-from-vite-to-laravel-mix
  mix.js('resources/js/app.js', 'public/js')
+ .vue()
  .postCss('resources/css/app.css', 'public/css', [
      //
  ]);
