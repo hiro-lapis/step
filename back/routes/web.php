@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/test', function () {
-    return view('base');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/{any?}', function () {
+    return view('spa');
+})->where('any', '.*')->name('top');
