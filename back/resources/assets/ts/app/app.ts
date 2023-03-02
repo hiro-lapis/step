@@ -46,10 +46,10 @@ const app = createApp({})
 import { router } from '../routes/routes'
 app.use(router)
 
-// vuex
-// import { createStore } from 'vuex'
-// const store = createStore({})
-// app.use(store)
+// pinia
+import { createPinia } from 'pinia'
+const pinia = createPinia()
+app.use(pinia)
 
 import { camelCase, upperFirst } from 'lodash'
 
