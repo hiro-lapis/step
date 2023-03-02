@@ -4,4 +4,5 @@ console.log('type script is now!')
 
 <template>
     <h1>Hello World !! and Type Script!!!</h1>
+    <router-link to="/good-morning">GoodMorning</router-link>
 </template>

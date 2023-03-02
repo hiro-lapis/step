@@ -42,6 +42,10 @@
 import { createApp } from 'vue'
 const app = createApp({})
 
+// router
+import { router } from '../routes/routes'
+app.use(router)
+
 // vuex
 // import { createStore } from 'vuex'
 // const store = createStore({})
