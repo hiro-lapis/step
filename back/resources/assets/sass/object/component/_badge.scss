@@ -1,0 +1,35 @@
+@charset "utf-8";
+/* ==========================================================================
+ Badge
+========================================================================== */
+.c-badge {
+    &--required {
+        color: orangered;
+    }
+}
+
+%badge-base {
+    display: inline-block;
+    padding: 7px 10px;
+    border-radius: 2px;
+    font-size: 10px;
+}
+// 左上配置タイプの三角形
+%triangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 50px 50px 0 0;
+}
+
+.c-badge--cart-added {
+    @extend %badge-base;
+    color: #fff;
+    background: $yellow;
+}
+
+.c-badge--ordered {
+    @extend %badge-base;
+    color: #fff;
+    background: $pink;
+}

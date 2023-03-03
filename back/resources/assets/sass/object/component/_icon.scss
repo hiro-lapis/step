@@ -1,0 +1,73 @@
+@charset "utf-8";
+/* ==========================================================================
+ Icon
+========================================================================== */
+@import "../../foundation/_variable";
+%c-icon {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.c-icon {
+    cursor: pointer;
+    &--large {
+        font-size: 24px;
+    }
+    &--fb {
+        @extend .c-icon--large;
+        width: 24px; // 並べて表示することが多いツイッターと幅・配置を合わせる
+        text-align: left;
+    }
+
+    &--edit {
+        cursor: pointer;
+        color: #f6f5f4;
+        // アイデアカードの右上に配置する
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        transition: all 0.3s;
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+    &--side-menu {
+        color: $color_black8;
+        font-size: 20px;
+        transition: all 0.3s;
+    }
+    &--star {
+        color: yellow;
+    }
+    &--black-star {
+        color: $color_black8;
+    }
+}
+
+.c-icon--times {
+    @extend %c-icon;
+    color: $color_black9;
+}
+
+.c-icon--upload {
+    @extend %c-icon;
+    color: $color_white1;
+    font-size: 24px;
+    padding: 12px 15px;
+    border-radius: 50%;
+    background: $wink;
+    &:hover {
+        opacity: 0.8;
+        transition: all 0.3s;
+    }
+}
+
+.c-icon--side-prefecture,
+.c-icon--side-city {
+    color: #999;
+    transition: all 0.2;
+    &:hover {
+        opacity: 0.8;
+        transition: all 0.2;
+    }
+}

@@ -1,0 +1,92 @@
+@charset "utf-8";
+// ====================================
+// Variable
+// ====================================
+$site-width: 980px;
+
+//color
+$color_base: #fcfcfc;
+$color_theme: #2196f3;
+$color_theme_user: #ff914d; // ユーザーテーマカラー
+$color_theme_shop: #41abff;
+$color_theme-clear1: rgba(33, 150, 243, 0.7);
+$color_theme-clear2: rgba(33, 150, 243, 0.5);
+$color_theme_light: #e8d3ae;
+$color_accent: #899878;
+$color_accent_light: #d7e0ce;
+
+$color_black: #000;
+$color_black1: #111;
+$color_black2: #222;
+$color_black3: #333;
+$color_black4: #444;
+$color_black5: #555;
+$color_black6: #666;
+$color_black7: #777;
+$color_black8: #888;
+$color_black9: #999;
+
+$color_white1: #fff;
+$color_white2: #eee;
+$color_white3: #ddd;
+$color_white4: #ccc;
+$color_white5: #bbb;
+$color_white6: #aaa;
+
+$weak: #a0a0a0;
+$strong: #ff6633;
+$submit: #0277bd;
+$authFormBg: rgba(127, 255, 212, 0.4);
+
+// flash message color
+$success: rgba(127, 255, 212, 0.4);
+$err: rgba(255, 111, 111, 0.753);
+// font-awesome icon  color
+$yellow: rgba(255, 187, 0, 1);
+$pink: rgba(241, 141, 158, 1);
+$wink: rgba(91, 200, 173, 1);
+$dizzy: rgba(251, 100, 66, 1);
+
+// Using in pushy Btn
+// Variables
+// -----------
+
+// Colors
+$blue: #1199ee;
+$green: #10ac84;
+$red: #ee4444; // TODO:エラーメッセージにちなんだ命名
+
+// Sizes
+$large: 1.5em;
+$default: 1.25em;
+$medium: 1em;
+$small: 0.75em;
+// ----------- pushy end
+
+//font
+//$font-size
+$font-size_s: 1.2rem;
+$font-size_m: 1.4rem;
+$font-size_default: 1.6rem; //defined  in base.scss
+$font-size_l: 1.8rem;
+$font-size_2l: 2rem;
+$font-size_3l: 3rem;
+$font-size_4l: 4rem;
+$font-size_5l: 5rem;
+
+// font-color
+$font-color_default: $color_black3;
+$font-color_link-hover: $color_black1;
+
+//space-size
+$space_s: 5px;
+$space_m: 10px;
+$space_1p: 15px;
+$space_2p: 20px;
+$space_3p: 30px;
+$space_4p: 40px;
+$space_5p: 50px;
+$space_6p: 60px;
+$space_7p: 70px;
+$space_8p: 80px;
+$space_9p: 90px;

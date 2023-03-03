@@ -1,0 +1,34 @@
+@charset "utf-8";
+@import "../../foundation/_variable";
+/* ==========================================================================
+ Error Message
+========================================================================== */
+.c-error-message {
+    white-space: pre-wrap; // バリデーションエラーメッセージが複数ある時に改行して表示する
+    // content: ""; // エラーメッセージがない時もheightをもつ
+    // display: block;
+    padding-left: 10px;
+    text-align: left;
+    font-size: 14px;
+    min-height: 20px;
+    color: $red;
+    // width: 400px;
+}
+
+%base {
+    display: block;
+    white-space: pre-wrap; // 改行表示
+    text-align: left;
+    font-size: 14px;
+    min-height: 20px;
+}
+// エラーメッセージ
+.c-message--error {
+    @extend %base;
+    color: $red;
+}
+// 薄めの黒
+.c-message--annotation {
+    @extend %base;
+    color: $color_black8;
+}

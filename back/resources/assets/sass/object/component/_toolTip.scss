@@ -1,0 +1,39 @@
+@charset "utf-8";
+/* ==========================================================================
+ Tool Tip
+========================================================================== */
+.c-tool-tip {
+    &__container {
+        position: relative;
+    }
+    &__icon {
+        margin-left: 5px;
+        font-size: 16px;
+        color: yellowgreen;
+        &:hover + .c-tool-tip {
+            display: inline-block;
+        }
+    }
+    position: absolute;
+    // 右側に表示する
+    right: -235px;
+    top: -10px;
+    padding: 10px;
+    font-size: 12px;
+    line-height: 1.6em;
+    color: #fff;
+    border-radius: 5px;
+    background: #999;
+    width: 200px;
+    // 吹き出しの口
+    &:before {
+        content: "";
+        position: absolute;
+        top: 6px;
+        right: 210px;
+        border: 15px solid transparent;
+        border-top: 15px solid #999; // 口のサイズ・トガリ具合
+        margin-left: -15px;
+        transform: rotateZ(90deg); // 吹き出し口の回転
+    }
+}

@@ -1,0 +1,43 @@
+@charset "utf-8";
+/* ==========================================================================
+ Container
+========================================================================== */
+/**
+使用ページ
+・アカウント登録ページ
+・ログインページ
+*/
+.l-container {
+    margin: 65px auto;
+}
+.l-container--mypage {
+    margin: 65px 0;
+    @include pc() {
+        margin: 65px auto;
+    }
+}
+
+.l-2column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    @include pc() {
+        width: 1080px;
+        flex-direction: row;
+    }
+}
+
+/**
+スマホサイズで縦並び(順序逆)にする
+ 使用ページ
+・マイページ
+*/
+.l-2column--reverse {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    @include pc() {
+        width: 1080px;
+        flex-direction: row;
+    }
+}

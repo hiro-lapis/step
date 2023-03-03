@@ -1,0 +1,121 @@
+@charset "utf-8";
+/* ==========================================================================
+ Footer
+========================================================================== */
+
+/** 1.PCフッター */
+.c-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 200px;
+    box-sizing: border-box;
+    width: 100%;
+    &__head {
+        text-align: left;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    &__body {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        font-size: 14px;
+    }
+    &__link {
+        // リストの縦線
+        &__container {
+            padding-left: 5px;
+            border-left: 1px solid #fff;
+            letter-spacing: 0.1em;
+        }
+        &-title {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        &__list {
+            margin-bottom: 10px;
+            color: #fff;
+        }
+    }
+}
+
+/**  2.SPフッターナビゲーション */
+.c-sp-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    &-nav {
+        &__container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            width: 100%;
+        }
+        &__item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+        }
+        &__item-text {
+            margin-top: 5px;
+        }
+    }
+}
+
+/* 3.SPフッターメニュー */
+.c-sp-nav {
+    position: absolute;
+    bottom: 50px;
+    left: 20%;
+    width: 80%;
+    // ヘッダー+フッター100px
+    height: calc(100vh - 100px);
+    background: #fff;
+    transform: translateX(100%);
+    transition: 0.5s;
+    &.active {
+        visibility: visible;
+        opacity: 1;
+        transition-delay: 0s;
+        // width 80% + left 20% なので20%の予約を残す
+        transform: translateX(00%);
+    }
+    &__bg {
+        position: absolute;
+        bottom: 50px;
+        width: 100%;
+        height: calc(100vh - 100px);
+        background-color: rgba(0, 0, 0, 0.4);
+        opacity: 0.8;
+    }
+    @include pc() {
+        display: none;
+    }
+    &__list {
+        display: flex;
+        flex-direction: column;
+        // color: #ffec5c;
+        // border-bottom: 1px solid #ffec5c;
+        &-item {
+            padding: 15px 15px 15px;
+            border-bottom: black 1px solid;
+        }
+        &-icon {
+            margin-right: 5px;
+        }
+    }
+}
+
+.c-copyright {
+    font-family: "Montserrat Subrayada", sans-serif;
+}
+
+.router-link-active {
+    font-weight: 900;
+}

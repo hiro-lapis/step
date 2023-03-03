@@ -1,0 +1,23 @@
+@charset "utf-8";
+/* ==========================================================================
+ Cart Icon
+========================================================================== */
+.c-cart-icon {
+    &__container {
+        position: relative;
+        padding: 10px;
+        font-size: 20px;
+        color: #fff;
+        border-radius: 50%;
+        transition: all 0.5s;
+        &:hover {
+            transition: all 0.5s;
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+    }
+    &__count {
+        position: absolute;
+        bottom: 5px;
+        font-size: 10px;
+    }
+}

@@ -1,0 +1,72 @@
+@charset "utf-8";
+@import "../../foundation/_variable";
+/* ==========================================================================
+ OrderDetail Card
+========================================================================== */
+.c-order-detail-card {
+    border: solid 1px $color_black9;
+    box-sizing: border-box;
+    width: 100%;
+    &__head {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        width: 100%;
+        background: $color_white2;
+        color: #555;
+        line-height: 1.4;
+    }
+    &__btn-container {
+    }
+    &__body {
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    // 注文された商品情報
+    &__product {
+        &-container {
+            display: flex;
+            flex-direction: column;
+            @include pc() {
+                flex-direction: row;
+            }
+        }
+        // 注文された商品の画像
+        &-image {
+            display: flex;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+        }
+        &-information {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-left: 5px;
+            line-height: 1.4;
+        }
+        // 注文された商品の名前
+        &-name {
+            margin-bottom: 5px;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+        &__btn-container {
+            text-align: right;
+        }
+    }
+    // 注文したユーザー
+    &__order-user {
+        display: flex;
+        align-items: center;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        & > * {
+            margin-right: 5px;
+        }
+    }
+}

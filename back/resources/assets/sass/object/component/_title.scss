@@ -1,0 +1,108 @@
+@charset "utf-8";
+@import "../../foundation/_variable";
+/* ==========================================================================
+ Title
+========================================================================== */
+.c-title {
+    padding: 0.5em 0;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: center;
+    color: #333;
+    &--white {
+        color: white;
+    }
+    &--large {
+        font-size: 26px;
+    }
+    @include pc() {
+        // max-width: 858px; // TODO: いつ書いたか不明。確認後に削除
+        font-size: 25px;
+    }
+    &--needs {
+        position: relative;
+        padding: 10px 15px;
+        justify-content: center;
+        background: #fffff2;
+        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+        @include pc() {
+            font-size: 30px;
+        }
+        &::before,
+        &::after {
+            position: absolute;
+            width: 0;
+            height: 51.95px;
+            content: "";
+            transform: rotate(-45deg);
+            border-width: 0 0 0 1px;
+            border-style: solid;
+            border-color: #e60012;
+        }
+        &::before {
+            top: -15px;
+            right: 10px;
+        }
+        &::after {
+            bottom: -15px;
+            left: 10px;
+        }
+    }
+    &--question {
+        font-size: 20px;
+        padding: 10px;
+        background: white;
+        border-bottom: 5px double #fd5722;
+    }
+}
+
+.c-title--how-to-use--append {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -30px;
+    right: 305px;
+    font-size: 14px;
+    transform: rotate(22deg);
+    &::before,
+    &::after {
+        content: "";
+        width: 3px;
+        height: 30px;
+        background-color: #ff914d;
+    }
+    &::before {
+        margin-right: 20px;
+        transform: rotate(-35deg);
+    }
+    &::after {
+        margin-left: 20px;
+        transform: rotate(35deg);
+    }
+}
+.c-title--how-to-use {
+    @extend .c-title;
+    position: relative;
+    padding-bottom: 20px;
+    font-size: 26px;
+    text-align: center;
+    &__accent {
+        margin: 0 5px;
+        font-size: 40px;
+        color: $color_theme_user;
+    }
+}
+
+// ショップTOPページタイトル
+.c-title--hero-banner {
+    font-size: 24px;
+}
+// ショップTOPページサブタイトル
+.c-title--hero-banner--sub {
+    font-size: 12px;
+}
+
+.c-title--needs--shop {
+
+}

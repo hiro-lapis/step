@@ -1,0 +1,17 @@
+@charset "utf-8";
+/* ==========================================================================
+ Footer
+========================================================================== */
+
+/** フッター共通レイアウト */
+.l-footer {
+    position: fixed;
+    bottom: 0;
+    margin-top: auto;
+    overflow: visible;
+    width: 100%;
+    @include pc() {
+        overflow: hidden;
+        position: relative;
+    }
+}
