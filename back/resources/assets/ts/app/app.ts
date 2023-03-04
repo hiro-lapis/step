@@ -8,8 +8,16 @@
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-// import axios from 'axios';
-// window.axios = axios;
+import axios from 'axios';
+
+declare global {
+    interface Window {
+      axios: any;
+    }
+}
+window.axios = axios;
+// SPA認証のためのcredentialを設定
+axios.defaults.withCredentials = true;
 
 // window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
