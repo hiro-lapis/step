@@ -13,7 +13,7 @@ const props = defineProps({
     label: { required: false, type:String, default: '', }, // 入力ラベル
     placeHalder: { required: false, type: String, default: '' }, // プレースホルダー
     required: { required: false, type: Boolean, default: '', }, // 入力必須マーク
-    rules: { required: false, type: Array<Function>, default: () => null}, // バリデーションルール関数
+    rules: { required: false, type: Array<Function>, default: []}, // バリデーションルール関数
     type: { required: false, type: String, default: 'text' }, // inputのtype属性
     value: { required: false, type:String, default: '', }, // 編集画面などの初期値
 })
