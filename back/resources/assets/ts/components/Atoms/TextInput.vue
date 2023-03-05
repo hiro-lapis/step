@@ -11,7 +11,7 @@ const props = defineProps({
     formId: { required: false, type: String, default: '', }, // ラベルとinputを紐付けるid
     inline: { required: false, type: Boolean, default: '', }, // エラーメッセージ不要な時にインライン化
     label: { required: false, type:String, default: '', }, // 入力ラベル
-    placeHalder: { required: false, type: String, default: '' }, // プレースホルダー
+    placeHolder: { required: false, type: String, default: '' }, // プレースホルダー
     required: { required: false, type: Boolean, default: '', }, // 入力必須マーク
     rules: { required: false, type: Array<Function>, default: []}, // バリデーションルール関数
     type: { required: false, type: String, default: 'text' }, // inputのtype属性
@@ -38,7 +38,7 @@ const input = (event: Event) => {
         const result = fn(val)
         errorMessage.value = typeof result === 'string' ? result : ''
     })
-    emit('update:value', (event.target as HTMLInputElement).value)
+    emit('update:value', val)
 }
 
 </script>
@@ -68,7 +68,7 @@ const input = (event: Event) => {
             class="c-input"
             :id="formId"
             :class="[{noErrorMessage: inline}, className ]"
-            :placeholder="placeHalder"
+            :placeholder="placeHolder"
         />
     </div>
 </template>
