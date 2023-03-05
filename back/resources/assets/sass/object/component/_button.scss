@@ -1,0 +1,325 @@
+@charset "utf-8";
+/* ==========================================================================
+ Button
+========================================================================== */
+%c-btn {
+    display: inline-block;
+    text-align: center;
+    box-sizing: border-box;
+}
+.c-btn {
+    display: inline-block;
+    text-align: center;
+    box-sizing: border-box;
+    // サイズ
+    &--minimum {
+        width: 100px;
+        height: 30px;
+        line-height: 28px;
+        font-size: 16px;
+    }
+    &--x-small {
+        width: 100%;
+        height: 30px;
+        line-height: 28px;
+        font-size: 16px;
+        @include pc() {
+            width: 30%;
+        }
+    }
+    &--small {
+        width: 50%;
+        height: 35px;
+        line-height: 30px;
+        font-size: 16px;
+        @include pc() {
+            width: 200px;
+        }
+    }
+    &--middle {
+        width: 80%;
+        height: 35px;
+        line-height: 35px;
+        font-size: 18px;
+        @include pc() {
+            width: 300px;
+        }
+    }
+    &--large {
+        width: 100%;
+        height: 48px;
+        line-height: 48px;
+        font-size: 18px;
+        @include pc() {
+            width: 400px;
+        }
+    }
+    &--x-large {
+        width: 100%;
+        height: 48px;
+        line-height: 48px;
+        font-size: 18px;
+    }
+
+    // デザイン
+    //// アカウント登録
+    &--login,
+    &--update,
+    &--reset,
+    &--show,
+    &--buy,
+    &--agree,
+    &--cancel {
+        color: #fff;
+        background-color: #65c99b;
+        border: 1px solid #65c99b;
+        &:hover {
+            background-color: #fff;
+            color: #65c99b;
+            // 使えない時は色も変えない
+            &:disabled {
+                color: #fff;
+                background-color: #65c99b;
+                border: 1px solid #65c99b;
+            }
+        }
+    }
+    &--send,
+    &--edit,
+    &--search,
+    &--create {
+        background-color: #1da1f2;
+        border: 1px solid #1da1f2;
+        color: #fff;
+        &:hover {
+            background-color: #fff;
+            color: #1da1f2;
+            &:disabled {
+                color: #fff;
+                background-color: #fff;
+                background-color: #1da1f2;
+                border: 1px solid #1da1f2;
+            }
+        }
+    }
+    &--delete,
+    &--danger,
+    &--ok {
+        background-color: #ea352e;
+        border: 1px solid #ea352e;
+        color: #fff;
+        &:hover {
+            background-color: #fff;
+            color: #ea352e;
+            // 使えない時は色も変えない
+            &:disabled {
+                color: #fff;
+                background-color: #ea352e;
+                border: 1px solid #ea352e;
+            }
+        }
+    }
+    &--purchase {
+        background-color: #ff4800;
+        border: 1px solid #ff4800;
+        color: #fff;
+        &:hover {
+            background-color: #fff;
+            color: #ff4800;
+            // 使えない時は色も変えない
+            &:disabled {
+                color: #fff;
+                background-color: #ff4800;
+                border: 1px solid #ff4800;
+            }
+        }
+    }
+
+    // &--product-edit {
+    //     color: white;
+    //     background: red;
+    //     padding: 15px 14px 15px 18px;
+    //     border-radius: 50%;
+    // }
+}
+// TOPページ登録ページ
+.c-btn--form-link-register {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--agree;
+}
+// TOPページ商品一覧ページ
+.c-btn--form-link-index {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--agree;
+}
+
+// ログイン
+.c-btn--login {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--agree;
+}
+// アカウント登録
+.c-btn--register {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--create;
+}
+// パスワードリセットメール
+.c-btn--forgot {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--create;
+}
+// パスワードリセット実行
+.c-btn--reset {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--update;
+}
+// カートから削除
+.c-btn--remove-item {
+    @extend %c-btn;
+    @extend .c-btn--minimum;
+    @extend .c-btn--delete;
+    width: 100%;
+}
+// 購入確定
+.c-btn--settle {
+    @extend %c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--purchase;
+}
+// プロフィール更新
+.c-btn--update-profile {
+    @extend %c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--create;
+    @include pc() {
+        // @extend .c-btn--small;
+        width: 200px;
+        height: 35px;
+        line-height: 30px;
+    }
+}
+// パスワード更新モーダル表示
+.c-btn--update-password {
+    @extend %c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--danger;
+    @include pc() {
+        // @extend .c-btn--small;
+        width: 200px;
+        height: 35px;
+        line-height: 30px;
+    }
+}
+// パスワード更新モーダル表示
+.c-btn--exec-update-password {
+    @extend %c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--create;
+}
+
+// 注文キャンセル
+.c-btn--order-cancel {
+    @extend %c-btn;
+    @extend .c-btn--x-large;
+    color: #f6f5f4;
+    background: #333;
+    border: 1px solid #333;
+    &:hover {
+        color: #333;
+        background: #f6f5f4;
+    }
+}
+
+// 注文カード:商品詳細をみる
+.c-btn--product-detail {
+    @extend %c-btn;
+    @extend .c-btn--x-small;
+    @extend .c-btn--create;
+}
+// 注文カード:商品をキャンセル
+.c-btn--cancel-order-detail {
+    @extend %c-btn;
+    @extend .c-btn--x-small;
+    @extend .c-btn--danger;
+}
+
+// SNSでログイン
+.c-btn--social-login {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #000;
+    font-size: 16px;
+    &__text {
+        width: 100%;
+    }
+}
+
+/*
+* ショップ
+*/
+.c-btn--product-edit {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--edit;
+}
+.c-btn--product-delete {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--danger;
+}
+.c-btn--product-update {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--update;
+}
+.c-btn--product-image-upload {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--update;
+}
+
+.c-btn--side-search {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--create;
+    font-size: 16px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.c-btn--twitter-share {
+    @extend %c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--create;
+}
+
+// ショップ マイページ 全件表示ボタン
+.c-btn--move-to-product-index {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--create;
+}
+// ショップ マイページ 注文リスト 取引完了
+.c-btn--order-finish {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--create;
+}
+// ショップ マイページ 注文リスト 取引キャンセル
+.c-btn--order-cancel {
+    @extend .c-btn;
+    @extend .c-btn--x-large;
+    @extend .c-btn--create;
+}

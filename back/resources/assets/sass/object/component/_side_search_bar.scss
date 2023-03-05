@@ -1,0 +1,31 @@
+@charset "utf-8";
+/* ==========================================================================
+ Side Search Bar
+========================================================================== */
+.c-side-search-bar {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    @include pc() {
+        // position: sticky;
+        // top: 70px;
+        // right: 15px;
+        height: fit-content;
+    }
+    &__body {
+        padding: 15px 0;
+    }
+    &__element {
+        margin-bottom: 10px;
+        &__title {
+            margin-bottom: 10px;
+        }
+        &:last-of-type {
+            margin-bottom: 0px;
+            text-align: center;
+        }
+    }
+}

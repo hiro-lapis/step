@@ -1,0 +1,23 @@
+@charset "utf-8";
+/* ==========================================================================
+ Table
+========================================================================== */
+.c-table {
+    width: 100%;
+    &__tr {
+    }
+    &__td {
+        &--left {
+            margin-right: 40px;
+            padding: 10px 15px 10px 10px;
+            width: 100px;
+            border: 1px solid #ddd;
+            background-color: rgba(254,236,92, 0.5);
+            color: #555;
+        }
+        &--right {
+            padding-left: 10px;
+        }
+    }
+
+}

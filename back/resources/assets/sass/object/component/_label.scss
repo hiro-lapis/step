@@ -1,0 +1,14 @@
+@charset "utf-8";
+/* ==========================================================================
+ Label
+========================================================================== */
+.c-label {
+    margin-bottom: 0;
+    &__box {
+        display: inline-block;
+        box-sizing: border-box;
+        width: 100%;
+        text-align: left;
+        padding: 5px;
+    }
+}

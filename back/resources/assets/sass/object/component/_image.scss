@@ -1,0 +1,73 @@
+@charset "utf-8";
+/* ==========================================================================
+ Icon
+========================================================================== */
+%fit {
+    object-fit: contain;
+}
+
+.c-img {
+    &--user {
+        width: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    &--product-card {
+        display: block;
+        margin: 0 auto;
+        width: unset;
+        max-width: 200px; //横長の画像もリサイズする
+        max-height: 180px;
+    }
+    // &--product-board {
+    //     margin: 0 auto;
+    //     width: 80%; // 縦長の商品もはみでにくくするためにリサイズ
+    //     display: block;
+    // }
+    &--review-user {
+        padding: 0;
+        width: 60px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    &--user-icon {
+        display: inline-flex;
+        border-radius: 50%;
+        box-sizing: border-box;
+        overflow: hidden;
+        &--small {
+            @extend .c-img--user-icon;
+            width: 40px;
+            height: 40px;
+        }
+        &--midium {
+            @extend .c-img--user-icon;
+            width: 60px;
+            height: 60px;
+        }
+        &--large {
+            @extend .c-img--user-icon;
+            width: 100px;
+            height: 100px;
+        }
+    }
+    &--icon--sns {
+        width: 40px;
+    }
+}
+
+/*
+* ショップ 商品画像
+*/
+.c-img--shop-product-show {
+    @extend %fit;
+    height: 300px;
+}
+// ショップ プロダクトボード
+.c-img--product-board {
+    @extend %fit;
+    display: block;
+    margin: 0 auto;
+    // width: 80%;
+    height: 200px;
+}

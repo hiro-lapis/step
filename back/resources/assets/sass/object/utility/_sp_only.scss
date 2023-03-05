@@ -1,0 +1,18 @@
+@charset "utf-8";
+/* ==========================================================================
+ Only Valid Smart Phone (スマホ・PCのみ有効)
+========================================================================== */
+// <br>で使用。文字改行の調整
+.u-hidden-pc {
+    display: block;
+    @include pc() {
+        display: none;
+    }
+}
+
+.u-hidden-sp {
+    display: none;
+    @include pc() {
+        display: block;
+    }
+}

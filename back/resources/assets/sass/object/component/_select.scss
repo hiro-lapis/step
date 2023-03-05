@@ -1,0 +1,68 @@
+@charset "utf-8";
+/* ==========================================================================
+ Select
+========================================================================== */
+%c-select {
+    color: #999;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border: 1px solid #e8e8e8;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.c-option {
+}
+
+// 都道府県セレクトボックス(サイドバー検索)
+.c-select--prefecture,
+.c-select--city {
+    @extend %c-select;
+    padding: 7px 10px;
+    font-size: 14px;
+    &__container {
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+    }
+    &__loading-icon {
+        position: absolute;
+        top: 18px;
+        left: 50%;
+    }
+    &--selected {
+        @extend .c-select--prefecture;
+        color: inherit;
+        appearance: none;
+        &__reset-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 8px;
+        }
+    }
+}
+
+.c-select--profile {
+    @extend .c-select--prefecture;
+    height: 48px;
+    font-size: 16px;
+    &__container {
+        @extend .c-select--prefecture__container;
+    }
+    &__loading-icon {
+        @extend .c-select--prefecture__loading-icon;
+    }
+    &--selected {
+        @extend .c-select--prefecture--selected;
+        height: 48px;
+        font-size: 16px;
+        &__reset-btn {
+            @extend .c-select--prefecture--selected__reset-btn;
+            bottom: 14px;
+            right: 10px;
+            font-size: 20px;
+        }
+    }
+}

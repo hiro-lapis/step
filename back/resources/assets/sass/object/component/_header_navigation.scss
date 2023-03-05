@@ -1,0 +1,79 @@
+@charset "utf-8";
+/* ==========================================================================
+ HeaderNavigation
+========================================================================== */
+// ロゴ
+.c-logo {
+    &__container {
+        width: 210px;
+        @include pc() {
+            width: 180px;
+            transition: all 0.3s;
+        }
+        &--footer {
+            width: 300px;
+            transition: all 0.3s;
+        }
+    }
+    transition: all 0.3s;
+}
+
+/**
+* 共通するスタイルをプレースホルダセレクタとして定義し、
+* extendする
+*/
+%c-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    box-sizing: border-box;
+    padding: 0 30px;
+    height: 50px;
+    width: 100%;
+    // overflow: hidden;
+    text-align: center;
+    transition: opacity 0.3s ease-in, visibility 0.3s ease-in 0.3s;
+    @include pc() {
+        justify-content: space-between; // TODO:ロゴができたら変更
+    }
+}
+
+.c-header--user {
+    @extend %c-header;
+    background-color: $color_theme_user;
+}
+.c-header--shop {
+    @extend %c-header;
+    background-color: $color_theme_shop;
+}
+
+// ②PCメニュー
+.c-nav {
+    display: none;
+    @include pc() {
+        display: inline-block;
+    }
+    &__list {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        list-style: none;
+        &-item {
+            display: inline-block;
+            margin-right: 35px;
+            border: none;
+        }
+        &-link {
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.2s;
+            &:hover {
+                transition: all 0.2s;
+                opacity: 0.6;
+            }
+        }
+    }
+}

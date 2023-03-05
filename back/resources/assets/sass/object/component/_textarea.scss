@@ -1,0 +1,40 @@
+@charset "utf-8";
+/* ==========================================================================
+ Textarea
+========================================================================== */
+%c-textarea {
+    resize: vertical; // 縦サイズのみリサイズ可能
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    white-space: pre-wrap; // 改行の表示
+    appearance: none;
+    font-size: 16px;
+}
+.c-textarea {
+    resize: vertical; // 縦サイズ固定
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    white-space: pre-wrap; // 改行の表示
+    appearance: none;
+    font-size: 16px;
+}
+
+.c-textarea--profile {
+    @extend %c-textarea;
+    height: 200px;
+    &:focus {
+        background: #fff;
+    }
+}
+
+// ショップ 商品名
+.c-textarea--product-name-edit {
+    @extend %c-textarea;
+    height: 100px;
+}
