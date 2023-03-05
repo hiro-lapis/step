@@ -3,12 +3,16 @@ import axios from 'axios'
 import { useRouter } from "vue-router"
 import { onMounted, ref, reactive } from 'vue'
 
-import { useUserStore } from '../../store/globalStore'
+import { useUserStore, useMessageInfoStore } from '../../store/globalStore'
 import TextInput from '../Atoms/TextInput.vue'
 import { User } from 'assets/ts/types/User'
+import BorderLine from '../Atoms/BorderLine.vue'
+import NotifyMessage from '../Atoms/NotifyMessage.vue'
 
 // utilities
 const userStore = useUserStore()
+const messageStore = useMessageInfoStore()
+
 const router = useRouter()
 
 const loginData = reactive({
@@ -25,7 +29,16 @@ const login = () => {
         axios.post('/api/login', loginData).then(res => {
             const data: User = res.data
             userStore.setUser(data)
-            router.push({ name: 'theme-list'})
+            userStore.setLogin(true)
+            router.push({ name: 'themes-list'})
+        }).catch(error => {
+            // 通信
+            console.log(error)
+            console.log(axios.isAxiosError(error))
+            console.log(error.response?.status === 422)
+            if (axios.isAxiosError(error) && error.response?.status === 422) {
+                messageStore.setErrorMessage('メールアドレスとパスワードが一致しません')
+            }
         })
     })
     loading.value = false
@@ -56,7 +69,7 @@ onMounted(() => {
 
 <template>
     <div class="l-container p-container">
-        <loading-component />
+        <NotifyMessage />
         <div class="p-login-form">
             <div class="p-login-form__container">
                 <div class="p-login-form__head">
@@ -72,7 +85,7 @@ onMounted(() => {
                             <span class="c-btn--social-login__text">Googleアカウントでログイン</span>
                         </a>
                     </div>
-                    <border-line />
+                    <BorderLine />
                     <span class="p-login-form__element"></span>
                     <!-- Eメールでログイン -->
                     <div class="p-login-form__element">

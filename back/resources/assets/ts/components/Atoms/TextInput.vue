@@ -2,11 +2,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import ErrorMessage from './ErrorMessage.vue'
+import RequiredBadge from './RequiredBadge.vue'
 
 
 // props
 const props = defineProps({
-    className: { required: false, type: Boolean, default: 'c-input--large', }, // クラス名(default: 横幅いっぱい表示のクラス)
+    className: { required: false, type: String, default: 'c-input--large', }, // クラス名(default: 横幅いっぱい表示のクラス)
     errorKey: { required: false, type: String, default: '' },
     formId: { required: false, type: String, default: '', }, // ラベルとinputを紐付けるid
     inline: { required: false, type: Boolean, default: '', }, // エラーメッセージ不要な時にインライン化
@@ -52,7 +53,7 @@ const input = (event: Event) => {
                 <label :for="formId" class="c-label">
                     {{ label }}
                     <template v-if="required">
-                        <required-badge-component />
+                        <RequiredBadge />
                     </template>
                 </label>
             </template>
