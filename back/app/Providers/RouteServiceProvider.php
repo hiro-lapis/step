@@ -17,7 +17,9 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+    // TOP画面の相対パスを返却
+    public const HOME = '';
+    // public const HOME = route('themes.top', [], false);
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
