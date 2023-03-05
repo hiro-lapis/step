@@ -12,7 +12,7 @@ class RegisterResponse implements LoginResponseContract
 {
     /**
      *
-     * Orignal: vendor/laravel/fortify/src/Http/Responses/LoginResponse.php
+     * Orignal: vendor/laravel/fortify/src/Http/Responses/RegisterResponse.php
      * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
      */

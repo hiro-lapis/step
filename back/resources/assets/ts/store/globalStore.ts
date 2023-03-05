@@ -7,24 +7,18 @@ export const useUserStore = defineStore('user', () => {
     // data
     const user = useLocalStorage<User>('user', { id: -1, name: 'hoge', image_url: '', email: 'hoge@gmail.com', profile: ''})
     const login = useLocalStorage('login', false)
-    // const notifyMessage = ref('')
     // computed
     const isLogin = computed(() => login.value)
-    // const hasNotifyMessage = () => notifyMessage.value !== ''
     // computed
     const initUser = () => user.value = { id: -1, name: '', image_url: '', email: '', profile: ''}
     const setUser = (newUser: User) => user.value = newUser
     const setLogin = (status: boolean) => login.value = status
-    // const setNotifyMessage = (message: string) => notifyMessage.value = message
     return {
         user,
         login,
-        // notifyMessage,
         isLogin,
-        // hasNotifyMessage,
         setLogin,
         setUser,
-        // setNotifyMessage,
         initUser,
     }
 })
@@ -40,13 +34,22 @@ export const useMessageInfoStore = defineStore('messageInfo', () => {
     // computed
     const hasMessage = () => messageInfo.message !== ''
     // computed
-    const setMessageInfo = (data: messageInfo) => {
-        messageInfo.message = data.message
-        messageInfo.isError = data.isError
+    const setMessage = (message: string) => {
+        messageInfo.message = message
+        messageInfo.isError = false
+        // 5s後にリセット
+        setTimeout(() => messageInfo.message = '', 5000)
+    }
+    const setErrorMessage = (message: string) => {
+        messageInfo.message = message
+        messageInfo.isError = true
+        // 5s後にリセット
+        setTimeout(() => messageInfo.message = '', 5000)
     }
     return {
         messageInfo,
         hasMessage,
-        setMessageInfo,
+        setMessage,
+        setErrorMessage,
     }
 })
