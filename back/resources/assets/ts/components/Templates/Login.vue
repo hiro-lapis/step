@@ -27,11 +27,8 @@ const loading = computed(() => {
 })
 
 const login = () => {
-    console.log('login dayo~')
-    console.log(loading.value)
     // 多重送信防止
     if (loading.value) return
-    console.log('ロード中にするよ')
     requestStore.setLoading(true)
     $repositories.auth.getCsrf().then(response => {
         $repositories.auth.login(loginData)
