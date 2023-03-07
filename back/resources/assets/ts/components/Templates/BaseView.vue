@@ -41,7 +41,9 @@ onMounted(() => {
     <Loading />
     <NotifyMessage />
     <Header />
-        <slot name="content">
-        </slot>
+        <div class="l-container p-container">
+            <slot name="content">
+            </slot>
+        </div>
     <Footer />
 </template>

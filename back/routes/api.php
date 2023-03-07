@@ -28,3 +28,5 @@ Route::middleware('guest')->group(function () {
     // ログイン
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware(array_filter([$limiter ? 'throttle:'.$limiter : null]))->name('api.login');
 });
+// ログアウト
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
