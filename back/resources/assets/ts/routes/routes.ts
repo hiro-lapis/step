@@ -20,10 +20,11 @@ export const router = createRouter({
     history: createWebHistory(), // 履歴機能ON
     routes,
 })
+export const guestPageUrl = ['/login']
+
 // 画面遷移、ブラウザリロード時共通処理
 // 認証が必要なページを開いているときはログインページへリダイレクト
 router.beforeEach(async (to: RouteLocationNormalized, from, next) => {
-    const guestPageUrl = ['/login']
     const loginRequired = !guestPageUrl.includes(to.path)
     const user = useUserStore()
     if (loginRequired && !user.isLogin) next({ name: 'login' })

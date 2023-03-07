@@ -1,43 +1,53 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { useRouter } from 'vue-router'
-import { ref, reactive } from 'vue'
-import { useUserStore, useMessageInfoStore } from '../../store/globalStore'
+import { computed, inject, ref, reactive } from 'vue'
+import { useUserStore, useMessageInfoStore, useRequestStore } from '../../store/globalStore'
 import { User } from 'assets/ts/types/User'
 import TextInput from '../Atoms/TextInput.vue'
 import BorderLine from '../Atoms/BorderLine.vue'
-
+import { Repositories } from '../../apis/repositoryFactory'
 
 // utilities
 const userStore = useUserStore()
+const requestStore = useRequestStore()
 const messageStore = useMessageInfoStore()
-
+const $repositories = inject<Repositories>("$repositories")!
 const router = useRouter()
 
+// data
 const loginData = reactive({
     email: '',
     password: '',
 })
-const loading = ref(false)
+
+// computed
+const loading = computed(() => {
+    return requestStore.isLoading
+})
 
 const login = () => {
+    console.log('login dayo~')
+    console.log(loading.value)
     // 多重送信防止
     if (loading.value) return
-    loading.value = true
-    axios.get('/sanctum/csrf-cookie').then(response => {
-        axios.post('/api/login', loginData).then(res => {
-            const data: User = res.data
-            userStore.setUser(data)
-            userStore.setLogin(true)
-            router.push({ name: 'themes-list'})
-        }).catch(error => {
-            // 通信
-            if (axios.isAxiosError(error) && error.response?.status === 422) {
-                messageStore.setErrorMessage('メールアドレスとパスワードが一致しません')
-            }
-        })
+    console.log('ロード中にするよ')
+    requestStore.setLoading(true)
+    $repositories.auth.getCsrf().then(response => {
+        $repositories.auth.login(loginData)
+            .then(res => {
+                requestStore.setLoading(false)
+                const data: User = res.data
+                userStore.setUser(data)
+                userStore.setLogin(true)
+                router.push({ name: 'themes-list'})
+            }).catch(error => {
+                requestStore.setLoading(false)
+                if (axios.isAxiosError(error) && error.response?.status === 422) {
+                    messageStore.setErrorMessage('メールアドレスとパスワードが一致しません')
+                }
+            })
     })
-    loading.value = false
 }
 </script>
 
@@ -76,6 +86,7 @@ const login = () => {
                             <div class="p-login-form__element">
                                 <TextInput
                                     v-model:value="loginData.password"
+                                    @keyup-enter="login"
                                     type="password"
                                     errorKey="password"
                                     placeHolder="パスワード"

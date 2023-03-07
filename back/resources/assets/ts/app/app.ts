@@ -8,16 +8,16 @@
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-import axios from 'axios';
+// import axios from 'axios';
 
-declare global {
-    interface Window {
-      axios: any;
-    }
-}
-window.axios = axios;
-// SPA認証のためのcredentialを設定
-axios.defaults.withCredentials = true;
+// declare global {
+//     interface Window {
+//       axios: any;
+//     }
+// }
+// window.axios = axios;
+// // SPA認証のためのcredentialを設定
+// axios.defaults.withCredentials = true
 
 // window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -84,5 +84,10 @@ requireComponent.keys().forEach(fileName => {
         app.component(componentName, componentConfig.default || componentConfig);
     }
 });
+
+import repository from '../apis/repositoryFactory'
+
+app.config.globalProperties.$repositories = repository()
+app.provide("$repositories", app.config.globalProperties.$repositories);
 
 app.mount("#app")
