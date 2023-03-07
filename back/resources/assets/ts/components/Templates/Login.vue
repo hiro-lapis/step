@@ -126,8 +126,8 @@ const login = () => {
 .p-container {
     margin-bottom: 50px;
     @include pc() {
-        margin-top: 115px;
-        margin-bottom: 65px;
+        margin-top: 115px; // ヘッダーとの余白
+        margin-bottom: 205px; // フッターとの余白
     }
 }
 .p-login-form {
