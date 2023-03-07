@@ -1,133 +1,119 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { useRouter } from "vue-router"
-import { onMounted, ref, reactive } from 'vue'
-
-import { useUserStore, useMessageInfoStore } from '../../store/globalStore'
-import TextInput from '../Atoms/TextInput.vue'
+import { useRouter } from 'vue-router'
+import { computed, inject, ref, reactive } from 'vue'
+import { useUserStore, useMessageInfoStore, useRequestStore } from '../../store/globalStore'
 import { User } from 'assets/ts/types/User'
+import TextInput from '../Atoms/TextInput.vue'
 import BorderLine from '../Atoms/BorderLine.vue'
-import NotifyMessage from '../Atoms/NotifyMessage.vue'
+import { Repositories } from '../../apis/repositoryFactory'
 
 // utilities
 const userStore = useUserStore()
+const requestStore = useRequestStore()
 const messageStore = useMessageInfoStore()
-
+const $repositories = inject<Repositories>("$repositories")!
 const router = useRouter()
 
+// data
 const loginData = reactive({
     email: '',
     password: '',
 })
-const loading = ref(false)
+
+// computed
+const loading = computed(() => {
+    return requestStore.isLoading
+})
 
 const login = () => {
     // 多重送信防止
     if (loading.value) return
-    loading.value = true
-    axios.get('/sanctum/csrf-cookie').then(response => {
-        axios.post('/api/login', loginData).then(res => {
-            const data: User = res.data
-            userStore.setUser(data)
-            userStore.setLogin(true)
-            router.push({ name: 'themes-list'})
-        }).catch(error => {
-            // 通信
-            console.log(error)
-            console.log(axios.isAxiosError(error))
-            console.log(error.response?.status === 422)
-            if (axios.isAxiosError(error) && error.response?.status === 422) {
-                messageStore.setErrorMessage('メールアドレスとパスワードが一致しません')
-            }
-        })
-    })
-    loading.value = false
-}
-
-onMounted(() => {
-    // ログイン状態チェック
-    axios.get('/api/is-login')
-        .then(response => {
-            console.log(response)
-            if (response.data.is_login) {
+    requestStore.setLoading(true)
+    $repositories.auth.getCsrf().then(response => {
+        $repositories.auth.login(loginData)
+            .then(res => {
+                requestStore.setLoading(false)
+                const data: User = res.data
+                userStore.setUser(data)
                 userStore.setLogin(true)
-                userStore.setUser(response.data.user)
-                // TODO:if-未ログイン状態のページを表示中
-                // ログイン後のTOP画面へ
-                router.push({ name: 'themes-list' })
-            } else {
-                console.log('未ログイン')
-                // TODO:if-ログイン状態のページを表示中
-                // state更新しログイン画面へ
-                userStore.setLogin(false)
-                userStore.initUser()
-                router.push('login')
-            }
-        })
-})
+                router.push({ name: 'themes-list'})
+            }).catch(error => {
+                requestStore.setLoading(false)
+                if (axios.isAxiosError(error) && error.response?.status === 422) {
+                    messageStore.setErrorMessage('メールアドレスとパスワードが一致しません')
+                }
+            })
+    })
+}
 </script>
 
 <template>
-    <div class="l-container p-container">
-        <NotifyMessage />
-        <div class="p-login-form">
-            <div class="p-login-form__container">
-                <div class="p-login-form__head">
-                    <h2 class="c-title">ログイン</h2>
-                </div>
-                <div class="p-login-form__body">
-                    <!-- SNSでログイン -->
-                    <div class="p-login-form__element">
-                        <a href="/login/google" class="c-btn c-btn--large c-btn--social-login">
-                            <div class="c-img--icon--sns">
-                                <img class="u-vertical-align--b" src="https://laravel8-haiki-share.s3-ap-northeast-1.amazonaws.com/asset/icon-google.png" alt="googleアイコン">
+    <BaseView>
+        <template v-slot:content>
+            <NotifyMessage />
+            <div class="l-container p-container">
+                <div class="p-login-form">
+                    <div class="p-login-form__container">
+                        <div class="p-login-form__head">
+                            <h2 class="c-title">ログイン</h2>
+                        </div>
+                        <div class="p-login-form__body">
+                            <!-- SNSでログイン -->
+                            <div class="p-login-form__element">
+                                <a href="/login/google" class="c-btn c-btn--large c-btn--social-login">
+                                    <div class="c-img--icon--sns">
+                                        <img class="u-vertical-align--b" src="https://laravel8-haiki-share.s3-ap-northeast-1.amazonaws.com/asset/icon-google.png" alt="googleアイコン">
+                                    </div>
+                                    <span class="c-btn--social-login__text">Googleアカウントでログイン</span>
+                                </a>
                             </div>
-                            <span class="c-btn--social-login__text">Googleアカウントでログイン</span>
-                        </a>
-                    </div>
-                    <BorderLine />
-                    <span class="p-login-form__element"></span>
-                    <!-- Eメールでログイン -->
-                    <div class="p-login-form__element">
-                        <TextInput
-                            v-model:value="loginData.email"
-                            type="email"
-                            formId="email"
-                            placeHolder="Eメール"
-                            errorKey="email"
-                        />
-                    </div>
-                    <div class="p-login-form__element">
-                        <TextInput
-                            v-model:value="loginData.password"
-                            type="password"
-                            errorKey="password"
-                            placeHolder="パスワード"
-                        />
-                    </div>
-                    <div class="p-login-form__btn-box">
-                        <button
-                            @click="login"
-                            class="c-btn--login">
-                            ログイン
-                        </button>
-                    </div>
-                    <div class="p-login-form__text-link">
-                        <router-link :to="{ name: 'todo' }">
-                            <span class="c-text-link p-link">
-                                新規登録はこちら
-                            </span>
-                        </router-link>
-                        <router-link :to="{ name: 'todo' }">
-                            <span class="c-text-link p-link">
-                                パスワードを忘れた方はこちら
-                            </span>
-                        </router-link>
+                            <BorderLine />
+                            <span class="p-login-form__element"></span>
+                            <!-- Eメールでログイン -->
+                            <div class="p-login-form__element">
+                                <TextInput
+                                    v-model:value="loginData.email"
+                                    type="email"
+                                    formId="email"
+                                    placeHolder="Eメール"
+                                    errorKey="email"
+                                />
+                            </div>
+                            <div class="p-login-form__element">
+                                <TextInput
+                                    v-model:value="loginData.password"
+                                    @keyup-enter="login"
+                                    type="password"
+                                    errorKey="password"
+                                    placeHolder="パスワード"
+                                />
+                            </div>
+                            <div class="p-login-form__btn-box">
+                                <button
+                                    @click="login"
+                                    class="c-btn--login">
+                                    ログイン
+                                </button>
+                            </div>
+                            <div class="p-login-form__text-link">
+                                <router-link :to="{ name: 'todo' }">
+                                    <span class="c-text-link p-link">
+                                        新規登録はこちら
+                                    </span>
+                                </router-link>
+                                <router-link :to="{ name: 'todo' }">
+                                    <span class="c-text-link p-link">
+                                        パスワードを忘れた方はこちら
+                                    </span>
+                                </router-link>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </template>
+    </BaseView>
 </template>
 
 <style lang="scss" scoped>
@@ -137,8 +123,8 @@ onMounted(() => {
 .p-container {
     margin-bottom: 50px;
     @include pc() {
-        margin-top: 115px;
-        margin-bottom: 65px;
+        margin-top: 115px; // ヘッダーとの余白
+        margin-bottom: 205px; // フッターとの余白
     }
 }
 .p-login-form {

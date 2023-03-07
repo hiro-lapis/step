@@ -23,6 +23,20 @@ export const useUserStore = defineStore('user', () => {
     }
 })
 
+export const useRequestStore = defineStore('request', () => {
+    // data
+    const loading = ref(false)
+    // computed
+    const isLoading = computed(() => loading.value)
+    // method
+    const setLoading = (state: boolean) => loading.value = state
+    return {
+        loading,
+        isLoading,
+        setLoading,
+    }
+})
+
 type messageInfo = {
     message: string,
     isError: boolean,

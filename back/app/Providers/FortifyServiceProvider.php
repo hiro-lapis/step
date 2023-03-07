@@ -43,7 +43,7 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
-        // ログイン認証レスポンス(HOMEへのリダイレクト)のカスタマイズ
+        // ログイン認証レスポンス(HOMEへのリダイレクト)をカスタマイズのため差し替え
         $this->app->singleton(
             \Laravel\Fortify\Contracts\LoginResponse::class,
             \App\Http\Responses\LoginResponse::class

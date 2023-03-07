@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-console.log('login success!!')
+console.log('now using base view!!')
 
 // utilities(store,router)
 // props
@@ -12,11 +12,15 @@ console.log('login success!!')
 </script>
 
 <template>
-    <h1>ログイン後の一覧</h1>
-    <div>
-        <router-link to="/good-morning">GoodMorning</router-link>
-    </div>
-    <div>
-        <router-link to="/login">Login</router-link>
-    </div>
+    <BaseView>
+        <template v-slot:content>
+            <h1>ログイン後の一覧</h1>
+            <div>
+                <router-link to="/good-morning">GoodMorning</router-link>
+            </div>
+            <div>
+                <router-link to="/login">Login</router-link>
+            </div>
+        </template>
+    </BaseView>
 </template>

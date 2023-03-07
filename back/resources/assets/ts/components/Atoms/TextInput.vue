@@ -22,6 +22,7 @@ const props = defineProps({
 // emits
 interface Emits {
     (e: 'update:value', value: string): void;
+    (e: 'keyupEnter'): void;
 }
 const emit = defineEmits<Emits>()
 
@@ -41,7 +42,8 @@ const input = (event: Event) => {
     })
     emit('update:value', val)
 }
-
+// enter押下後にイベント発行 処理実行するかどうかは親側の実装に任せる
+const handleEnter = () => emit('keyupEnter')
 </script>
 
 
@@ -66,6 +68,7 @@ const input = (event: Event) => {
             :value="value"
             :type="type"
             @input="$event => input($event)"
+            @keyup.enter="handleEnter()"
             class="c-input"
             :id="formId"
             :class="[{noErrorMessage: inline}, className ]"
