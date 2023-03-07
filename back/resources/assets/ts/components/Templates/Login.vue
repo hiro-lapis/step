@@ -51,63 +51,60 @@ const login = () => {
 <template>
     <BaseView>
         <template v-slot:content>
-            <NotifyMessage />
-            <div class="l-container p-container">
-                <div class="p-login-form">
-                    <div class="p-login-form__container">
-                        <div class="p-login-form__head">
-                            <h2 class="c-title">ログイン</h2>
+            <div class="p-login-form">
+                <div class="p-login-form__container">
+                    <div class="p-login-form__head">
+                        <h2 class="c-title">ログイン</h2>
+                    </div>
+                    <div class="p-login-form__body">
+                        <!-- SNSでログイン -->
+                        <div class="p-login-form__element">
+                            <a href="/login/google" class="c-btn c-btn--large c-btn--social-login">
+                                <div class="c-img--icon--sns">
+                                    <img class="u-vertical-align--b" src="https://laravel8-haiki-share.s3-ap-northeast-1.amazonaws.com/asset/icon-google.png" alt="googleアイコン">
+                                </div>
+                                <span class="c-btn--social-login__text">Googleアカウントでログイン</span>
+                            </a>
                         </div>
-                        <div class="p-login-form__body">
-                            <!-- SNSでログイン -->
-                            <div class="p-login-form__element">
-                                <a href="/login/google" class="c-btn c-btn--large c-btn--social-login">
-                                    <div class="c-img--icon--sns">
-                                        <img class="u-vertical-align--b" src="https://laravel8-haiki-share.s3-ap-northeast-1.amazonaws.com/asset/icon-google.png" alt="googleアイコン">
-                                    </div>
-                                    <span class="c-btn--social-login__text">Googleアカウントでログイン</span>
-                                </a>
-                            </div>
-                            <BorderLine />
-                            <span class="p-login-form__element"></span>
-                            <!-- Eメールでログイン -->
-                            <div class="p-login-form__element">
-                                <TextInput
-                                    v-model:value="loginData.email"
-                                    type="email"
-                                    formId="email"
-                                    placeHolder="Eメール"
-                                    errorKey="email"
-                                />
-                            </div>
-                            <div class="p-login-form__element">
-                                <TextInput
-                                    v-model:value="loginData.password"
-                                    @keyup-enter="login"
-                                    type="password"
-                                    errorKey="password"
-                                    placeHolder="パスワード"
-                                />
-                            </div>
-                            <div class="p-login-form__btn-box">
-                                <button
-                                    @click="login"
-                                    class="c-btn--login">
-                                    ログイン
-                                </button>
-                            </div>
-                            <div class="p-login-form__text-link">
-                                <router-link :to="{ name: 'todo' }">
-                                    <span class="c-text-link p-link">
-                                        新規登録はこちら
-                                    </span>
-                                </router-link>
-                                <router-link :to="{ name: 'todo' }">
-                                    <span class="c-text-link p-link">
-                                        パスワードを忘れた方はこちら
-                                    </span>
-                                </router-link>
-                            </div>
+                        <BorderLine />
+                        <span class="p-login-form__element"></span>
+                        <!-- Eメールでログイン -->
+                        <div class="p-login-form__element">
+                            <TextInput
+                                v-model:value="loginData.email"
+                                type="email"
+                                formId="email"
+                                placeHolder="Eメール"
+                                errorKey="email"
+                            />
+                        </div>
+                        <div class="p-login-form__element">
+                            <TextInput
+                                v-model:value="loginData.password"
+                                @keyup-enter="login"
+                                type="password"
+                                errorKey="password"
+                                placeHolder="パスワード"
+                            />
+                        </div>
+                        <div class="p-login-form__btn-box">
+                            <button
+                                @click="login"
+                                class="c-btn--login">
+                                ログイン
+                            </button>
+                        </div>
+                        <div class="p-login-form__text-link">
+                            <router-link :to="{ name: 'todo' }">
+                                <span class="c-text-link p-link">
+                                    新規登録はこちら
+                                </span>
+                            </router-link>
+                            <router-link :to="{ name: 'todo' }">
+                                <span class="c-text-link p-link">
+                                    パスワードを忘れた方はこちら
+                                </span>
+                            </router-link>
                         </div>
                     </div>
                 </div>
