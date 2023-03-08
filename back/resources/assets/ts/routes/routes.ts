@@ -29,13 +29,8 @@ export const guestPageUrl = ['/login', '/password/forgot', '/password/reset']
 // 画面遷移、ブラウザリロード時共通処理
 // 認証が必要なページを開いているときはログインページへリダイレクト
 router.beforeEach(async (to: RouteLocationNormalized, from, next) => {
-    console.log('to')
-    console.log(to.path)
     const loginRequired = !guestPageUrl.includes(to.path)
     const user = useUserStore()
-    if (loginRequired) {
-        console.log('ログイン必要')
-    }
     if (loginRequired && !user.isLogin) next({ name: 'login' })
     else next()
 })
