@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { useRouter } from 'vue-router'
-import { computed, inject, ref, reactive } from 'vue'
+import { computed, inject, reactive } from 'vue'
 import { useUserStore, useMessageInfoStore, useRequestStore } from '../../store/globalStore'
 import { User } from 'assets/ts/types/User'
 import TextInput from '../Atoms/TextInput.vue'
@@ -100,7 +100,7 @@ const login = () => {
                                     新規登録はこちら
                                 </span>
                             </router-link>
-                            <router-link :to="{ name: 'todo' }">
+                            <router-link :to="{ name: 'password-forgot' }">
                                 <span class="c-text-link p-link">
                                     パスワードを忘れた方はこちら
                                 </span>

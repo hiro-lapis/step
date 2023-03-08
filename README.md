@@ -15,6 +15,10 @@
 - Composition APIユーティリティ(Local Storage):[VueUse](https://vueuse.org/)
 - 静的解析(リンター):[eslint](https://eslint.org/)
 
+## External service
+
+- メール配信サービス 開発環境でのテスト用に使用: [MailTrap](https://mailtrap.io/inboxes)
+
 ## Conduct
 
 ### Backend
