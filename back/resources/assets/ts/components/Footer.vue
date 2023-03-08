@@ -2,8 +2,8 @@
 import FadeIn from './Atoms/Transition/FadeIn.vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import axios from 'axios'
-import { router } from '../../../assets/ts/routes/routes'
-import { useUserStore } from '../../../assets/ts/store/globalStore'
+import { router } from '../routes/routes'
+import { useUserStore } from '../store/globalStore'
 
 // utility
 const userStore = useUserStore()
