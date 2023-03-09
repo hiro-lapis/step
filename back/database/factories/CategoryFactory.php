@@ -20,7 +20,6 @@ class CategoryFactory extends Factory
             'name' => fake()->unique()->name(),
             'uri' => fake()->unique()->name(),
             'sort_number' => fake()->unique()->numberBetween(1, 65535), // small integer のmax値
-
         ];
     }
 }
