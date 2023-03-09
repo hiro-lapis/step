@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\NewPasswordController;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::get('is-login', fn () => response()->json(['is_login' => auth()->user() !
 // 認証
 Route::middleware('guest')->group(function () {
     $limiter = config('fortify.limiters.login');
+    // ユーザー登録
+    Route::post('/register', [RegisteredUserController::class, 'store']);
     // ログイン
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware(array_filter([$limiter ? 'throttle:'.$limiter : null]))->name('api.login');
     // パスワードリセット手続メール配信

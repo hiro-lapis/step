@@ -15,6 +15,7 @@
  */
 
 import axios from 'axios'
+import { useMessageInfoStore } from '../store/globalStore';
 
 // グローバルオブジェクトへの登録
 declare global {
@@ -42,14 +43,31 @@ axios.interceptors.request.use((req): any => {
     return req;
 })
 
+
 // リクエスト実行後の後処理
 axios.interceptors.response.use(
     (res): any => {
-      console.log('res', res)
-      return res;
+        console.log('res', res)
+        return res;
     },
     (error) => {
-      console.log('error', error)
+        // pnia初期化後のinterceptor内でstore使用
+        const msg = useMessageInfoStore()
+        switch (error.response.status) {
+            case 422:
+                if (error.response.data.errors && typeof error.response.data.errors === 'object') {
+                    const keys = Object.keys(error.response.data.errors)
+                    let messages = ''
+                    // 各項目の配列形式で入っているバリデーションメッセージを改行区切りでセット
+                    keys.forEach((key) => {
+                            error.response.data.errors[key].forEach(e => {
+                                messages += e + '\n'
+                            })
+                    })
+                    msg.setErrorMessage(messages)
+                }
+                break
+        }
       return Promise.reject(error);
     }
 )

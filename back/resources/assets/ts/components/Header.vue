@@ -96,12 +96,12 @@ const userImage = computed(() => {
                                 <a href="#" class="c-nav__list-link">商品を見る</a>
                             </li>
                         </router-link>
-                        <router-link :to="{ name: 'todo' }">
+                        <router-link :to="{ name: 'register' }">
                             <li class="c-nav__list-item">
                                 <a href="#" class="c-nav__list-link">アカウント登録</a>
                             </li>
                         </router-link>
-                        <router-link :to="{ name: 'todo' }">
+                        <router-link :to="{ name: 'login' }">
                             <li class="c-nav__list-item">
                                 <a href="#" class="c-nav__list-link">ログイン</a>
                             </li>
