@@ -19,7 +19,7 @@ class StepFactory extends Factory
         return [
             'user_id' => null,
             'category_id' => null,
-            'name' => fake()->name(),
+            'name' => fake()->title(),
             'achievement_date_count' => fake()->numberBetween(1, 100),
             'achievement_date_time' => fake()->time(),
         ];
