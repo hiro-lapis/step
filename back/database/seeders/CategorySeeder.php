@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * マスタデータ投入seeder
+ */
 class CategorySeeder extends Seeder
 {
     /**

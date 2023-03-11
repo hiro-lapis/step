@@ -18,11 +18,11 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->comment('登録ユーザーID');
             $table->unsignedBigInteger('category_id')->comment('カテゴリーID');
             $table->string('name')->comment('ステップ名');
-            $table->unsignedSmallInteger('achievement_date_count')->comment('達成目安時間(day)');
-            $table->time('achievement_date_time')->comment('達成目安時間(h)');
+            $table->time('achievement_time_type_id')->comment('達成目安時間ID');
             $table->timestamps();
 
             $table->index('category_id');
+            $table->index('achievement_time_type_id');
             $table->index('user_id');
         });
     }
