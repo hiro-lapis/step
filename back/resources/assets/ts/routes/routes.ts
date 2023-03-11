@@ -9,6 +9,7 @@ import PasswordForgot from '../components/Templates/Password/Forgot.vue'
 import PasswordReset from '../components/Templates/Password/Reset.vue'
 import ThemeListView from '../components/Templates/Themes/ListView.vue'
 import StepEditView from '../components/Templates/Steps/EditView.vue'
+import StepListView from '../components/Templates/Steps/ListView.vue'
 
 // ルート登録
 const routes = [
@@ -21,6 +22,7 @@ const routes = [
     { path: '/password/forgot', name: 'password-forgot', component: PasswordForgot, },
     { path: '/password/reset', name: 'password-reset', component: PasswordReset, },
     { path: '/steps/create', name: 'steps-create', component: StepEditView, },
+    { path: '/steps', name: 'steps-list', component: StepListView, },
 ]
 
 
