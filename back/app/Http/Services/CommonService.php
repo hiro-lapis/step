@@ -2,14 +2,14 @@
 
 namespace App\Http\Services;
 
-use App\Repositories\Category\CategoryInterface;
+use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Support\Collection;
 
 class CommonService
 {
-    private CategoryInterface $category_repository;
+    private CategoryRepositoryInterface $category_repository;
 
-    public function __construct(CategoryInterface $category_repository)
+    public function __construct(CategoryRepositoryInterface $category_repository)
     {
         $this->category_repository = $category_repository;
     }
