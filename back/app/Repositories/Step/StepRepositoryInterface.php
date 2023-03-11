@@ -13,5 +13,5 @@ interface StepRepositoryInterface
      * @params array $params
      * @return Step
      */
-    public function store(array $params): Step;
+    public function create(array $params): Step;
 }

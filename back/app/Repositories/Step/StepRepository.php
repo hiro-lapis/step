@@ -14,7 +14,7 @@ class StepRepository implements StepRepositoryInterface
         $this->step = $step;
     }
 
-    public function store(array $params): Step
+    public function create(array $params): Step
     {
         return $this->step->create($params);
     }

@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\AchievementTimeTypeController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\StepController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -19,9 +21,9 @@ use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/user', fn(Request $request) => $request->user());
+    Route::post('/steps', [StepController::class, 'store'])->name('steps.store');
 });
 
 // ユーザーログイン状態確認
@@ -29,6 +31,7 @@ Route::get('is-login', fn () => response()->json(['is_login' => auth()->user() !
 
 // カテゴリー取得
 Route::get('/categories', CategoryController::class);
+Route::get('/achievement-time-types', AchievementTimeTypeController::class);
 
 // 認証
 Route::middleware('guest')->group(function () {
