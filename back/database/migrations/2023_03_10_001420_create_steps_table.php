@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('achievement_date_count')->comment('達成目安時間(day)');
             $table->time('achievement_date_time')->comment('達成目安時間(h)');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('category_id');
             $table->index('user_id');
