@@ -15,8 +15,7 @@ class Step extends Model
         'user_id',
         'category_id',
         'name',
-        'achievement_date_count',
-        'achievement_date_time',
+        'achievement_date_time_type_id',
     ];
 
     /** accessor */

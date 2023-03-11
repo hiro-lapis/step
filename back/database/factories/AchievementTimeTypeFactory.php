@@ -1,13 +1,13 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Step>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AchievementTimeType>
  */
-class StepFactory extends Factory
+class AchievementTimeTypeFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +18,7 @@ class StepFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'user_id' => null,
-            'category_id' => null,
-            'achievement_time_type_id' => null,
+            'sort_number' => fake()->unique()->numberBetween(1, 65535), // small int max値
         ];
     }
 }

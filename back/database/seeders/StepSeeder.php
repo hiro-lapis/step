@@ -26,8 +26,7 @@ class StepSeeder extends Seeder
                     'name' => 'テスト',
                     'user_id' => 1,
                     'category_id' => 1,
-                    'achievement_date_count' => 2,
-                    'achievement_date_time' => '10:00:00',
+                    'achievement_time_type_id' => 1, // 1日以内
                 ]
             ]);
 
