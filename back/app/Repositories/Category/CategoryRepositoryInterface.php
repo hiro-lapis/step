@@ -4,7 +4,7 @@ namespace App\Repositories\Category;
 
 use Illuminate\Support\Collection;
 
-interface CategoryInterface
+interface CategoryRepositoryInterface
 {
     /**
      * カテゴリーを一覧取得

@@ -5,7 +5,7 @@ namespace App\Repositories\Category;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;
 
-class CategoryRepository implements CategoryInterface
+class CategoryRepository implements CategoryRepositoryInterface
 {
     private Category $category;
 
