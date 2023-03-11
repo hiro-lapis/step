@@ -21,6 +21,6 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     public function get(): Collection
     {
-        return $this->category->get();
+        return $this->category->orderBy('sort_number')->get();
     }
 }

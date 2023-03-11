@@ -2,16 +2,22 @@
 
 namespace App\Http\Services;
 
+use App\Repositories\AchievementTimeType\AchievementTimeTypeRepositoryInterface;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Support\Collection;
 
 class CommonService
 {
     private CategoryRepositoryInterface $category_repository;
+    private AchievementTimeTypeRepositoryInterface $achievement_time_type_repository;
 
-    public function __construct(CategoryRepositoryInterface $category_repository)
+    public function __construct(
+        CategoryRepositoryInterface $category_repository,
+        AchievementTimeTypeRepositoryInterface $achievement_time_type_repository,
+    )
     {
         $this->category_repository = $category_repository;
+        $this->achievement_time_type_repository = $achievement_time_type_repository;
     }
 
     /**
@@ -22,5 +28,15 @@ class CommonService
     public function getCategory(): Collection
     {
         return $this->category_repository->get();
+    }
+
+    /**
+     * カテゴリー情報の取得
+     *
+     * @return Collection
+     */
+    public function getAchievementTimeType(): Collection
+    {
+        return $this->achievement_time_type_repository->get();
     }
 }

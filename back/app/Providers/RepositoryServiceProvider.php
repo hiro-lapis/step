@@ -18,6 +18,7 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         $to_bind = [
+            \App\Repositories\AchievementTimeType\AchievementTimeTypeRepositoryInterface::class => \App\Repositories\AchievementTimeType\AchievementTimeTypeRepository::class,
             \App\Repositories\Category\CategoryRepositoryInterface::class => \App\Repositories\Category\CategoryRepository::class,
             \App\Repositories\Step\StepRepositoryInterface::class => \App\Repositories\Step\StepRepository::class,
         ];
