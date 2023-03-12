@@ -31,7 +31,7 @@ class CommonService
     }
 
     /**
-     * カテゴリー情報の取得
+     * 達成目安時間情報の取得
      *
      * @return Collection
      */
