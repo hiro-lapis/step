@@ -77,6 +77,7 @@ requireComponent.keys().forEach(fileName => {
     );
     // コンポーネント名の重複があればエラーとする
     if ( vueComponentArray.indexOf(componentName) >= 0 ) {
+        console.log('componentName:' + componentName)
         throw new Error('component duplication error.');
     } else {
         // フォーマットしたコンポーネントファイルを登録

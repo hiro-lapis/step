@@ -1,8 +1,7 @@
 export type Step = {
     id?: number|null,
-    categoryId: number,
-    userId?: number,
+    category_id: number,
+    user_id?: number,
     name: string,
-    achievementDateCount: string,
-    achievementDateTime: string,
+    achievement_time_type: string,
 }
