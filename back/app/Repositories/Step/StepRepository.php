@@ -47,7 +47,7 @@ class StepRepository implements StepRepositoryInterface
             }
         }
         // 達成目安時間
-        if ($condition['city_id']) {
+        if (array_key_exists('achievement_time_type_id', $condition)) {
             $query->where('shops.achievement_time_type_id', $condition['achievement_time_type_id']);
         }
         return $query->with('category:id,name')
