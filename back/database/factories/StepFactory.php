@@ -17,10 +17,10 @@ class StepFactory extends Factory
     public function definition()
     {
         return [
+            'name' => fake()->name(),
             'user_id' => null,
             'category_id' => null,
             'achievement_time_type_id' => null,
-            'name' => fake()->name(),
         ];
     }
 }

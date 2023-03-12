@@ -64,9 +64,9 @@ const userImage = computed(() => {
                     <!-- ログイン済メニュー -->
                     <template v-if="isLogin">
                         <!-- ユーザーメニュー -->
-                        <router-link :to="{ name: 'todo' }">
+                        <router-link :to="{ name: 'steps-create' }">
                             <li class="c-nav__list-item">
-                                <span class="c-nav__list-link">商品を見る</span>
+                                <span class="c-nav__list-link">ステップを投稿する</span>
                             </li>
                         </router-link>
                         <li @click="logout" class="c-nav__list-item">
@@ -93,7 +93,7 @@ const userImage = computed(() => {
                         <!-- ユーザーメニュー -->
                         <router-link :to="{ name: 'todo' }">
                             <li class="c-nav__list-item">
-                                <a href="#" class="c-nav__list-link">商品を見る</a>
+                                <a href="#" class="c-nav__list-link">ステップを見る(TODO)</a>
                             </li>
                         </router-link>
                         <router-link :to="{ name: 'register' }">

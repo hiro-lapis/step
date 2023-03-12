@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('sort_number')->comment('並び順');
             $table->string('uri')->comment('カテゴリーURI');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->unique('uri');
             $table->unique('sort_number');
