@@ -4,8 +4,10 @@ import { useRouter, useRoute } from 'vue-router'
 import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
 import TextInput from '../../Atoms/TextInput.vue'
 import CategorySelectBox from '../../Atoms/CategorySelectBox.vue'
+import StepCardList from '../../Atoms/StepCardList.vue'
 import AchievementTimeTypeSelectBox from '../../Atoms/AchievementTimeTypeSelectBox.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
+import { Step } from '../../../types/Step'
 
 // utilities
 const requestStore = useRequestStore()
@@ -18,19 +20,39 @@ console.log('type script and pinia is now!')
 // store
 // props
 // data
+const stepList = ref<Step[]>([])
+const condition = reactive({
+    key_word: '',
+    category_id: null,
+    achievement_time_type_id: null,
+})
+
 // emits
 // computed
 // watch
 // methods
+const fetchData = () => {
+    requestStore.setLoading(true)
+    $repositories.step.get(condition)
+    .then(response => {
+        stepList.value = response.data.result.data
+    }).finally(() =>
+        requestStore.setLoading(false)
+    )
+}
+const init = () => {
+    fetchData()
+}
+onMounted(() => init())
 </script>
 
 <template>
-    <h1>This is step list</h1>
-    <h1>Hello World !! and Type Script!!!</h1>
-    <div>
-        <router-link to="/good-morning">GoodMorning</router-link>
-    </div>
-    <div>
-        <router-link to="/login">Login</router-link>
-    </div>
+    <BaseView className="p-container__steps-list">
+        <template v-slot:content>
+            <h1>ステップ一覧</h1>
+            <StepCardList
+                :step-list="stepList"
+            />
+        </template>
+    </BaseView>
 </template>
