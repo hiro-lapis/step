@@ -15,6 +15,18 @@ class StepService
         $this->step_respository = $step_respository;
     }
 
+    /**
+     * ステップの検索と取得
+     *
+     * @param array $params
+     * @return array
+     */
+    public function get(array $params): array
+    {
+        $result = $this->step_respository->pagenateByCondition($params);
+        return compact('result');
+    }
+
     public function store(array $params): Step
     {
         // ログインユーザーIDを追加

@@ -3,7 +3,7 @@
 namespace App\Repositories\Step;
 
 use App\Models\Step;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface StepRepositoryInterface
 {
@@ -14,4 +14,12 @@ interface StepRepositoryInterface
      * @return Step
      */
     public function create(array $params): Step;
+
+    /**
+     * ステップ情報を検索しページネーションで取得
+     *
+     * @param array $condition
+     * @return LengthAwarePaginator
+     */
+    public function pagenateByCondition(array $condition): LengthAwarePaginator;
 }

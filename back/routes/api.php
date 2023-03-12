@@ -23,8 +23,11 @@ use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 */
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/user', fn(Request $request) => $request->user());
+    // ステップ新規作成
     Route::post('/steps', [StepController::class, 'store'])->name('steps.store');
 });
+// ステップ一覧
+Route::get('/steps', [StepController::class, 'index'])->name('steps.index');
 
 // ユーザーログイン状態確認
 Route::get('is-login', fn () => response()->json(['is_login' => auth()->user() !== null, 'user' => auth()->user()]));
