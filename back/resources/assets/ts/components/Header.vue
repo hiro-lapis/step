@@ -91,9 +91,9 @@ const userImage = computed(() => {
                     <!-- ゲストメニュー -->
                     <template v-else>
                         <!-- ユーザーメニュー -->
-                        <router-link :to="{ name: 'todo' }">
+                        <router-link :to="{ name: 'steps-list' }">
                             <li class="c-nav__list-item">
-                                <a href="#" class="c-nav__list-link">ステップを見る(TODO)</a>
+                                <a href="#" class="c-nav__list-link">ステップを見る</a>
                             </li>
                         </router-link>
                         <router-link :to="{ name: 'register' }">

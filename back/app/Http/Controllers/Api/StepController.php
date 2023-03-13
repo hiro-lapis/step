@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Steps\CreateRequest;
+use App\Http\Requests\Steps\IndexRequest;
 use App\Services\StepService;
 use Illuminate\Http\Request;
 
@@ -22,9 +23,9 @@ class StepController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexRequest $request)
     {
-        //
+        return $this->step_service->get($request->validated());
     }
 
     /**

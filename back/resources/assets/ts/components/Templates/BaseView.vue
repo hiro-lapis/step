@@ -7,23 +7,28 @@ import Footer from '../Footer.vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../store/globalStore'
 import { Repositories } from '../../apis/repositoryFactory'
-import { guestPageUrl } from '../../routes/routes'
+import { guestPageName, guestOnlyPageName } from '../../routes/routes'
 
 // utilities
 const router = useRouter()
 const userStore = useUserStore()
 const $repositories = inject<Repositories>("$repositories")!
 
+// props
+defineProps({
+    className: { required: false, type: String, default: 'p-container', },
+})
 onMounted(() => {
     // ログイン状態チェック
-    const isGuestPage = guestPageUrl.includes(router.currentRoute.value.path)
+    const isGuestOnlyPage = guestOnlyPageName.includes(router.currentRoute.value.name!.toString())
+    const isGuestPage = guestPageName.includes(router.currentRoute.value.name!.toString())
     $repositories.auth.isLogin().then(response => {
         if (response.data.is_login) {
             userStore.setLogin(true)
             userStore.setUser(response.data.user)
-            // 未ログイン用ページを表示中ならログイン後のTOP画面へ
-            if (isGuestPage) {
-                router.push({ name: 'themes-list' })
+            // ログイン中で未ログイン限定ページを表示中ならログイン後のTOP画面へ
+            if (isGuestOnlyPage) {
+                router.push({ name: 'steps-list' })
             }
         } else {
             userStore.setLogin(false)
@@ -41,9 +46,21 @@ onMounted(() => {
     <Loading />
     <NotifyMessage />
     <Header />
-        <div class="l-container p-container">
+        <div class="l-container" :class="className">
             <slot name="content">
             </slot>
         </div>
     <Footer />
 </template>
+
+<style scoped lang="scss">
+
+// 各ページでコンテンツを表示するwidthスタイルを設定
+// 適宜propsで変更する
+.p-container {
+    max-width: 1440px;
+    &__steps-list {
+        max-width: 1000px;
+    }
+}
+</style>

@@ -6,6 +6,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -50,10 +51,11 @@ class User extends Authenticatable
     /** relation */
 
     /**
-     * @return BelongsTo
+     * @return HasMany
      */
-    public function categories(): BelongsTo
+    public function step(): HasMany
     {
-        return $this->belongsTo(Category::class);
+        return $this->hasMany(Step::class);
     }
+
 }

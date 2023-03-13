@@ -37,7 +37,9 @@ const create = async () => {
     requestStore.setLoading(true)
     await $repositories.step.store(createData).then((response) => {
         messageStore.setMessage('ステップが登録されました')
-        router.push({ name: 'steps-list' })
+        setTimeout(() => {
+            router.push({ name: 'steps-list' })
+        }, 3000)
     }).finally(() => {
         requestStore.setLoading(false)
     })
@@ -109,12 +111,6 @@ onMounted(() => {
 // TODO: アルファベット順に並べ替え
 @import "../../../../sass/foundation/_breakpoints.scss";
 @import "../../../../sass/layout/_container.scss";
-
-.p-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
 .p-form {
     &__container { // 入力フォーム
