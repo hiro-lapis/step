@@ -48,6 +48,14 @@ class User extends Authenticatable
     ];
 
     /** accessor */
+
+    /**
+     * ユーザーの画像urlを取得
+     */
+    public function getImageUrlAttribute($value)
+    {
+        return $value ?? 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/no_user_icon_img.png';
+    }
     /** relation */
 
     /**
