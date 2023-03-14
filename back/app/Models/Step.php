@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Step extends Model
@@ -44,6 +45,14 @@ class Step extends Model
     public function achievementTimeType(): BelongsTo
     {
         return $this->belongsTo(AchievementTimeType::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function subSteps(): HasMany
+    {
+        return $this->hasMany(SubStep::class);
     }
 
     /** query */
