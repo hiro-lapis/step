@@ -95,7 +95,7 @@ const login = () => {
                             </button>
                         </div>
                         <div class="p-login-form__text-link">
-                            <router-link :to="{ name: 'todo' }">
+                            <router-link :to="{ name: 'register' }">
                                 <span class="c-text-link p-link">
                                     新規登録はこちら
                                 </span>
