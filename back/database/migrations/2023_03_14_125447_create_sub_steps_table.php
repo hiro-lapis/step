@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('sort_number')->comment('並び順');
 
             $table->index('step_id');
-            $table->unique(['id', 'sort_number']);
+            $table->unique(['step_id', 'sort_number']);
 
             $table->timestamps();
         });
