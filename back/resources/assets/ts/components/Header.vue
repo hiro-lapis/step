@@ -55,7 +55,7 @@ const userImage = computed(() => {
         <header class="c-header c-header--user">
             <router-link :to="{ name: topPageName }">
                 <div class="c-logo__container">
-                    <img src="https://laravel8-haiki-share.s3-ap-northeast-1.amazonaws.com/asset/logo.png" class="c-logo"/>
+                    <span class="c-logo">Step</span>
                 </div>
             </router-link>
             <!-- PC用メニュー -->
@@ -112,3 +112,13 @@ const userImage = computed(() => {
         </header>
     </div>
 </template>
+
+<style lang="scss" scoped>
+// ロゴ文字だけをリクエスト
+// https://developers.google.com/fonts/docs/css2?hl=ja#optimizing_your_font_requests
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Subrayada&display=swap&text=Step');
+.c-logo {
+    font-family: 'Montserrat Subrayada', sans-serif;
+    letter-spacing: normal;
+}
+</style>

@@ -83,7 +83,7 @@ const convertKeysToSnakeCase = (obj: Object) => {
                         <div class="p-register-form__element">
                             <a href="/login/google" class="c-btn c-btn--large c-btn--social-login">
                                 <div class="c-img--icon--sns">
-                                    <img class="u-vertical-align--b" src="https://laravel8-haiki-share.s3-ap-northeast-1.amazonaws.com/asset/icon-google.png" alt="googleアイコン">
+                                    <img class="u-vertical-align--b" src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/icon-google.png" alt="googleアイコン">
                                 </div>
                                 <span class="c-btn--social-login__text">Googleアカウントで登録</span>
                             </a>

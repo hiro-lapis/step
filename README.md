@@ -48,3 +48,15 @@
 - バリデーションエラーの情報は store 管理。errors というオブジェクトの中に各種キーを持たせ、コンポーネントにはエラーのキーを渡す。
 - <script>　内の記述順は、 `store -> props -> data -> emits -> computed -> watch -> methods -> onMounted (life cycle)`
 - axios の処理は apis/ のリポジトリを使う。また、エラー処理は基本base.repository のinterceptor で共通処理にする。個別にエラーハンドリングが必要な時のみ、個別のリクエスト実行処理にエラーハンドリングを追加する
+
+### Storage
+ファイルはS3にて管理
+用途ごとにディレクトリを分ける
+
+```
+step── public
+         ├── common // アプリ側で使用する公開画像(snsアイコンなど)
+         │   index.js
+         ├── users // ユーザーアップロード画像(ユーザーアイコン)
+             └── steps // ステップで使われる画像
+```
