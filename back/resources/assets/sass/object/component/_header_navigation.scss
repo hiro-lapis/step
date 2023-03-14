@@ -4,6 +4,8 @@
 ========================================================================== */
 // ロゴ
 .c-logo {
+    font-family: 'Montserrat Subrayada', sans-serif;
+    letter-spacing: normal;
     &__container {
         width: 210px;
         @include pc() {
