@@ -47,7 +47,7 @@ const register = async () => {
 
             // インデックス画面へ遷移
             messageStore.setMessage('登録ありがとうございます！テーマ一覧へ遷移します。')
-            router.push({ name: 'themes-list' })
+            router.push({ name: 'steps-list' })
         })
         .finally(() => {
             requestStore.setLoading(false)
