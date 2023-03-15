@@ -37,7 +37,7 @@ const login = () => {
                 const data: User = res.data
                 userStore.setUser(data)
                 userStore.setLogin(true)
-                router.push({ name: 'themes-list'})
+                router.push({ name: 'steps-list'})
             }).catch(error => {
                 requestStore.setLoading(false)
                 if (axios.isAxiosError(error) && error.response?.status === 422) {
