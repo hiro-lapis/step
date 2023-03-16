@@ -5,6 +5,7 @@ namespace App\Repositories\Step;
 
 use App\Models\Step;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class StepRepository implements StepRepositoryInterface
 {
@@ -20,6 +21,20 @@ class StepRepository implements StepRepositoryInterface
         return $this->step->create($params);
     }
 
+    public function updateOrCreateSubSteps(Step $step, Collection $sub_step_params): int
+    {
+        $sort_number = 1;
+        $sub_step_params->each(function($params) use ($step, &$sort_number) {
+            // steps.idとsort_numberで検索をかけてupsertをかける
+            $step->subSteps()->updateOrCreate(
+                ['step_id' => $step->id, 'sort_number' => $sort_number],
+                $params
+            );
+            $sort_number++;
+        });
+        // 処理結果件数としてsort_numberを返却
+        return ($sort_number - 1);
+    }
 
     /**
      * ステップ情報を検索しページネーションで取得

@@ -37,7 +37,7 @@ class StepController extends Controller
     public function store(CreateRequest $request)
     {
         $result = $this->step_service->store($request->validated());
-        return response()->json($result);
+        return response()->json($result['step'], $result['status']);
     }
 
     /**

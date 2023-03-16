@@ -46,7 +46,6 @@ const input = (event: Event) => {
 const handleEnter = () => emit('keyupEnter')
 </script>
 
-
 <template>
     <div class="c-input__container">
         <div class="c-input__label">

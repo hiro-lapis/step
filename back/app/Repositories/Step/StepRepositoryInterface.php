@@ -4,6 +4,7 @@ namespace App\Repositories\Step;
 
 use App\Models\Step;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 interface StepRepositoryInterface
 {
@@ -14,6 +15,15 @@ interface StepRepositoryInterface
      * @return Step
      */
     public function create(array $params): Step;
+
+    /**
+     * 引数にとったステップ情報に紐づける形で子ステップを登録更新
+     *
+     * @param Step $step
+     * @param Collection $sub_step_params
+     * @return int 子ステップの登録更新回数
+     */
+    public function updateOrCreateSubSteps(Step $step, Collection $sub_step_params): int;
 
     /**
      * ステップ情報を検索しページネーションで取得
