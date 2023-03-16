@@ -19,7 +19,6 @@ const routes = [
     { path: '/register', name: 'register', component: Register }, // 未作成画面の仮リンク先
     { path: '/good-morning', name: 'good-morning', component: GoodMorning },
     { path: '/login', name: 'login', component: Login },
-    { path: '/themes', name: 'themes-list', component: ThemeListView, },
     { path: '/password/forgot', name: 'password-forgot', component: PasswordForgot, },
     { path: '/password/reset', name: 'password-reset', component: PasswordReset, },
     { path: '/steps/create', name: 'steps-create', component: StepEditView, },
