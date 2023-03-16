@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { inject, onMounted, ref, reactive } from 'vue'
+import { inject, onMounted, provide, ref, reactive, readonly } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
-import TextInput from '../../Atoms/TextInput.vue'
-import CategorySelectBox from '../../Atoms/CategorySelectBox.vue'
 import AchievementTimeTypeSelectBox from '../../Atoms/AchievementTimeTypeSelectBox.vue'
+import CategoryBadge from '../../Atoms/CategoryBadge.vue'
+import CategorySelectBox from '../../Atoms/CategorySelectBox.vue'
+import TextInput from '../../Atoms/TextInput.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
 
 // utilities
@@ -16,21 +17,28 @@ const route = useRoute()
 
 // data
 const isEdit = ref(false)
-const createData = reactive({
+type CreateData = {
+    name: string
+    category_id: number
+    achievement_time_type_id: number
+    sub_steps: Array<{name: string, detail: string, sort_number?: number}>
+}
+const createData = reactive<CreateData>({
     name: '',
     category_id: 0,
     achievement_time_type_id: 0,
+    sub_steps : [],
 })
+
 const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 
 // computed
 // watch
 // methods
+const initialSubStep = { name: '', detail: '', }
+const addSubStep = () => createData.sub_steps.push(Object.assign({}, initialSubStep))
 
 const create = async () => {
-    console.log('requestStore.isLoading')
-    console.log(requestStore.isLoading)
-
     if (requestStore.isLoading) return
     categorySelect.value?.validate()
 
@@ -44,9 +52,19 @@ const create = async () => {
         requestStore.setLoading(false)
     })
 }
+const subStepLabel = (index: number) => {
+    return `サブステップ${(index + 1)}`
+}
 
 const init = () => {
+    // 編集画面か判定
     isEdit.value = route.name === 'steps-edit'
+    // カテゴリー情報を取得し各種コンポーネントで使用
+    $repositories.common.category()
+        .then(res => {
+            const categories = res.data
+            provide('categories', readonly(categories))
+        })
 }
 onMounted(() => {
     init()
@@ -54,10 +72,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <BaseView>
+    <BaseView className="p-container--steps-form">
         <template v-slot:content>
                 <div class="p-form">
-                    <div class="p-form__container">
+                    <!-- start:p-form__container -->
+                    <div class="p-form__editor">
                         <div class="p-form__head">
                             <h2 class="c-title">新規作成</h2>
                         </div>
@@ -90,8 +109,31 @@ onMounted(() => {
                                     required
                                 />
                             </div>
+                            <template v-for="(subStep, index) in createData.sub_steps">
+                                <div class="p-form__element">
+                                    <div class="p-form__element">
+                                        <TextInput
+                                            v-model:value="subStep.name"
+                                            :label="subStepLabel(index)"
+                                        />
+                                    </div>
+                                    <div class="p-form__element">
+                                        <TextInput
+                                            v-model:value="subStep.detail"
+                                            label="詳細"
+                                        />
+                                    </div>
+                                </div>
+                            </template>
+                            <!-- 子ステップ追加 -->
                             <div class="p-form__bottom">
                             <template v-if="!isEdit">
+                                <button
+                                    @click="addSubStep"
+                                    class="c-btn c-btn--middle c-btn--add-sub-step"
+                                >
+                                    子ステップ追加
+                                </button>
                                 <button
                                     @click="create"
                                     class="c-btn c-btn--middle c-btn--create"
@@ -100,6 +142,27 @@ onMounted(() => {
                                 </button>
                             </template>
                         </div>
+                        </div>
+                    </div>
+                    <!-- end:p-form__container -->
+                    <div class="p-preview">
+                        <div class="p-preview__container">
+                            <div class="p-preview__head">
+                                <h1 class="c-title">{{ createData.name }}</h1>
+                                <div class="step-detail__info">
+                                    <CategoryBadge v-if="createData.category_id" :id="createData.category_id" />
+                                </div>
+                            </div>
+                            <div class="p-preview__body">
+                                <div class="p-preview__sub-step">
+                                    <template v-for="subStep in createData.sub_steps">
+                                        <div>{{ subStep.name }}</div>
+                                        <div>{{ subStep.detail }}</div>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="step-detail__body">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -112,9 +175,11 @@ onMounted(() => {
 @import "../../../../sass/foundation/_breakpoints.scss";
 @import "../../../../sass/layout/_container.scss";
 
-.p-form {
-    &__container { // 入力フォーム
-        margin: 0 auto;
+.p-form { // 編集フォームとプレビューのラッパー
+    display: flex;
+    justify-content: center;
+    &__editor { // 編集フォーム
+        // margin: 0 auto;
         width: 100%;
         padding: 20px 40px;
         box-sizing: border-box;
@@ -148,5 +213,22 @@ onMounted(() => {
             margin-top: 20px;
         }
     }
+}
+
+.p-preview { // プレビュー
+    width: 100%;
+    padding: 20px 40px;
+    box-sizing: border-box;
+    text-align: center;
+    @include pc() {
+        width: 600px;
+        box-shadow: 0 0 8px #ccc;
+    }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400&family=Montserrat+Subrayada&display=swap');
+.step-detail {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-weight: 400;
 }
 </style>
