@@ -72,7 +72,7 @@ const userImage = computed(() => {
                         <li @click="logout" class="c-nav__list-item">
                             <span class="c-nav__list-link">ログアウト</span>
                         </li>
-                        <router-link :to="{ name: 'todo' }">
+                        <router-link :to="{ name: 'mypage' }">
                             <li class="c-nav__list-item">
                                 <div class="c-img--user-icon--small">
                                     <img
