@@ -21,7 +21,7 @@ class MypageController extends Controller
     {
         /** @ $user App/Models/User */
         $user = auth()->user();
-        return $user;
+        return compact('user');
     }
 
     /**

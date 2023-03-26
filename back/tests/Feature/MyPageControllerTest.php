@@ -60,11 +60,13 @@ class MyPageControllerTest extends TestCase
 
         // パスワード以外の情報を取得できているか
         $response->assertJson([
-            'id' => $this->user->id,
-            'name' => $this->user->name,
-            'email' => $this->user->email,
-            'profile' => $this->user->profile,
-            'image_url' => $this->user->image_url,
+            'user' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+                'profile' => $this->user->profile,
+                'image_url' => $this->user->image_url,
+            ],
         ]);
         // JSON文字列をstdClassへデコードし、さらに配列へ変換
         $result = (array)json_decode($response->content());
