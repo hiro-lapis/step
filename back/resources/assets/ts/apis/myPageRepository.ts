@@ -13,7 +13,18 @@ export class MyPageRepository {
     async user(): Promise<AxiosResponse<UserResponse>> {
         return await axios.get(`${this.userUrl}`)
     }
-    async update(params): Promise<AxiosResponse<UpdateResponse>> {
+    async update(data: { name: string, email: string }, files: File|null): Promise<AxiosResponse<UpdateResponse>> {
+        /**
+         * パラメータを設定
+         * 画像アップロードとフォームデータを同時送信する場合、下記に注意
+         * ・FormDataオブジェクトを使う(ファイルアップロード時の作法)
+         */
+        let params = new FormData()
+        params.append('name', data.name)
+        params.append('email', data.email)
+        if (!!files) {
+            params.append('file', files)
+        }
         return await axios.post(`${this.updateProfileUrl}`, params)
     }
     async passwordUpdate(params: { current_password: string, password: string, password_confirmation: string }): Promise<any> {
