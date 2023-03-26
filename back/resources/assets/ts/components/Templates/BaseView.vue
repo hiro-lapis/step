@@ -1,3 +1,4 @@
+
 <script setup lang="ts">
 import { inject, onMounted } from 'vue'
 import Loading from '../Atoms/Loading.vue'
@@ -66,5 +67,10 @@ onMounted(() => {
         max-width: 1440px;
         margin-bottom: 250px;
     }
+    &__mypage {
+        max-width: 1440px;
+        margin-bottom: 300px;
+    }
 }
+
 </style>

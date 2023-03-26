@@ -51,7 +51,7 @@ axios.interceptors.response.use(
         return res;
     },
     (error) => {
-        // pnia初期化後のinterceptor内でstore使用
+        // pinia初期化後のinterceptor内でstore使用
         const msg = useMessageInfoStore()
         switch (error.response.status) {
             case 422:
