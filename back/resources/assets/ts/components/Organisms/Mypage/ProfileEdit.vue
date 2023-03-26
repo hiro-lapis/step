@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { inject, onMounted, reactive, ref } from 'vue'
-import Loading from '../Atoms/Loading.vue'
-import NotifyMessage from '../Atoms/NotifyMessage.vue'
 import { User } from '../../../types/User'
 import { useRouter } from 'vue-router'
-import { useRequestStore, useUserStore } from '../../../store/globalStore'
+import { useRequestStore, useUserStore, useMessageInfoStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
-import { guestPageName } from '../../../routes/routes'
 import TextInput from '../../Atoms/TextInput.vue'
+import UploadUserImage from '../../Atoms/UploadUserImage.vue'
 
 // utilities
 const router = useRouter()
-const userStore = useUserStore()
+const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
 const $repositories = inject<Repositories>("$repositories")!
 
@@ -34,7 +32,6 @@ const showPasswordUpdateModal = () => passwordUpdateMode.value = !passwordUpdate
 const fetchData = () => {
     $repositories.mypage.user()
         .then(response => {
-            // user.value = response.data.user.
             user.id = response.data.user.id
             user.name = response.data.user.name
             user.email = response.data.user.email
@@ -61,7 +58,7 @@ const update = () => {
     requestStore.setLoading(true)
     $repositories.mypage.update(params)
         .then(response => {
-            fetchData()
+            messageStore.setMessage(response.data.message)
         })
         .finally(() => {
             requestStore.setLoading(false)
@@ -74,38 +71,39 @@ onMounted(() => {
 
 <template>
     <div class="c-multi-page--profile">
-        <p>oge</p>
-        <!-- <password-modal
+        <PassWordModal
             @close="passwordUpdateMode = false"
             name="パスワード変更"
             v-show="passwordUpdateMode"
-        /> -->
-        <!-- <div class="c-multi-page--profile__image-input">
+        />
+        <div class="c-multi-page--profile__image-input">
             <div class="c-multi-page--profile__element">
                 <label for="user-image" class="c-label">
                     ユーザーアイコン
                 </label>
             </div>
-            <upload-user-image
+            <UploadUserImage
                 ref="uploadImage"
                 type="user"
                 :userImage="user.image_url "
             />
-        </div> -->
+        </div>
         <div class="c-multi-page--profile__element">
             <TextInput
+                label="ユーザー名"
                 v-model:value="user.name"
                 formId="name"
                 placeHoler="アカウント名"
             />
         </div>
-        <!-- <div class="c-multi-page--profile__element">
-            <display-input
-                :value.sync="user.email"
+        <div class="c-multi-page--profile__element">
+            <TextInput
                 label="メールアドレス"
+                v-model:value="user.email"
                 formId="email"
+                placeHoler="メールアドレス"
             />
-        </div> -->
+        </div>
         <div class="c-multi-page--profile__btn-container">
             <button @click="update" class="c-btn--update-profile">
                 更新

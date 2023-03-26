@@ -32,7 +32,6 @@ const pageTitle = computed(() => {
         case 'profileEdit':
             return 'プロフィール編集';
     }
-
 })
 // watch
 // methods
@@ -42,7 +41,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <BaseView class="p-container__mypage">
+    <BaseView className="p-container__mypage">
         <template v-slot:content>
             <div class="c-multi-page__container">
                 {{ pageTitle }}
