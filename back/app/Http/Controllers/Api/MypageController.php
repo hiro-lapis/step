@@ -40,7 +40,8 @@ class MypageController extends Controller
             if ($request->file('file')) {
                 // users/user_id/配下に顔図を配置
                 $image_url = Storage::disk('s3')->put('public/users/' . (string)$request->user()->id, $request['file'], 'public');
-                $params['image_url'] = $image_url;
+                // 絶対パス(S3URL)を登録情報として保存
+                $params['image_url'] = Storage::disk('s3')->url($image_url);
             }
             $user->fill($params)->update();
             DB::commit();

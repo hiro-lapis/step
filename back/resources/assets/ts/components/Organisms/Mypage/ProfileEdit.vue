@@ -2,13 +2,12 @@
 import { inject, onMounted, reactive, ref } from 'vue'
 import { User } from '../../../types/User'
 import { useRouter } from 'vue-router'
-import { useRequestStore, useUserStore, useMessageInfoStore } from '../../../store/globalStore'
+import { useRequestStore, useMessageInfoStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
 import TextInput from '../../Atoms/TextInput.vue'
 import UploadUserImage from '../../Atoms/UploadUserImage.vue'
 
 // utilities
-const router = useRouter()
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
 const $repositories = inject<Repositories>("$repositories")!
@@ -22,7 +21,9 @@ const user = reactive<User>({
     profile: '',
 })
 const passwordUpdateMode = ref(false)
-const uploadImage = ref<HTMLInputElement>()
+// const uploadImage = ref<InstanceType<typeof UploadUserImage>>()
+const uploadImage = ref<File|null>(null)
+
 // emits
 // computed
 // watch
@@ -35,6 +36,7 @@ const fetchData = () => {
             user.id = response.data.user.id
             user.name = response.data.user.name
             user.email = response.data.user.email
+            user.image_url = response.data.user.image_url
         })
 }
 
@@ -46,17 +48,19 @@ const update = () => {
      * ・FormDataオブジェクトを使う(ファイルアップロード時の作法)
      * ・ファイルは配列キーにして渡す(文字列にキャストされるのを防ぐ)
      */
-    let params = new FormData();
-    params.append("name", user.name!)
-    params.append("email", user.email!)
-    if (!!uploadImage.value && uploadImage.value.files) {
-        // ファイル情報はFileList定義なので、ループで追加
-        for (let file of uploadImage.value.files) {
-            params.append("file[]", file)
-        }
+    let params = {
+        name: user.name,
+        email: user.email,
+    }
+
+    // params.append("name", user.name!)
+    // params.append("email", user.email!)
+    let file: File|null = null
+    if (!!uploadImage.value) {
+        file = uploadImage.value
     }
     requestStore.setLoading(true)
-    $repositories.mypage.update(params)
+    $repositories.mypage.update(params, file)
         .then(response => {
             messageStore.setMessage(response.data.message)
         })
@@ -85,7 +89,8 @@ onMounted(() => {
             <UploadUserImage
                 ref="uploadImage"
                 type="user"
-                :userImage="user.image_url "
+                :imageUrl="user.image_url "
+                @update:upload-image="e => uploadImage = e"
             />
         </div>
         <div class="c-multi-page--profile__element">

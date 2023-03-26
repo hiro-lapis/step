@@ -1,32 +1,59 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, PropType } from 'vue'
 
+/**
+ *単一画像ファイルアップロードコンポーネント
+ */
+// props
 const props = defineProps({
-    // アップロードタイプ(user/step)
     type: { required: true, type: String, },
-    userImage: { required: true, type: String, },
+    imageUrl: { required: true, type: [String, null] as PropType<string | null>, },
 })
+
+
+interface Emits {
+    (e: 'update:upload-image', file: File): void
+}
+// 親画面へアップロードする画像ファイルを発信
+const emit = defineEmits<Emits>()
 
 // data
 const message = ref('')
 const file = ref<File|null>(null)
-const title = ref('')
-const view = ref(true)
-const images = ref([])
+const previewMode = ref(true)
 const confirmedImage = ref<string | ArrayBuffer | null>('')
 
-// methods
+// computed
+const isNotUpload = computed(() => {
+    return confirmedImage.value === '' || confirmedImage.value === null
+})
+const sampleImage = computed(() => {
+    return 'https://laravel8-inspiration.s3-ap-northeast-1.amazonaws.com/no_user_icon_img.png'
+})
+// 状態に応じた画面表示する画像のURL
+const imageUrl = computed(() => {
+    // フォームで画像を選択済の場合はアップロード画像のURL
+    if (confirmedImage.value !== '') {
+        return confirmedImage.value
+    }
+    // フォームで画像を未選択の場合はユーザー設定の画像URL
+    if (props.imageUrl !== '') {
+        return props.imageUrl
+    }
+    // ユーザー設定の画像がない時はサンプル画像のURL
+    return sampleImage.value
+})
 
+// methods
 const confirmImage = (e: Event) => {
-    message.value = ''
     file.value = ((e.target as HTMLInputElement).files as FileList)[0]
 
     if (!file.value.type.match('image.*')) {
-        message.value = '画像ファイルを選択して下さい';
-        confirmedImage.value = '';
-        return;
+        alert('画像ファイルを選択して下さい')
+        // confirmedImage.value = ''
+        return
     }
-    createImage(file.value);
+    createImage(file.value)
 }
 
 const createImage = (file: File) => {
@@ -34,39 +61,9 @@ const createImage = (file: File) => {
     reader.readAsDataURL(file)
     reader.onload = (e: ProgressEvent) => {
         confirmedImage.value = reader.result
-        // confirmedImage.value = e.target?.result
     }
+    emit('update:upload-image', file)
 }
-
-const setConfirmedImage = (url: string) => {
-    confirmedImage.value = url
-}
-// computed
-
-// アップロード先URLの指定
-const uploadUrl = computed(() => {
-    return props.type === 'user' ? '/api/images/user' : '/api/images/idea'
-})
-const isUserType = computed(() => {
-        return props.type === 'user'
-})
-const isNotUpload = computed(() => {
-    return confirmedImage.value === ''
-})
-const sampleImage = computed(() => {
-    return 'https://laravel8-inspiration.s3-ap-northeast-1.amazonaws.com/no_user_icon_img.png'
-})
-const imageUrl = computed(() => {
-    // フォームで画像を選択済の場合はアップロード画像のURLを返す
-    if (confirmedImage.value !== '') {
-        return confirmedImage.value;
-    }
-    if (props.userImage !== '') {
-        return props.userImage
-    }
-    // ユーザー設定の画像がない時はサンプル画像のURLを返す
-    return sampleImage.value;
-})
 </script>
 
 <template>
@@ -74,23 +71,17 @@ const imageUrl = computed(() => {
         <div class="c-upload-image__box">
             <input
                 class="u-hidden"
-                id="user-image"
+                id="upload-image"
                 type="file"
                 @change="confirmImage"
-                v-if="view"
+                v-if="previewMode"
             />
             <label
                 :class="{ 'c-upload-image--sample': isNotUpload }"
-                for="user-image"
+                for="upload-image"
             >
-                <div
-                    :class="[
-                        isUserType
-                            ? 'c-upload-image--user'
-                            : 'c-upload-image--idea'
-                    ]"
-                >
-                    <img class="c-img" :src="(imageUrl as string)" />
+                <div class="c-upload-image--user">
+                    <img class="c-img--upload-user-icon-preview" :src="(imageUrl as string)" />
                 </div>
             </label>
         </div>
@@ -98,16 +89,8 @@ const imageUrl = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.c-upload-image {
+.c-upload-image { // アップロード画像外枠
     width: 200px;
-    &--idea {
-        margin: 0 auto;
-        width: 200px;
-        height: 200px;
-        overflow: hidden;
-        border-radius: 3px;
-        background-position: center center;
-    }
     &--user {
         width: 120px;
         height: 120px;
