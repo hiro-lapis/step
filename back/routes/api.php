@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Api\AchievementTimeTypeController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\MypageController;
 use App\Http\Controllers\Api\StepController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\NewPasswordController;
@@ -25,6 +25,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/user', fn(Request $request) => $request->user());
     // ステップ新規作成
     Route::post('/steps', [StepController::class, 'store'])->name('steps.store');
+
+    Route::group(['prefix' => 'mypage'], function() {
+        Route::get('', [MypageController::class, 'index'])->name('mypage.index');
+        Route::post('/profile', [MypageController::class, 'updateProfile'])->name('mypage.update.profile');
+    });
+    // ログアウト
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 // ステップ一覧
 Route::get('/steps', [StepController::class, 'index'])->name('steps.index');
@@ -48,5 +55,3 @@ Route::middleware('guest')->group(function () {
     // メール配信後のリセット
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.reset');
 });
-// ログアウト
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
