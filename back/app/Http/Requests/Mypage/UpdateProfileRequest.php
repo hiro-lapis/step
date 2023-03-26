@@ -30,6 +30,7 @@ class UpdateProfileRequest extends FormRequest
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user()->id)],
             // 画像ファイル(10mb迄)
             'file' => ['sometimes', 'max:10240', 'mimes:jpg,bmp,png'],
+            'profile' => ['nullable', 'string'],
         ];
     }
 }

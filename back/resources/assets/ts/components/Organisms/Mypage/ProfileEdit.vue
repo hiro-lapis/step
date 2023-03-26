@@ -6,6 +6,7 @@ import { useUserStore, useRequestStore, useMessageInfoStore } from '../../../sto
 import { Repositories } from '../../../apis/repositoryFactory'
 import PasswordModal from '../../Molecules/PasswordModal.vue'
 import TextInput from '../../Atoms/TextInput.vue'
+import TextareaInput from '../../Atoms/TextareaInput.vue'
 import UploadUserImage from '../../Atoms/UploadUserImage.vue'
 
 // utilities
@@ -55,6 +56,7 @@ const update = () => {
     let params = {
         name: user.name,
         email: user.email,
+        profile: user.profile,
     }
 
     let file: File|null = null
@@ -124,6 +126,15 @@ onMounted(() => {
                 v-model:value="user.email"
                 formId="email"
                 placeHoler="メールアドレス"
+            />
+        </div>
+        <div class="c-multi-page--profile__element">
+            <TextareaInput
+                label="プロフィール"
+                v-model:value="user.profile"
+                formId="profile"
+                placeHoler="自己紹介文"
+                counter
             />
         </div>
         <div class="c-multi-page--profile__btn-container">

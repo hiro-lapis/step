@@ -90,6 +90,7 @@ class MyPageControllerTest extends TestCase
         $params = [
             'name' => 'foo',
             'email' => 'hoge@bar.com',
+            'profile' => 'テストプロフィール',
         ];
         $response = $this->actingAs($this->user)->postJson('/api/mypage/profile', $params);
         $response->assertOk();
@@ -98,6 +99,7 @@ class MyPageControllerTest extends TestCase
         // APIで更新したプロフィール情報になっているか
         $this->assertSame($params['name'], $this->user->name);
         $this->assertSame($params['email'], $this->user->email);
+        $this->assertSame($params['profile'], $this->user->profile);
     }
 
     public function test_updateProfileImage(): void

@@ -3,5 +3,5 @@ export type User = {
     name: string,
     image_url: string | null,
     email: string,
-    profile: string | null,
+    profile: string,
 }
