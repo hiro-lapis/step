@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { inject, onMounted, reactive, ref } from 'vue'
 import { User } from '../../../types/User'
-import { useRouter } from 'vue-router'
 import { useUserStore, useRequestStore, useMessageInfoStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
 import PasswordModal from '../../Molecules/PasswordModal.vue'
@@ -28,9 +27,6 @@ const passwordUpdateMode = ref(false)
 const uploadImage = ref<File|null>(null)
 const fileFlg = ref(false)
 
-// emits
-// computed
-// watch
 // methods
 const showPasswordUpdateModal = () => passwordUpdateMode.value = !passwordUpdateMode.value
 
@@ -47,13 +43,7 @@ const fetchData = () => {
 
 const update = () => {
     if (requestStore.isLoading) return
-    /**
-     * パラメータを設定
-     * 画像アップロードとフォームデータを同時送信する場合、下記に注意
-     * ・FormDataオブジェクトを使う(ファイルアップロード時の作法)
-     * ・ファイルは配列キーにして渡す(文字列にキャストされるのを防ぐ)
-     */
-    let params = {
+    const params = {
         name: user.name,
         email: user.email,
         profile: user.profile,
