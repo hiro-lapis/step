@@ -42,7 +42,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <BaseView class="p-container">
+    <BaseView class="p-container__mypage">
         <template v-slot:content>
             <div class="c-multi-page__container">
                 {{ pageTitle }}
