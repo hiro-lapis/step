@@ -13,7 +13,7 @@ export class MyPageRepository {
     async user(): Promise<AxiosResponse<UserResponse>> {
         return await axios.get(`${this.userUrl}`)
     }
-    async update(data: { name: string, email: string }, files: File|null): Promise<AxiosResponse<UpdateResponse>> {
+    async update(data: { name: string, email: string }, files: File|null): Promise<AxiosResponse<UpdateProfileResponse>> {
         /**
          * パラメータを設定
          * 画像アップロードとフォームデータを同時送信する場合、下記に注意
@@ -27,7 +27,7 @@ export class MyPageRepository {
         }
         return await axios.post(`${this.updateProfileUrl}`, params)
     }
-    async passwordUpdate(params: { current_password: string, password: string, password_confirmation: string }): Promise<any> {
+    async passwordUpdate(params: { current_password: string, password: string, password_confirmation: string }): Promise<AxiosResponse<UpdatePasssowrdResponse>> {
         return await axios.post(`${this.updatePasswordUrl}`, params)
     }
 }
@@ -38,6 +38,9 @@ export class MyPageRepository {
 export type UserResponse = {
     user: User
 }
-export type UpdateResponse = {
+export type UpdateProfileResponse = {
+    user: User
     message: string
+}
+export type UpdatePasssowrdResponse = {
 }

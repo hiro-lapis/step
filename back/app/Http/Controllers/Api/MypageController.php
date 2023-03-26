@@ -49,7 +49,9 @@ class MypageController extends Controller
             report($e);
             DB::rollback();
         }
-        return response()->json(['message' => 'プロフィール情報を更新しました']);
+        $user->refresh();
+        $message = 'プロフィール情報を更新しました';
+        return response()->json(compact('user', 'message'));
     }
 
     /**

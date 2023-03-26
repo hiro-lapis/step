@@ -2,14 +2,16 @@
 import { inject, onMounted, reactive, ref } from 'vue'
 import { User } from '../../../types/User'
 import { useRouter } from 'vue-router'
-import { useRequestStore, useMessageInfoStore } from '../../../store/globalStore'
+import { useUserStore, useRequestStore, useMessageInfoStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
+import PasswordModal from '../../Molecules/PasswordModal.vue'
 import TextInput from '../../Atoms/TextInput.vue'
 import UploadUserImage from '../../Atoms/UploadUserImage.vue'
 
 // utilities
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
+const userStore = useUserStore()
 const $repositories = inject<Repositories>("$repositories")!
 
 // data
@@ -23,6 +25,7 @@ const user = reactive<User>({
 const passwordUpdateMode = ref(false)
 // const uploadImage = ref<InstanceType<typeof UploadUserImage>>()
 const uploadImage = ref<File|null>(null)
+const fileFlg = ref(false)
 
 // emits
 // computed
@@ -37,6 +40,7 @@ const fetchData = () => {
             user.name = response.data.user.name
             user.email = response.data.user.email
             user.image_url = response.data.user.image_url
+            user.profile = response.data.user.profile
         })
 }
 
@@ -53,31 +57,44 @@ const update = () => {
         email: user.email,
     }
 
-    // params.append("name", user.name!)
-    // params.append("email", user.email!)
     let file: File|null = null
-    if (!!uploadImage.value) {
+    if (!!uploadImage.value && fileFlg.value) {
         file = uploadImage.value
     }
     requestStore.setLoading(true)
     $repositories.mypage.update(params, file)
         .then(response => {
             messageStore.setMessage(response.data.message)
+            userStore.setUser(response.data.user)
         })
         .finally(() => {
             requestStore.setLoading(false)
         })
 }
+const setDataByStore = () => {
+    user.id = userStore.user.id
+    user.name = userStore.user.name
+    user.email = userStore.user.email
+    user.image_url = userStore.user.image_url
+    user.profile = userStore.user.profile
+}
+const setUpdloadImage = (e) => {
+    uploadImage.value = e
+    fileFlg.value = true
+}
 onMounted(() => {
+    // 初期情報としてstoreのユーザー情報をページの状態に設定
+    setDataByStore()
+    // APIでユーザー情報を取得
     fetchData()
 })
 </script>
 
 <template>
     <div class="c-multi-page--profile">
-        <PassWordModal
+        <PasswordModal
             @close="passwordUpdateMode = false"
-            name="パスワード変更"
+            title="パスワード変更"
             v-show="passwordUpdateMode"
         />
         <div class="c-multi-page--profile__image-input">
@@ -90,7 +107,7 @@ onMounted(() => {
                 ref="uploadImage"
                 type="user"
                 :imageUrl="user.image_url "
-                @update:upload-image="e => uploadImage = e"
+                @update:upload-image="setUpdloadImage"
             />
         </div>
         <div class="c-multi-page--profile__element">

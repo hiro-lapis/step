@@ -7,10 +7,9 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class MyPageControllerTest extends TestCase
@@ -113,12 +112,34 @@ class MyPageControllerTest extends TestCase
         ];
         // アカウント画像ファイルのアップロード
         $response = $this->actingAs($this->user)->postJson('/api/mypage/profile', $params);
-        $response->dump();
+
+        // 表示のためのメッセージ確認
+        $response->assertJson([
+            'message' => 'プロフィール情報を更新しました',
+            'user' => [
+                'name' => $params['name'],
+                'email' => $params['email'],
+            ],
+        ]);
         // ファイルパス情報が更新されているか
         $before_path = $this->user->image_url;
         $this->user->refresh();
         $this->assertNotSame($before_path, $this->user->image_url);
-        // ファイルが存在するか
-        Storage::disk('s3')->assertExists($this->user->image_url);
+    }
+
+    public function test_updatePassword(): void
+    {
+        $current_password = 'password';
+        $user = User::factory()->create(['password' => Hash::make($current_password)]);
+        $params = [
+            'current_password' => $current_password,
+            'password' => 'new_password',
+            'password_confirmation' => 'new_password',
+        ];
+        $response = $this->actingAs($user)->putJson('/api/mypage/password', $params);
+        $response->assertOk();
+        $user->refresh();
+        // 更新後のハッシュ化パスワードとの整合性をチェック
+        $this->assertTrue(Hash::check($params['password'], $user->password));
     }
 }

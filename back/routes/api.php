@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\NewPasswordController;
+use Laravel\Fortify\Http\Controllers\PasswordController;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
@@ -29,6 +30,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['prefix' => 'mypage'], function() {
         Route::get('', [MypageController::class, 'index'])->name('mypage.index');
         Route::post('/profile', [MypageController::class, 'updateProfile'])->name('mypage.update.profile');
+        Route::put('/password', [PasswordController::class, 'update'])->name('mypage.update.password');
     });
     // ログアウト
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
