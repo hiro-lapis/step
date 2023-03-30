@@ -48,7 +48,7 @@ class StepRepository implements StepRepositoryInterface
             ->joinMasterTables()
             ->joinUsers();
         // キーワード(ステップ名,カテゴリー,ユーザー名)
-        if ($condition['key_word']) {
+        if (isset($condition['key_word'])) {
             $query->where(function ($query) use ($condition) {
                 $query->orWhere('steps.name', 'like', '%' . $condition['key_word'] . '%');
                 $query->orWhere('categories.name', 'like', '%' . $condition['key_word'] . '%');
