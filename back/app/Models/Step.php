@@ -20,7 +20,50 @@ class Step extends Model
         'achievement_time_type_id',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:Y年n月j日',
+        'updated_at' => 'datetime:Y年n月j日',
+        'deleted_at' => 'datetime:Y年n月j日',
+    ];
+
     /** accessor */
+
+    public function getUserNameAttribute(): string
+    {
+        return $this->user->name ?? '';
+    }
+
+    public function getUserImageUrlAttribute(): string
+    {
+        return $this->user->image_url ?? '';
+    }
+
+    public function getUserProfileAttribute(): string
+    {
+        return $this->user->profile ?? '';
+    }
+
+    public function getCategoryNameAttribute(): string
+    {
+        return $this->category->name ?? '';
+    }
+
+    public function getAchievementTimeTypeNameAttribute(): string
+    {
+        return $this->achievementTimeType->name ?? '';
+    }
+
+    /**
+     * 作成したユーザー自身か判定
+     * 未ログイン時は一律false
+     *
+     * @return boolean
+     */
+    public function getIsWriterAttribute(): bool
+    {
+        return $this->user_id === auth()->user();
+    }
+
     /** relation */
 
     /**

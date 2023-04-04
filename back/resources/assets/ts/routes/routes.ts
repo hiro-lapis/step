@@ -40,7 +40,7 @@ export const guestPageName = [
     'password-forgot',
     'password-reset',
     'steps-list',
-    'steps-show'
+    'steps-show',
 ]
 
 // 未ログイン状態の時のみ表示するページ

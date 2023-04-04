@@ -1,24 +1,134 @@
 <script setup lang="ts">
-import { useUserStore } from '../../../store/globalStore'
+import { computed, inject, onMounted, ref } from 'vue'
+import { useRequestStore, useUserStore } from '../../../store/globalStore'
+import { Repositories } from '../../../apis/repositoryFactory'
+import { useRoute, useRouter } from 'vue-router'
+import StepPreview from '../../Organisms/Steps/StepPreview.vue'
+import { Step } from '../../../types/Step'
+import ImageClip from '../../Atoms/ImageClip.vue'
 
-console.log('type script and pinia is now!')
-// store
-const store = useUserStore()
-console.log(store)
-// props
+const $repositories = inject<Repositories>("$repositories")!
+const requestStore = useRequestStore()
+const userStore = useUserStore()
+const route = useRoute()
+const router = useRouter()
+
 // data
-// emits
+const step = ref<Step>({
+    id: 0,
+    category_id: 0,
+    user_id: 0,
+    name: '',
+    sub_steps: [],
+    achievement_time_type_id: 0,
+    achievement_time_type: { id: 0, name: ''},
+    category: { id: 0, name: ''},
+})
+const isInitialized = ref(false)
 // computed
-// watch
+const isChallengeable = computed(() => {
+    // ロード完了後で、ログイン中で、投稿ユーザーでないか
+    return isInitialized.value && userStore.isLogin && userStore.user.id !== step.value.user_id
+})
+
 // methods
+const fetchData = async () => {
+    const stepId = Number(route.params.id)
+    requestStore.setLoading(true)
+    await $repositories.step.find(stepId)
+        .then(response => {
+            step.value = response.data
+            isInitialized.value = true
+        }).finally(() => {
+            requestStore.setLoading(false)
+        })
+}
+// ログインユーザーがステップへチャレンジ
+const challenge = async () => {
+    if (requestStore.isLoading) return
+    requestStore.setLoading(true)
+    await $repositories.step.challenge(step.value.id!)
+        .then(response => {
+            console.log(response)
+        }).finally(() => {
+            requestStore.setLoading(false)
+        })
+}
+// ログインページへ遷移
+const gotoLogin = () => router.push({ name: 'login'})
+onMounted(() => {
+    fetchData()
+})
 </script>
 
 <template>
-    <h1>Hello World !! and Type Script!!!</h1>
-    <div>
-        <router-link to="/good-morning">GoodMorning</router-link>
-    </div>
-    <div>
-        <router-link to="/login">Login</router-link>
-    </div>
+    <BaseView className="p-container--steps-show">
+        <template v-slot:content>
+            <div class="p-step-show__main">
+                <StepPreview
+                    :step="step"
+                >
+                    <template v-slot:bottom>
+                        <button
+                            v-if="isChallengeable"
+                            @click="challenge"
+                            class="c-btn--challenge">
+                            挑戦する!
+                        </button>
+                        <button
+                            v-if="!userStore.isLogin"
+                            @click="gotoLogin"
+                            class="c-btn--challenge">
+                            ログインして挑戦する!
+                        </button>
+                    </template>
+                </StepPreview>
+            </div>
+            <div v-if="isInitialized" class="p-step-show__aside">
+                <div class="c-step-supplement">
+                    <div class="c-step-supplement__head">
+                        <ImageClip :path="step.user_image_url!"></ImageClip>
+                        <div class="u-margin-l-05p">{{ step.user_name! }}</div>
+                    </div>
+                    <div class="c-step-supplement__user-information">
+                        {{ step.user_profile! }}
+                    </div>
+                </div>
+            </div>
+        </template>
+    </BaseView>
 </template>
+
+<style scoped lang="scss">
+@import '../../../../sass/foundation/breakpoints';
+
+.p-step-show {
+    &__container {
+        overflow: hidden; // 見出し線など溢れるデザインを非表示
+    }
+    &__main {
+        width: 100%;
+        @include pc() {
+            width: 70%;
+        }
+    }
+    &__aside { // sp非表示
+        display: none;
+        @include pc() {
+            width: 25%;
+            display: block;
+        }
+    }
+}
+.c-step-supplement {
+    background-color: #fff;
+    padding: 20px;
+    &__head {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    // &__user-information {
+    // }
+}
+</style>

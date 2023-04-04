@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, onMounted } from 'vue'
-import Loading from '../Atoms/Loading.vue'
+import LoadingIcon from '../Atoms/LoadingIcon.vue'
 import NotifyMessage from '../Atoms/NotifyMessage.vue'
 import Header from '../Header.vue'
 import Footer from '../Footer.vue'

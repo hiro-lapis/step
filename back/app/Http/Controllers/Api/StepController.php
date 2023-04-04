@@ -4,9 +4,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Steps\ChallengeRequest;
 use App\Http\Requests\Steps\CreateRequest;
 use App\Http\Requests\Steps\IndexRequest;
+use App\Http\Requests\Steps\ShowRequest;
 use App\Services\StepService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class StepController extends Controller
@@ -34,7 +37,7 @@ class StepController extends Controller
      * @param  CreateRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateRequest $request)
+    public function store(CreateRequest $request): JsonResponse
     {
         $result = $this->step_service->store($request->validated());
         return response()->json($result['step'], $result['status']);
@@ -43,12 +46,13 @@ class StepController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  ShowRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(ShowRequest $request): JsonResponse
     {
-        //
+        $result = $this->step_service->show($request->validated()['id']);
+        return response()->json($result);
     }
 
     /**
@@ -61,6 +65,17 @@ class StepController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    /**
+     * ステップへのチャレンジ
+     *
+     *
+     * @return JsonResponse
+     */
+    public function challenge(ChallengeRequest $request): JsonResponse
+    {
+        return response()->json(['result' => true]);
     }
 
     /**

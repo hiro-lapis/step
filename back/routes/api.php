@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/user', fn(Request $request) => $request->user());
     // ステップ新規作成
     Route::post('/steps', [StepController::class, 'store'])->name('steps.store');
+    Route::post('/steps/challenges', [StepController::class, 'challenge'])->name('steps.challenge');
 
     Route::group(['prefix' => 'mypage'], function() {
         Route::get('', [MypageController::class, 'index'])->name('mypage.index');
@@ -37,6 +38,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 });
 // ステップ一覧
 Route::get('/steps', [StepController::class, 'index'])->name('steps.index');
+Route::get('/steps/{id}', [StepController::class, 'show'])->name('steps.show');
 
 // ユーザーログイン状態確認
 Route::get('is-login', fn () => response()->json(['is_login' => auth()->user() !== null, 'user' => auth()->user()]));

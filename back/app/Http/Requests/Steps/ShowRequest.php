@@ -4,7 +4,7 @@ namespace App\Http\Requests\Steps;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateRequest extends FormRequest
+class ShowRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,21 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'max:255'],
-            'category_id' => ['required', 'exists:categories,id'],
-            'achievement_time_type_id' => ['required', 'exists:achievement_time_types,id'],
-            'sub_steps' => ['array', 'min:1'],
-            'sub_steps.*' => ['array:name,detail,sort_number'],
+            'id' => ['required', 'exists:steps,id'],
         ];
+    }
+
+    /**
+     * バリデーション前に実行される処理
+     * ルートパラメータを入力値に追加してバリデーション
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        // パラメータはstring型なのでキャスト
+        return $this->merge([
+            'id' => (int)$this->route('id')
+        ]);
     }
 }
