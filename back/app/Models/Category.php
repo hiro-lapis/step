@@ -14,6 +14,12 @@ class Category extends Model
     // マスタデータなのでアプリケーション側からの更新なし
     protected $fillable = [];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     /** accessor */
     /** relation */
 

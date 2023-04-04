@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { inject, onMounted } from 'vue'
-import Loading from '../Atoms/Loading.vue'
+import LoadingIcon from '../Atoms/LoadingIcon.vue'
 import NotifyMessage from '../Atoms/NotifyMessage.vue'
 import Header from '../Header.vue'
 import Footer from '../Footer.vue'
@@ -44,7 +44,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Loading />
+    <LoadingIcon />
     <NotifyMessage />
     <Header />
         <div class="l-container" :class="className">
@@ -67,10 +67,15 @@ onMounted(() => {
         max-width: 1440px;
         margin-bottom: 250px;
     }
+    &--steps-show {
+        display: flex; // メインコンテンツとサイドバーの横並び
+        justify-content: space-between;
+        max-width: 1000px;
+        margin-bottom: 300px;
+    }
     &__mypage {
         max-width: 1440px;
         margin-bottom: 300px;
     }
 }
-
 </style>

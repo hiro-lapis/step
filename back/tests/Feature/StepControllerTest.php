@@ -6,6 +6,7 @@ namespace Tests\Feature;
 use App\Models\AchievementTimeType;
 use App\Models\Category;
 use App\Models\Step;
+use App\Models\SubStep;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -69,10 +70,20 @@ class StepControllerTest extends TestCase
     {
         // 登録前のデータ状況を確認
         $this->assertDatabaseCount('steps', 0);
+        $sub_step_count = rand(1, 3);
+        $sub_steps = [];
+        for ($i=1; $i <= $sub_step_count; $i++) {
+            $sub_steps[] = [
+                'name' => 'サブステップ',
+                'detail' => 'サブステップ詳細' . $i,
+                'sort_number' => $i,
+            ];
+        }
         $params = [
             'name' => 'テストだよ',
             'category_id' => $this->category->id,
             'achievement_time_type_id' => $this->achievement_time_type->id,
+            'sub_steps' => $sub_steps,
         ];
         $this->actingAs($this->user)->postJson('/api/steps', $params);
 
@@ -83,6 +94,8 @@ class StepControllerTest extends TestCase
         $this->assertSame($this->user->id, $result->user_id);
         $this->assertSame($this->category->id, $result->category_id);
         $this->assertSame($params['achievement_time_type_id'], $result->achievement_time_type_id);
+        // サブステップの個数
+        $this->assertSame($sub_step_count, $result->subSteps()->count());
     }
 
     public function test_StepIndexReturnExpectedData(): void
@@ -102,5 +115,60 @@ class StepControllerTest extends TestCase
         $this->assertSame(10, $paginate['total']);
         //
         $this->assertSame(10, $paginate['total']);
+    }
+
+    public function test_stepShow(): void
+    {
+        $step_id = '1';
+        $response = $this->getJson('/api/steps/' . $step_id);
+        // 存在しないステップを参照するとバリデーションで弾かれるか
+        $response->assertUnprocessable();
+
+        // 子ステップ2つもつステップ情報を作成
+        $step = Step::factory()
+            ->has(SubStep::factory()->count(2))
+            ->create([
+            'user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'achievement_time_type_id' => $this->achievement_time_type->id,
+        ]);
+        $response = $this->getJson('/api/steps/' . $step->id);
+
+        // \Log::info('HIRO:responseの中身' . print_r(($response), true));
+        // $response->dump();
+        $step = Step::find($step->id);
+        $response->assertJson([
+            'id' => $step->id,
+            'user_id' => $step->user_id,
+            'category_id' => $step->category_id,
+            'achievement_time_type_id' => $step->achievement_time_type_id,
+            'name' => $step->name,
+            'category_name' => $step->category_name,
+            'user_name' => $step->user_name,
+            'user_image_url' => $step->user_image_url,
+            'achievement_time_type_name' => $step->achievement_time_type_name,
+            'is_writer' => $step->is_writer,
+        ]);
+    }
+
+    public function test_challenge(): void
+    {
+        // 自分が作者のステップ情報を作成
+        $step = Step::factory()->create([
+            'user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'achievement_time_type_id' => $this->achievement_time_type->id,
+        ]);
+
+        // チャレンジ実行
+        $response = $this->postJson('/api/steps/challenges');
+        // 未ログインだと401になるか
+        $response->assertUnauthorized();
+
+        // ログイン状態でチャレンジ実行
+        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges');
+        // 自作のステップには挑戦できない422レスポンスのメッセージが返ってくるか
+        $response->assertUnprocessable();
+
     }
 }

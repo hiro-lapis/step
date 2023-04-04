@@ -265,61 +265,8 @@
         width: 100%;
     }
 }
-
-/*
-* ショップ
-*/
-.c-btn--product-edit {
+.c-btn--challenge {
     @extend .c-btn;
-    @extend .c-btn--x-large;
-    @extend .c-btn--edit;
-}
-.c-btn--product-delete {
-    @extend .c-btn;
-    @extend .c-btn--x-large;
-    @extend .c-btn--danger;
-}
-.c-btn--product-update {
-    @extend .c-btn;
-    @extend .c-btn--x-large;
-    @extend .c-btn--update;
-}
-.c-btn--product-image-upload {
-    @extend .c-btn;
-    @extend .c-btn--x-large;
-    @extend .c-btn--update;
-}
-
-.c-btn--side-search {
-    @extend .c-btn;
-    @extend .c-btn--x-large;
-    @extend .c-btn--create;
-    font-size: 16px;
-    height: 30px;
-    line-height: 30px;
-}
-
-.c-btn--twitter-share {
-    @extend %c-btn;
-    @extend .c-btn--x-large;
-    @extend .c-btn--create;
-}
-
-// ショップ マイページ 全件表示ボタン
-.c-btn--move-to-product-index {
-    @extend .c-btn;
-    @extend .c-btn--x-large;
-    @extend .c-btn--create;
-}
-// ショップ マイページ 注文リスト 取引完了
-.c-btn--order-finish {
-    @extend .c-btn;
-    @extend .c-btn--x-large;
-    @extend .c-btn--create;
-}
-// ショップ マイページ 注文リスト 取引キャンセル
-.c-btn--order-cancel {
-    @extend .c-btn;
-    @extend .c-btn--x-large;
-    @extend .c-btn--create;
+    @extend .c-btn--large;
+    @extend .c-btn--agree;
 }

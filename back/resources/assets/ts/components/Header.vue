@@ -32,7 +32,7 @@ const logout = () => {
  * ページのモードに合わせたTOPページ名
  */
 const topPageName = computed(() => {
-    return 'login'
+    return userStore.isLogin ? 'steps-list' : 'login'
 })
 /**
  * ページがユーザーかどうか

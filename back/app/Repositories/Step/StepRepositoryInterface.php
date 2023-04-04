@@ -32,4 +32,12 @@ interface StepRepositoryInterface
      * @return LengthAwarePaginator
      */
     public function pagenateByCondition(array $condition): LengthAwarePaginator;
+
+    /**
+     * 詳細画面の情報取得
+     *
+     * @param int $step_id
+     * @return Step
+     */
+    public function findShowData(int $step_id): Step;
 }

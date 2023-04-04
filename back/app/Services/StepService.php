@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Step;
 use App\Repositories\Step\StepRepositoryInterface;
 use App\Repositories\SubStep\SubStepRepositoryInterface;
 use Exception;
@@ -45,7 +46,6 @@ class StepService
         try {
             // ステップ登録
             $step = $this->step_respository->create($params)->fresh();
-            \Log::info('HIRO:stepの中身' . print_r($step->toArray(), true));
             // 子ステップ登録
             $sub_step_params = collect($params['sub_steps']);
             $count = $this->step_respository->updateOrCreateSubSteps($step, $sub_step_params);
@@ -57,5 +57,25 @@ class StepService
             $status = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
         return compact('step', 'status');
+    }
+
+    /**
+     * 詳細情報を取得
+     *
+     * @param integer $step_id
+     * @return void
+     */
+    public function show(int $step_id): Step
+    {
+        $step = $this->step_respository->findShowData($step_id);
+        // アクセサの設定
+        return $step->setAppends([
+            'category_name',
+            'achievement_time_type_name',
+            'is_writer',
+            'user_name',
+            'user_image_url',
+            'user_profile',
+        ]);
     }
 }

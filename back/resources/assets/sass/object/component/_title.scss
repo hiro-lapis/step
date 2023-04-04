@@ -9,50 +9,45 @@
     line-height: 1.5;
     text-align: center;
     color: #333;
+    @include pc() {
+        font-size: 25px;
+    }
     &--white {
         color: white;
     }
     &--large {
         font-size: 26px;
     }
-    @include pc() {
-        // max-width: 858px; // TODO: いつ書いたか不明。確認後に削除
-        font-size: 25px;
+    &--step {
+        @extend .c-title;
+        text-align: left;
     }
-    &--needs {
+    &--sub-step {
+        @extend .c-title;
+        font-size: 16px;
+        text-align: left;
         position: relative;
-        padding: 10px 15px;
-        justify-content: center;
-        background: #fffff2;
-        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
-        @include pc() {
-            font-size: 30px;
+        padding-left: 25px; // 下線よりやや右側から文字開始
+        padding-bottom: 0;
+        &::before {
+            position: absolute;
+            content: '';
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 0;
+            border: none;
+            border-left: solid 10px transparent;
+            border-bottom: solid 10px #1E88E5;// 見出し左の矢印
         }
-        &::before,
         &::after {
             position: absolute;
-            width: 0;
-            height: 51.95px;
-            content: "";
-            transform: rotate(-45deg);
-            border-width: 0 0 0 1px;
-            border-style: solid;
-            border-color: #e60012;
-        }
-        &::before {
-            top: -15px;
-            right: 10px;
-        }
-        &::after {
-            bottom: -15px;
+            content: '';
+            bottom: -4px;
             left: 10px;
+            width: 100%;
+            border-bottom: solid 2px #1E88E5; // 見出しアンダーライン
         }
-    }
-    &--question {
-        font-size: 20px;
-        padding: 10px;
-        background: white;
-        border-bottom: 5px double #fd5722;
     }
 }
 

@@ -70,4 +70,20 @@ class StepRepository implements StepRepositoryInterface
             ->addSelect('steps.*')
             ->paginate();
     }
+
+    /**
+     * 詳細画面の情報取得
+
+     * @param int $step_id
+     * @return Step
+     */
+    public function findShowData(int $step_id): Step
+    {
+        return $this->step
+            ->with('category')
+            ->with('user')
+            // 並び順に取得
+            ->with('subSteps', fn($query) => $query->orderBy('sort_number', 'asc'))
+            ->find($step_id);
+    }
 }
