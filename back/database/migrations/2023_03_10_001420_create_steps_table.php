@@ -18,6 +18,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->comment('登録ユーザーID');
             $table->unsignedBigInteger('category_id')->comment('カテゴリーID');
             $table->string('name')->comment('ステップ名');
+            $table->string('image_url')->nullable()->comment('ステップのサムネイル画像URL');
+            $table->text('summary')->nullable()->comment('ステップの概要');
+            $table->text('merit')->nullable()->comment('ステップのメリット');
             $table->unsignedBigInteger('achievement_time_type_id')->comment('達成目安時間ID');
             $table->timestamps();
             $table->softDeletes();

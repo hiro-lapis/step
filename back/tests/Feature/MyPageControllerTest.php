@@ -141,6 +141,7 @@ class MyPageControllerTest extends TestCase
         $response = $this->actingAs($user)->putJson('/api/mypage/password', $params);
         $response->assertOk();
         $user->refresh();
+        
         // 更新後のハッシュ化パスワードとの整合性をチェック
         $this->assertTrue(Hash::check($params['password'], $user->password));
     }

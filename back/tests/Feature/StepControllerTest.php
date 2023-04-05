@@ -3,8 +3,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Enums\ChallengeStatusEnum;
 use App\Models\AchievementTimeType;
 use App\Models\Category;
+use App\Models\Challenge;
+use App\Models\ChallengeStep;
 use App\Models\Step;
 use App\Models\SubStep;
 use App\Models\User;
@@ -16,7 +19,7 @@ use Tests\TestCase;
 
 class StepControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     private User $user;
     private Category $category;
@@ -166,9 +169,15 @@ class StepControllerTest extends TestCase
         $response->assertUnauthorized();
 
         // ログイン状態でチャレンジ実行
-        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges');
-        // 自作のステップには挑戦できない422レスポンスのメッセージが返ってくるか
-        $response->assertUnprocessable();
+        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges', ['id' => $step->id]);
+        // 自作のステップには挑戦できない403レスポンスが返ってくるか
+        $response->assertForbidden();
 
+        // ステップの投稿者を異なるユーザーにして再度チャレンジ実行
+        $step->update(['user_id' => 999999999]);
+        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges', ['id' => $step->id]);
+        $response->assertOk();
+        // 挑戦中のチャレンジデータが作成されているか
+        $this->assertTrue(ChallengeStep::where('challenge_user_id', $this->user->id)->where('step_id', $step->id)->where('status', ChallengeStatusEnum::Start)->exists());
     }
 }

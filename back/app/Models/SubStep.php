@@ -11,9 +11,10 @@ class SubStep extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'step_id',
+        'name',
         'detail',
+        'image_url',
         'sort_number',
     ];
 
