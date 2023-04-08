@@ -24,6 +24,8 @@ class ChallengeSubStep extends Model
         'sort_number',
     ];
 
+    /** relation */
+
     /**
      * @return BelongsTo
      */

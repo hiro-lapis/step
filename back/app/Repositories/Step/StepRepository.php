@@ -9,12 +9,10 @@ use Illuminate\Support\Collection;
 
 class StepRepository implements StepRepositoryInterface
 {
-    private Step $step;
-
-    public function __construct(Step $step)
-    {
-        $this->step = $step;
-    }
+    public function __construct(
+        private Step $step,
+    )
+    {}
 
     public function create(array $params): Step
     {

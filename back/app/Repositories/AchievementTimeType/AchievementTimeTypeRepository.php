@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\Collection;
 
 class AchievementTimeTypeRepository implements AchievementTimeTypeRepositoryInterface
 {
-    private AchievementTimeType $achievement_time_type;
-
-    public function __construct(AchievementTimeType $achievement_time_type)
-    {
-        $this->achievement_time_type = $achievement_time_type;
-    }
+    public function __construct(
+        private AchievementTimeType $achievement_time_type,
+    )
+    {}
 
     public function get(): Collection
     {

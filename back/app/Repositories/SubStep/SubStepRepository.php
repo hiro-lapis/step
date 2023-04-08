@@ -7,12 +7,10 @@ use App\Models\SubStep;
 
 class SubStepRepository implements SubStepRepositoryInterface
 {
-    private SubStep $sub_step;
-
-    public function __construct(SubStep $sub_step)
-    {
-        $this->sub_step = $sub_step;
-    }
+    public function __construct(
+        private SubStep $sub_step,
+    )
+    {}
 
     public function create(array $params): SubStep
     {
