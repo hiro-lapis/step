@@ -14,16 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('challenge_information', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('user_id')->comment('チャレンジするユーザーのID');
             $table->unsignedInteger('challenge_count')->default(0)->comment('チャレンジした回数');
+            $table->unsignedInteger('challenging_count')->default(0)->comment('チャレンジ中のステップ数');
             $table->unsignedInteger('clear_count')->default(0)->comment('チャレンジクリア回数');
             $table->unsignedInteger('fail_count')->default(0)->comment('チャレンジ失敗回数');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('user_id');
-            $table->comment('ユーザー毎のチャレンジ関連情報');
+            $table->unique('user_id');
+            $table->comment('ユーザー毎のチャレンジサマリー情報');
         });
     }
 

@@ -70,12 +70,13 @@ class StepController extends Controller
     /**
      * ステップへのチャレンジ
      *
-     *
+     *　@param ChallengeRequest $request
      * @return JsonResponse
      */
     public function challenge(ChallengeRequest $request): JsonResponse
     {
-        return response()->json(['result' => true]);
+        $result = $this->step_service->challenge($request->validated()['id']);
+        return response()->json($result);
     }
 
     /**

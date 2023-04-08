@@ -6,7 +6,7 @@ namespace Tests\Feature;
 use App\Enums\ChallengeStatusEnum;
 use App\Models\AchievementTimeType;
 use App\Models\Category;
-use App\Models\Challenge;
+use App\Models\ChallengeInformation;
 use App\Models\ChallengeStep;
 use App\Models\Step;
 use App\Models\SubStep;
@@ -178,6 +178,35 @@ class StepControllerTest extends TestCase
         $response = $this->actingAs($this->user)->postJson('/api/steps/challenges', ['id' => $step->id]);
         $response->assertOk();
         // 挑戦中のチャレンジデータが作成されているか
-        $this->assertTrue(ChallengeStep::where('challenge_user_id', $this->user->id)->where('step_id', $step->id)->where('status', ChallengeStatusEnum::Start)->exists());
+        $this->assertTrue(ChallengeStep::where('challenge_user_id', $this->user->id)->where('step_id', $step->id)->where('status', ChallengeStatusEnum::Challenging)->exists());
+
+        // ユーザーのチャレンジ関連情報が存在するか
+        $challenge = ChallengeInformation::where('user_id', $this->user->id)->first();
+        $this->assertSame(1, $challenge->challenge_count);
+        $this->assertSame(1, $challenge->challenging_count);
+        $this->assertSame(0, $challenge->clear_count);
+
+        // チャレンジ中に同じステップに挑戦しようとすると403エラーレスポンスが返ってくるか
+        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges', ['id' => $step->id]);
+        $response->assertForbidden();
+
+        $challenge = ChallengeInformation::where('user_id', $this->user->id)->first();
+        $challenge_step = ChallengeStep::where('challenge_user_id', $this->user->id)->first();
+
+        // 失敗に更新し、チャレンジ状況の情報が更新されているか
+        $challenge_step->update(['status' => ChallengeStatusEnum::Failed]);
+        $challenge->refresh();
+        $this->assertSame(1, $challenge->challenge_count);
+        $this->assertSame(0, $challenge->challenging_count);
+        $this->assertSame(0, $challenge->clear_count);
+        $this->assertSame(1, $challenge->fail_count);
+
+        // 達成済に更新し、チャレンジ状況の情報が更新されているか
+        $challenge_step->update(['status' => ChallengeStatusEnum::Cleared]);
+        $challenge->refresh();
+        $this->assertSame(1, $challenge->challenge_count);
+        $this->assertSame(0, $challenge->challenging_count);
+        $this->assertSame(1, $challenge->clear_count);
+        $this->assertSame(0, $challenge->fail_count);
     }
 }

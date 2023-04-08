@@ -3,26 +3,27 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\ChallengeStatusEnum;
+use App\Models\ChallengeStep;
 use App\Models\Step;
+use App\Repositories\ChallengeStep\ChallengeStepRepositoryInterface;
 use App\Repositories\Step\StepRepositoryInterface;
 use App\Repositories\SubStep\SubStepRepositoryInterface;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class StepService
 {
-    private StepRepositoryInterface $step_respository;
-    private SubStepRepositoryInterface $sub_step_respository;
-
     public function __construct(
-        StepRepositoryInterface $step_respository,
-        SubStepRepositoryInterface $sub_step_respository,
+        private StepRepositoryInterface $step_respository,
+        private SubStepRepositoryInterface $sub_step_respository,
+        private ChallengeStepRepositoryInterface $challenge_step_respository,
     )
-    {
-        $this->step_respository = $step_respository;
-        $this->sub_step_respository = $sub_step_respository;
-    }
+    {}
 
     /**
      * ステップの検索と取得
@@ -77,5 +78,39 @@ class StepService
             'user_image_url',
             'user_profile',
         ]);
+    }
+
+    /**
+     * ステップへのチャレンジ
+     *
+     * @param integer $step_id
+     * @return array
+     * @throws HttpException
+     */
+    public function challenge(int $step_id): array
+    {
+        $original_step = $this->step_respository->findShowData($step_id);
+        if (!Gate::allows('store-challenge', $original_step)) {
+            abort(HttpResponse::HTTP_FORBIDDEN);
+        }
+
+        // チャレンジ時点のステップ情報を保存しつつチャレンジ情報作成
+        // ChallengeStepのライフサイクルメソッドでチャレンジ状況も自動更新
+        $data = [
+            'challenge_user_id' => auth()->user()->id,
+            'step_id' => $original_step->id,
+            'challenged_at' => now(),
+            'status' => ChallengeStatusEnum::Challenging,
+            'post_user_id' => $original_step->user_id,
+            'category_id' => $original_step->category_id,
+            'achievement_time_type_id' => $original_step->achievement_time_type_id,
+            'name' => $original_step->name,
+            'image_url' => $original_step->image_url,
+            'summary' => $original_step->summary,
+            'merit' => $original_step->merit,
+        ];
+        $challenge_step = $this->challenge_step_respository->create($data);
+
+        return compact('challenge_step');
     }
 }

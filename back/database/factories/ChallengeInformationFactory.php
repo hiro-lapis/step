@@ -19,6 +19,7 @@ class ChallengeInformationFactory extends Factory
         return [
             'user_id' => null,
             'challenge_count' => 0,
+            'challenging_count' => 0,
             'clear_count' => 0,
             'fail_count' => 0,
         ];
