@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    private Category $category;
-
-    public function __construct(Category $category)
-    {
-        $this->category = $category;
-    }
+    public function __construct(
+        private Category $category,
+    )
+    {}
 
     /**
      * カテゴリーを一覧取得

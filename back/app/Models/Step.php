@@ -18,6 +18,9 @@ class Step extends Model
         'category_id',
         'name',
         'achievement_time_type_id',
+        'image_url',
+        'summary',
+        'merit',
     ];
 
     protected $casts = [
@@ -91,11 +94,13 @@ class Step extends Model
     }
 
     /**
+     * 並び順を指定して、サブステップを取得
+     *
      * @return HasMany
      */
     public function subSteps(): HasMany
     {
-        return $this->hasMany(SubStep::class);
+        return $this->hasMany(SubStep::class)->orderBy('sort_number');
     }
 
     /** query */
@@ -103,10 +108,10 @@ class Step extends Model
     /**
      * マスタ情報テーブルとのjoin
      *
-     * @param  $query
+     * @param  Builder $query
      * @return $query Builder
      */
-    public function scopeJoinUsers($query): Builder
+    public function scopeJoinUsers(Builder $query): Builder
     {
         return $query->join('users', 'users.id', '=', 'steps.user_id');
     }
@@ -114,10 +119,10 @@ class Step extends Model
     /**
      * マスタ情報テーブルとのjoin
      *
-     * @param  $query
+     * @param  Builder $query
      * @return $query Builder
      */
-    public function scopeJoinMasterTables($query): Builder
+    public function scopeJoinMasterTables(Builder $query): Builder
     {
         return $query->join('categories', 'categories.id', '=', 'steps.category_id')
             ->join('achievement_time_types', 'achievement_time_types.id', '=', 'steps.achievement_time_type_id');

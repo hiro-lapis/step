@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, ref } from 'vue'
-import { useRequestStore, useUserStore } from '../../../store/globalStore'
+import { useMessageInfoStore, useRequestStore, useUserStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { useRoute, useRouter } from 'vue-router'
 import StepPreview from '../../Organisms/Steps/StepPreview.vue'
@@ -8,6 +8,7 @@ import { Step } from '../../../types/Step'
 import ImageClip from '../../Atoms/ImageClip.vue'
 
 const $repositories = inject<Repositories>("$repositories")!
+const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
 const userStore = useUserStore()
 const route = useRoute()
@@ -50,6 +51,7 @@ const challenge = async () => {
     await $repositories.step.challenge(step.value.id!)
         .then(response => {
             console.log(response)
+            messageStore.setMessage(response.data.message)
         }).finally(() => {
             requestStore.setLoading(false)
         })

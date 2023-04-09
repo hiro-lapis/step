@@ -3,10 +3,18 @@ import { Category } from './Category'
 import { SubStep } from './SubStep'
 import { User } from './User'
 
-export type Step = {
-    id?: number|null,
+export type ChallengeStep = {
+    id: number,
+    challenge_user_id: number,
+    challenged_at: string,
+    cleared_at: string|null,
+    status: number,
+    status_name?: string,
+
+    //  ここからオリジナルのステップ情報
+    step_id: number
+    post_user_id: number,
     category_id: number
-    user_id?: number
     name: string
     sub_steps: SubStep[]
     achievement_time_type_id: number
@@ -15,7 +23,7 @@ export type Step = {
     created_at?: string
     // 以下アクセサで必要に応じて設定
     category_name?: string
-    user_name?: string
-    user_image_url?: string
-    user_profile?: string
+    post_user_name?: string
+    post_user_image_url?: string
+    post_user_profile?: string
 }

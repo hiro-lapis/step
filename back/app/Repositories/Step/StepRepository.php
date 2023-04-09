@@ -9,12 +9,10 @@ use Illuminate\Support\Collection;
 
 class StepRepository implements StepRepositoryInterface
 {
-    private Step $step;
-
-    public function __construct(Step $step)
-    {
-        $this->step = $step;
-    }
+    public function __construct(
+        private Step $step,
+    )
+    {}
 
     public function create(array $params): Step
     {
@@ -83,7 +81,7 @@ class StepRepository implements StepRepositoryInterface
             ->with('category')
             ->with('user')
             // 並び順に取得
-            ->with('subSteps', fn($query) => $query->orderBy('sort_number', 'asc'))
+            ->with('subSteps')
             ->find($step_id);
     }
 }

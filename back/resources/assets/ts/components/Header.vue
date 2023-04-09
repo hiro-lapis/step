@@ -69,6 +69,12 @@ const userImage = computed(() => {
                                 <span class="c-nav__list-link">ステップを投稿する</span>
                             </li>
                         </router-link>
+                        <!-- ステップ一覧 -->
+                        <router-link :to="{ name: 'steps-list' }">
+                            <li class="c-nav__list-item">
+                                <a href="#" class="c-nav__list-link">ステップ一覧</a>
+                            </li>
+                        </router-link>
                         <li @click="logout" class="c-nav__list-item">
                             <span class="c-nav__list-link">ログアウト</span>
                         </li>
@@ -93,7 +99,7 @@ const userImage = computed(() => {
                         <!-- ユーザーメニュー -->
                         <router-link :to="{ name: 'steps-list' }">
                             <li class="c-nav__list-item">
-                                <a href="#" class="c-nav__list-link">ステップを見る</a>
+                                <a href="#" class="c-nav__list-link">ステップ一覧</a>
                             </li>
                         </router-link>
                         <router-link :to="{ name: 'register' }">

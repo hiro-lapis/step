@@ -3,20 +3,21 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Enums\ChallengeStatusEnum;
 use App\Models\AchievementTimeType;
 use App\Models\Category;
+use App\Models\ChallengeInformation;
+use App\Models\ChallengeStep;
 use App\Models\Step;
 use App\Models\SubStep;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\Fluent\AssertableJson;
-use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class StepControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     private User $user;
     private Category $category;
@@ -153,12 +154,17 @@ class StepControllerTest extends TestCase
 
     public function test_challenge(): void
     {
-        // 自分が作者のステップ情報を作成
-        $step = Step::factory()->create([
-            'user_id' => $this->user->id,
-            'category_id' => $this->category->id,
-            'achievement_time_type_id' => $this->achievement_time_type->id,
-        ]);
+        // 自分が作者のステップ情報(子ステップ2つ)を作成 (sort_numberを設定しつつ作成)
+        $step = Step::factory()
+            ->has(SubStep::factory()->count(2)->sequence(
+                ['sort_number' => 1],
+                ['sort_number' => 2],
+            ))
+            ->create([
+                'user_id' => $this->user->id,
+                'category_id' => $this->category->id,
+                'achievement_time_type_id' => $this->achievement_time_type->id,
+            ]);
 
         // チャレンジ実行
         $response = $this->postJson('/api/steps/challenges');
@@ -166,9 +172,49 @@ class StepControllerTest extends TestCase
         $response->assertUnauthorized();
 
         // ログイン状態でチャレンジ実行
-        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges');
-        // 自作のステップには挑戦できない422レスポンスのメッセージが返ってくるか
-        $response->assertUnprocessable();
+        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges', ['id' => $step->id]);
+        // 自作のステップには挑戦できない403レスポンスが返ってくるか
+        $response->assertForbidden();
 
+        // ステップの投稿者を異なるユーザーにして再度チャレンジ実行
+        $step->update(['user_id' => 999999999]);
+        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges', ['id' => $step->id]);
+        $response->assertOk();
+        // 挑戦中のチャレンジデータが作成されているか
+        $this->assertTrue(ChallengeStep::where('challenge_user_id', $this->user->id)->where('step_id', $step->id)->where('status', ChallengeStatusEnum::Challenging)->exists());
+
+        // ユーザーのチャレンジ関連情報が存在するか
+        $challenge = ChallengeInformation::where('user_id', $this->user->id)->first();
+        $this->assertSame(1, $challenge->challenge_count);
+        $this->assertSame(1, $challenge->challenging_count);
+        $this->assertSame(0, $challenge->clear_count);
+
+        // チャレンジ中に同じステップに挑戦しようとすると403エラーレスポンスが返ってくるか
+        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges', ['id' => $step->id]);
+        $response->assertForbidden();
+
+        $challenge = ChallengeInformation::where('user_id', $this->user->id)->first();
+        $challenge_step = ChallengeStep::where('challenge_user_id', $this->user->id)->first();
+
+        // オリジナルステップ情報をコピーしたチャレンジステップ情報が作成されているか
+        $this->assertSame($step->id, $challenge_step->step_id);
+        // 子ステップ情報含めチャレンジ情報で作成されているか
+        $this->assertSame(2, $challenge_step->challengeSubSteps->count());
+
+        // 失敗に更新し、チャレンジ状況の情報が更新されているか
+        $challenge_step->update(['status' => ChallengeStatusEnum::Failed]);
+        $challenge->refresh();
+        $this->assertSame(1, $challenge->challenge_count);
+        $this->assertSame(0, $challenge->challenging_count);
+        $this->assertSame(0, $challenge->clear_count);
+        $this->assertSame(1, $challenge->fail_count);
+
+        // 達成済に更新し、チャレンジ状況の情報が更新されているか
+        $challenge_step->update(['status' => ChallengeStatusEnum::Cleared]);
+        $challenge->refresh();
+        $this->assertSame(1, $challenge->challenge_count);
+        $this->assertSame(0, $challenge->challenging_count);
+        $this->assertSame(1, $challenge->clear_count);
+        $this->assertSame(0, $challenge->fail_count);
     }
 }

@@ -20,6 +20,7 @@ class SubStepFactory extends Factory
             'step_id' => null,
             'name' => fake()->name(),
             'detail' => fake()->name(),
+            'image_url' => fake()->imageUrl(),
             'sort_number' => fake()->unique()->numberBetween(1, 127),
         ];
     }

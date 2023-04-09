@@ -25,25 +25,7 @@ class ChallengeRequest extends FormRequest
     {
         return [
             'id' => ['required', 'exists:steps,id'],
-            // TODO：バリデーション
-            // ステップ作成者自身でないか
-            // 現在すでに対象のステップにチャレンジ中でないか
-
-            //  NOTE:期限付きにするかどうか
+            //  NOTE:期限付きにするかどうか検討
         ];
-    }
-
-    /**
-     * バリデーション前に実行される処理
-     * ルートパラメータを入力値に追加してバリデーション
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        // パラメータはstring型なのでキャスト
-        return $this->merge([
-            'user_id' => auth()->user()->id ?? 0,
-        ]);
     }
 }
