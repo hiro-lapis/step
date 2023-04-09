@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('challenge_steps', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('challenge_user_id')->comment('チャレンジしているユーザーID');
-            $table->timestamp('challenged_at')->comment('チャレンジ開始日時');
+            $table->timestamp('challenged_at')->nullable()->comment('チャレンジ開始日時');
             $table->datetime('cleared_at')->nullable()->comment('チャレンジ終了日時');
             $table->unsignedTinyInteger('status')->default(0)->comment('チャレンジ状況(初期値0:挑戦中)');
 

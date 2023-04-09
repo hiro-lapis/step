@@ -100,7 +100,7 @@ class StepService
             'challenge_user_id' => auth()->user()->id,
             'step_id' => $original_step->id,
             'challenged_at' => now(),
-            'status' => ChallengeStatusEnum::Challenging,
+            'status' => ChallengeStatusEnum::Challenging->value,
             'post_user_id' => $original_step->user_id,
             'category_id' => $original_step->category_id,
             'achievement_time_type_id' => $original_step->achievement_time_type_id,
@@ -109,7 +109,30 @@ class StepService
             'summary' => $original_step->summary,
             'merit' => $original_step->merit,
         ];
-        $challenge_step = $this->challenge_step_respository->create($data);
+
+        try {
+            DB::beginTransaction();
+            $challenge_step = $this->challenge_step_respository->create($data);
+            // チャレンジ時のサブステップデータの作成
+            $original_sub_step_data = $original_step->subSteps->map(function ($sub_step) use ($challenge_step) {
+                return [
+                    'challenge_step_id' => $challenge_step->id,
+                    'sub_step_id' => $sub_step->id,
+                    'challenged_at' => $sub_step->sort_number == 1 ? now() : null, // 最初の子ステップのみチャレンジ状態にする
+                    'status' => $sub_step->sort_number == 1 ? ChallengeStatusEnum::Challenging->value : ChallengeStatusEnum::NotChallenged->value, // 最初の子ステップのみチャレンジ状態にする
+                    'name' => $sub_step->name,
+                    'detail' => $sub_step->detail,
+                    'image_url' => $sub_step->image_url,
+                    'sort_number' => $sub_step->sort_number,
+                ];
+            })->toArray();
+            $this->challenge_step_respository->createManySubStep($challenge_step, $original_sub_step_data);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            report($e);
+            throw new HttpException(HttpResponse::HTTP_INTERNAL_SERVER_ERROR, 'チャレンジデータの作成に失敗しました');
+        }
 
         return compact('challenge_step');
     }

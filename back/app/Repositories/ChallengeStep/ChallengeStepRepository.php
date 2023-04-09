@@ -21,4 +21,17 @@ class ChallengeStepRepository implements ChallengeStepRepositoryInterface
     {
         return $this->challenge_step->create($data);
     }
+
+    /**
+     * 引数にとったチャレンジステップ情報に紐づくサブステップ情報を新規作成
+     *
+     * @param ChallengeStep $challenge_step
+     * @param array $data
+     * @return integer
+     */
+    public function createManySubStep(ChallengeStep $challenge_step, array $data): int
+    {
+         $challenge_step->challengeSubSteps()->createMany($data);
+         return $challenge_step->challengeSubSteps()->count();
+    }
 }

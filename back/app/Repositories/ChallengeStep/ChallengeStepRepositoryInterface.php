@@ -13,4 +13,12 @@ interface ChallengeStepRepositoryInterface
      * @return ChallengeStep
      */
     public function create(array $data): ChallengeStep;
+
+    /**
+     * チャレンジ時のサブステップ情報を複数新規作成
+     *
+     * @param array $data
+     * @return integer
+     */
+    public function createManySubStep(ChallengeStep $challenge_step, array $data): int;
 }

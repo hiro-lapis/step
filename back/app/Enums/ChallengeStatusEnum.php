@@ -4,12 +4,10 @@ namespace App\Enums;
 
 enum ChallengeStatusEnum: int
 {
-    /**
-     * const.php と定義を合わせること
-     */
-    case Challenging = 0; // 挑戦中
-    case Lating = 1; // 挑戦中で達成期限を過ぎている
+    case NotChallenged = 0; // 未挑戦
+    case Challenging = 1; // 挑戦中
     case Retry = 2;   // 再挑戦
+    case Lating = 3; // 挑戦中で達成期限を過ぎている
     case Cleared = 10;   // 達成
     case Lated = 20;  // 達成はしたが達成期限を過ぎていた
     case Failed = 30;  // 失敗
@@ -20,9 +18,10 @@ enum ChallengeStatusEnum: int
      * @param integer $status
      * @return string ステータス名
      */
-    public static function string(int $role): string
+    public static function string(int $status): string
     {
-        return match ($role) {
+        return match ($status) {
+            self::NotChallenged, self::NotChallenged->value => '未挑戦',
             self::Challenging, self::Challenging->value => '挑戦中',
             self::Lating, self::Lating->value => '挑戦中(期限過ぎ)',
             self::Retry, self::Retry->value => '再達成',

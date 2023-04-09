@@ -76,7 +76,7 @@ class StepController extends Controller
     public function challenge(ChallengeRequest $request): JsonResponse
     {
         $result = $this->step_service->challenge($request->validated()['id']);
-        return response()->json($result);
+        return response()->json(['message' => 'チャレンジ開始しました。達成するまでがんばりましょう！']);
     }
 
     /**

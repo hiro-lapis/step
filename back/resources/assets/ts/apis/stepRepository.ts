@@ -21,7 +21,7 @@ export class StepRepository {
         return await axios.get(`${this.findUrl}/${step_id}`)
     }
     async challenge(step_id: number): Promise<AxiosResponse<ChallengeResponse>> {
-        return await axios.post(`${this.challengeUrl}`, { step_id: step_id})
+        return await axios.post(`${this.challengeUrl}`, { id: step_id})
     }
 }
 type PaginationData = {
@@ -37,5 +37,5 @@ type GetResponse = {
 type FindResponse = Step
 
 type ChallengeResponse = {
-    result: Boolean
+    message: string
 }

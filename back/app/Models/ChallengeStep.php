@@ -6,6 +6,7 @@ use App\Enums\ChallengeStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ChallengeStep extends Model
@@ -59,7 +60,45 @@ class ChallengeStep extends Model
         });
     }
 
+        /** accessor */
+
+        public function getPostUserNameAttribute(): string
+        {
+            return $this->postUser->name ?? '';
+        }
+
+        public function getPostUserImageUrlAttribute(): string
+        {
+            return $this->postUser->image_url ?? '';
+        }
+
+        public function getPostUserProfileAttribute(): string
+        {
+            return $this->postUser->profile ?? '';
+        }
+
+        public function getCategoryNameAttribute(): string
+        {
+            return $this->category->name ?? '';
+        }
+
+        public function getAchievementTimeTypeNameAttribute(): string
+        {
+            return $this->achievementTimeType->name ?? '';
+        }
+
+
     /** relation */
+
+    /**
+     * 並び順を指定して、チャレンジサブステップを取得
+     *
+     * @return HasMany
+     */
+    public function challengeSubSteps(): HasMany
+    {
+        return $this->hasMany(ChallengeSubStep::class)->orderBy('sort_number');
+    }
 
     /**
      * @return BelongsTo

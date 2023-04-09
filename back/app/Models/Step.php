@@ -94,11 +94,13 @@ class Step extends Model
     }
 
     /**
+     * 並び順を指定して、サブステップを取得
+     *
      * @return HasMany
      */
     public function subSteps(): HasMany
     {
-        return $this->hasMany(SubStep::class);
+        return $this->hasMany(SubStep::class)->orderBy('sort_number');
     }
 
     /** query */

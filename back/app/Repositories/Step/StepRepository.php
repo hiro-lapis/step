@@ -81,7 +81,7 @@ class StepRepository implements StepRepositoryInterface
             ->with('category')
             ->with('user')
             // 並び順に取得
-            ->with('subSteps', fn($query) => $query->orderBy('sort_number', 'asc'))
+            ->with('subSteps')
             ->find($step_id);
     }
 }

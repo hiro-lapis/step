@@ -13,8 +13,6 @@ use App\Models\SubStep;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\Fluent\AssertableJson;
-use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class StepControllerTest extends TestCase
@@ -156,12 +154,17 @@ class StepControllerTest extends TestCase
 
     public function test_challenge(): void
     {
-        // 自分が作者のステップ情報を作成
-        $step = Step::factory()->create([
-            'user_id' => $this->user->id,
-            'category_id' => $this->category->id,
-            'achievement_time_type_id' => $this->achievement_time_type->id,
-        ]);
+        // 自分が作者のステップ情報(子ステップ2つ)を作成 (sort_numberを設定しつつ作成)
+        $step = Step::factory()
+            ->has(SubStep::factory()->count(2)->sequence(
+                ['sort_number' => 1],
+                ['sort_number' => 2],
+            ))
+            ->create([
+                'user_id' => $this->user->id,
+                'category_id' => $this->category->id,
+                'achievement_time_type_id' => $this->achievement_time_type->id,
+            ]);
 
         // チャレンジ実行
         $response = $this->postJson('/api/steps/challenges');
@@ -192,6 +195,11 @@ class StepControllerTest extends TestCase
 
         $challenge = ChallengeInformation::where('user_id', $this->user->id)->first();
         $challenge_step = ChallengeStep::where('challenge_user_id', $this->user->id)->first();
+
+        // オリジナルステップ情報をコピーしたチャレンジステップ情報が作成されているか
+        $this->assertSame($step->id, $challenge_step->step_id);
+        // 子ステップ情報含めチャレンジ情報で作成されているか
+        $this->assertSame(2, $challenge_step->challengeSubSteps->count());
 
         // 失敗に更新し、チャレンジ状況の情報が更新されているか
         $challenge_step->update(['status' => ChallengeStatusEnum::Failed]);
