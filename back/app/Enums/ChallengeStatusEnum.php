@@ -24,10 +24,38 @@ enum ChallengeStatusEnum: int
             self::NotChallenged, self::NotChallenged->value => '未挑戦',
             self::Challenging, self::Challenging->value => '挑戦中',
             self::Lating, self::Lating->value => '挑戦中(期限過ぎ)',
-            self::Retry, self::Retry->value => '再達成',
+            self::Retry, self::Retry->value => '再挑戦',
             self::Cleared, self::Cleared->value => '達成',
             self::Lated, self::Lated->value => '達成(期限過ぎ',
             self::Failed, self::Failed->value => '失敗',
+        };
+    }
+
+    public static function getInChallengeStatuses(): array
+    {
+        return [
+            self::Challenging->value,
+            self::Lating->value,
+            self::Retry->value,
+        ];
+    }
+
+    /**
+     * チャレンジ状態かどうか判定
+     *
+     * @param integer $status
+     * @return boolean
+     */
+    public static function isInChallenge(int $status): bool
+    {
+        return match ($status) {
+            self::NotChallenged, self::NotChallenged->value => false,
+            self::Challenging, self::Challenging->value => true,
+            self::Lating, self::Lating->value => true,
+            self::Retry, self::Retry->value => true,
+            self::Cleared, self::Cleared->value => false,
+            self::Lated, self::Lated->value => false,
+            self::Failed, self::Failed->value => false,
         };
     }
 }

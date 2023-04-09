@@ -35,7 +35,7 @@ class AuthServiceProvider extends ServiceProvider
             // 自身が投稿したステップでないか
             if ($user->id === $step->user_id) return false;
             // 現在挑戦中でないか
-            $in_challenging = ChallengeStep::challengeUserId($user->id)->challenging()->exists();
+            $in_challenging = ChallengeStep::stepId($step->id)->challengeUserId($user->id)->challenging()->exists();
             if ($in_challenging) return false;
             return true;
         });

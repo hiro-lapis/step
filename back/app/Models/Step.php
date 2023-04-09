@@ -108,10 +108,10 @@ class Step extends Model
     /**
      * マスタ情報テーブルとのjoin
      *
-     * @param  $query
+     * @param  Builder $query
      * @return $query Builder
      */
-    public function scopeJoinUsers($query): Builder
+    public function scopeJoinUsers(Builder $query): Builder
     {
         return $query->join('users', 'users.id', '=', 'steps.user_id');
     }
@@ -119,10 +119,10 @@ class Step extends Model
     /**
      * マスタ情報テーブルとのjoin
      *
-     * @param  $query
+     * @param  Builder $query
      * @return $query Builder
      */
-    public function scopeJoinMasterTables($query): Builder
+    public function scopeJoinMasterTables(Builder $query): Builder
     {
         return $query->join('categories', 'categories.id', '=', 'steps.category_id')
             ->join('achievement_time_types', 'achievement_time_types.id', '=', 'steps.achievement_time_type_id');

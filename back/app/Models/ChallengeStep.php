@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ChallengeStatusEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -139,23 +140,39 @@ class ChallengeStep extends Model
 
     /** scope */
 
-    public function scopeChallengeUserId($query, int $user_id)
+    public function scopeStepId(Builder $query, int $step_id): Builder
+    {
+        return $query->where('step_id', $step_id);
+    }
+
+    public function scopeChallengeUserId(Builder $query, int $user_id): Builder
     {
         return $query->where('challenge_user_id', $user_id);
     }
 
-    public function scopeChallenging($query)
+    public function scopeChallenging(Builder $query): Builder
     {
         return $query->where('status', ChallengeStatusEnum::Challenging);
     }
 
-    public function scopeCleared($query)
+    public function scopeCleared(Builder $query): Builder
     {
         return $query->where('status', ChallengeStatusEnum::Cleared);
     }
 
-    public function scopeFailed($query)
+    public function scopeFailed(Builder $query): Builder
     {
         return $query->where('status', ChallengeStatusEnum::Failed);
+    }
+
+    /**
+     * チャレンジ状態のステータスでの絞り込み
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeInChallengeStatus(Builder $query): Builder
+    {
+        return $query->whereIn('status', ChallengeStatusEnum::getInChallengeStatuses());
     }
 }
