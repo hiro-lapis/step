@@ -74,7 +74,7 @@ onMounted(() => {
         margin-bottom: 300px;
     }
     &__mypage {
-        max-width: 1440px;
+        max-width: 600px;
         margin-bottom: 300px;
     }
 }

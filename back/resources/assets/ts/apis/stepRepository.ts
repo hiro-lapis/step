@@ -10,10 +10,10 @@ export class StepRepository {
     private readonly findUrl = '/api/steps'
     private readonly challengeUrl = '/api/steps/challenges'
 
-    async store(data: { category_id: number, achievement_time_type_id: number,  name: string, page: number }): Promise<any> {
+    async store(data: { category_id: number, achievement_time_type_id: number,  name: string }): Promise<any> {
         return await axios.post(`${this.baseUrl}`, data)
     }
-    async get(data: { key_word: string, category_id: number|null, achievement_time_type_id: number|null }): Promise<any> {
+    async get(data: { key_word: string, category_id: number|null, achievement_time_type_id: number|null, page: number }): Promise<any> {
         // クエリパラメータで送信
         return await axios.get(`${this.baseUrl}`, { params: data })
     }
