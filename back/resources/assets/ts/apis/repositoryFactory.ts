@@ -1,6 +1,7 @@
 import { AuthRepository } from './authRepository'
 import { CommonRepository } from './commonRepository'
 import { StepRepository } from './stepRepository'
+import { ChallengeStepRepository } from './challengeStepRepository'
 import { MyPageRepository } from './myPageRepository'
 
 export interface Repositories {
@@ -14,6 +15,7 @@ export interface Repositories {
 const repositories = {
   auth: new AuthRepository(),
   common: new CommonRepository(),
+  challengeStep: new ChallengeStepRepository(),
   mypage: new MyPageRepository(),
   step: new StepRepository(),
 }

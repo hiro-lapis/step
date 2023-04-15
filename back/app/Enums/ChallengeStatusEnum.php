@@ -41,6 +41,19 @@ enum ChallengeStatusEnum: int
     }
 
     /**
+     * 達成済みのステータスを返却
+     *
+     * @return array
+     */
+    public static function getClearedStatuses(): array
+    {
+        return [
+            self::Cleared,
+            self::Lated,
+        ];
+    }
+
+    /**
      * チャレンジ状態かどうか判定
      *
      * @param integer $status

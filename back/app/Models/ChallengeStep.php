@@ -30,6 +30,15 @@ class ChallengeStep extends Model
         'merit',
     ];
 
+    protected $appends = [
+        'status_name',
+    ];
+
+    public function getStatusNameAttribute(): string
+    {
+        return ChallengeStatusEnum::string($this->status);
+    }
+
     /**
      * モデルの「起動」メソッド
      *
@@ -61,33 +70,32 @@ class ChallengeStep extends Model
         });
     }
 
-        /** accessor */
+    /** accessor */
 
-        public function getPostUserNameAttribute(): string
-        {
-            return $this->postUser->name ?? '';
-        }
+    public function getPostUserNameAttribute(): string
+    {
+        return $this->postUser->name ?? '';
+    }
 
-        public function getPostUserImageUrlAttribute(): string
-        {
-            return $this->postUser->image_url ?? '';
-        }
+    public function getPostUserImageUrlAttribute(): string
+    {
+        return $this->postUser->image_url ?? '';
+    }
 
-        public function getPostUserProfileAttribute(): string
-        {
-            return $this->postUser->profile ?? '';
-        }
+    public function getPostUserProfileAttribute(): string
+    {
+        return $this->postUser->profile ?? '';
+    }
 
-        public function getCategoryNameAttribute(): string
-        {
-            return $this->category->name ?? '';
-        }
+    public function getCategoryNameAttribute(): string
+    {
+        return $this->category->name ?? '';
+    }
 
-        public function getAchievementTimeTypeNameAttribute(): string
-        {
-            return $this->achievementTimeType->name ?? '';
-        }
-
+    public function getAchievementTimeTypeNameAttribute(): string
+    {
+        return $this->achievementTimeType->name ?? '';
+    }
 
     /** relation */
 
@@ -99,6 +107,18 @@ class ChallengeStep extends Model
     public function challengeSubSteps(): HasMany
     {
         return $this->hasMany(ChallengeSubStep::class)->orderBy('sort_number');
+    }
+
+    /**
+     * 並び順を指定して、達成済orチャレンジ中のサブステップを取得
+     *
+     * @return HasMany
+     */
+    public function clearedSubSteps(): HasMany
+    {
+        return $this->hasMany(ChallengeSubStep::class)
+            ->whereIn('status', ChallengeStatusEnum::getClearedStatuses())
+            ->orderBy('sort_number');
     }
 
     /**

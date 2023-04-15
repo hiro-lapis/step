@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from 'vue'
+// 挑戦中のステップを表示するページ
+// ステップへの挑戦後にステップを編集してサブステップが更新されたり削除されたりした場合を考慮して、画面を別に作る
+import { inject, onMounted, ref } from 'vue'
 import { useMessageInfoStore, useRequestStore, useUserStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { useRoute, useRouter } from 'vue-router'
 import StepPreview from '../../Organisms/Steps/StepPreview.vue'
-import { Step } from '../../../types/Step'
+import { ChallengeStep } from '../../../types/ChallengeStep'
 import ImageClip from '../../Atoms/ImageClip.vue'
 
 const $repositories = inject<Repositories>("$repositories")!
@@ -15,29 +17,33 @@ const route = useRoute()
 const router = useRouter()
 
 // data
-const step = ref<Step>({
+const step = ref<ChallengeStep>({
     id: 0,
+    challenge_user_id: 0,
+    challenged_at: '',
+    cleared_at: '',
+    status: 0,
+    status_name: '',
+    step_id: 0,
+    post_user_id: 0,
     category_id: 0,
-    user_id: 0,
     name: '',
     merit: '',
-    sub_steps: [],
+    challenge_sub_steps: [],
+    challenge_sub_steps_count: 0,
+    cleared_sub_steps_count: 0,
     achievement_time_type_id: 0,
     achievement_time_type: { id: 0, name: ''},
     category: { id: 0, name: ''},
 })
 const isInitialized = ref(false)
 // computed
-const isChallengeable = computed(() => {
-    // ロード完了後で、ログイン中で、投稿ユーザーでないか
-    return isInitialized.value && userStore.isLogin && userStore.user.id !== step.value.user_id
-})
 
 // methods
 const fetchData = async () => {
     const stepId = Number(route.params.id)
     requestStore.setLoading(true)
-    await $repositories.step.find(stepId)
+    await $repositories.challengeStep.find(stepId)
         .then(response => {
             step.value = response.data
             isInitialized.value = true
@@ -45,20 +51,19 @@ const fetchData = async () => {
             requestStore.setLoading(false)
         })
 }
-// ログインユーザーがステップへチャレンジ
-const challenge = async () => {
-    if (requestStore.isLoading) return
-    requestStore.setLoading(true)
-    await $repositories.step.challenge(step.value.id!)
-        .then(response => {
-            console.log(response)
-            messageStore.setMessage(response.data.message)
-        }).finally(() => {
-            requestStore.setLoading(false)
-        })
-}
-// ログインページへ遷移
-const gotoLogin = () => router.push({ name: 'login'})
+// ログインユーザーがサブステップをクリア
+// const clear = async (subStepId: number) => {
+//     if (requestStore.isLoading) return
+//     requestStore.setLoading(true)
+//     await $repositories.step.clear(subStepId)
+//         .then(response => {
+//             console.log(response)
+//             messageStore.setMessage(response.data.message)
+//         }).finally(() => {
+//             requestStore.setLoading(false)
+//         })
+// }
+
 onMounted(() => {
     fetchData()
 })
@@ -72,29 +77,18 @@ onMounted(() => {
                     :step="step"
                 >
                     <template v-slot:bottom>
-                        <button
-                            v-if="isChallengeable"
-                            @click="challenge"
-                            class="c-btn--challenge">
-                            挑戦する!
-                        </button>
-                        <button
-                            v-if="!userStore.isLogin"
-                            @click="gotoLogin"
-                            class="c-btn--challenge">
-                            ログインして挑戦する!
-                        </button>
+                        <!-- コンテンツ下部スロット -->
                     </template>
                 </StepPreview>
             </div>
             <div v-if="isInitialized" class="p-step-show__aside">
                 <div class="c-step-supplement">
                     <div class="c-step-supplement__head">
-                        <ImageClip :path="step.user_image_url!"></ImageClip>
-                        <div class="u-margin-l-05p">{{ step.user_name! }}</div>
+                        <ImageClip :path="step.post_user_image_url!"></ImageClip>
+                        <div class="u-margin-l-05p">{{ step!.post_user_name! }}</div>
                     </div>
                     <div class="c-step-supplement__user-information">
-                        {{ step.user_profile! }}
+                        {{ step.post_user_profile! }}
                     </div>
                 </div>
             </div>

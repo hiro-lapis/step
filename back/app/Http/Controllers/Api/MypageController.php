@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Mypage\UpdateProfileRequest;
 use App\Models\User;
+use App\Services\StepService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class MypageController extends Controller
 {
+    public function __construct(private StepService $step_service)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -51,5 +56,17 @@ class MypageController extends Controller
         $user->refresh();
         $message = 'プロフィール情報を更新しました';
         return response()->json(compact('user', 'message'));
+    }
+
+    public function postedStep(): JsonResponse
+    {
+        $result = $this->step_service->getPosted();
+        return response()->json($result);
+    }
+
+    public function challengingStep(): JsonResponse
+    {
+        $result = $this->step_service->getChallenging();
+        return response()->json($result);
     }
 }

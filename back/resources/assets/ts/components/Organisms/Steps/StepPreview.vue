@@ -1,18 +1,25 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { ChallengeStep } from 'assets/ts/types/ChallengeStep';
 import { PropType } from 'vue'
 import { Step } from '../../../types/Step'
 import CategoryBadge from '../../Atoms/CategoryBadge.vue'
 
 // props
 const props = defineProps({
-    step: { required: true, type: Object as PropType<Step>, }, // プレビュー表示するステップ情報
+    step: { required: true, type: Object as PropType<Step|ChallengeStep>, }, // プレビュー表示するステップ情報
     readOnly: { required: false, type: Boolean, default: false, }, // 見るだけモードか
 })
 
-// methods
-// data
-
-
+// computed
+// ステップ・チャレンジステップの型が異なるため、型に応じたサブステップを表示
+const subSteps = computed(() => {
+    if ('sub_steps' in props.step ) {
+        return props.step.sub_steps
+    } else {
+        return props.step.challenge_sub_steps
+    }
+})
 </script>
 
 <template>
@@ -32,12 +39,12 @@ const props = defineProps({
             <!-- ステップ詳細 -->
             <div class="c-step-preview__body">
                 <div class="c-sub-step__container">
-                    <template v-for="(subStep, index) in step.sub_steps">
+                    <template v-for="(subStep, index) in subSteps">
                         <div class="c-sub-step">
                             <!-- サブステップ見出し -->
                             <div class="c-sub-step__header">
                                 <h2 class="c-title--sub-step">
-                                    <span class="c-sub-step__header--prefix">ステップ{{ index }} </span>
+                                    <span class="c-sub-step__header--prefix">ステップ{{ (index + 1).toString() + ' ' }}</span>
                                     <span class="c-sub-step__header--name">{{ subStep.name }}</span>
                                 </h2>
                                 <!-- TODO画像設定の有無に応じて画像表示 -->
@@ -62,6 +69,9 @@ const props = defineProps({
 .c-step-preview {
     background-color: #fff;
     padding: 0px 20px 20px;
+    width: 100%; // 親要素の幅いっぱいに広げる
+    overflow-wrap: break-word;
+    word-wrap: break-word; // 溢れる文字を折り返す
     &__head {
         margin-bottom: 30px;
     }
@@ -80,7 +90,7 @@ const props = defineProps({
 .c-sub-step {
     margin-bottom: 25px;
     &__header {
-        margin-bottom: 10px;
+        margin-bottom: 20px;
     }
     &__content {
         font-size: 13px;

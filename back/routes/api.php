@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AchievementTimeTypeController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ChallengeStepController;
 use App\Http\Controllers\Api\MypageController;
 use App\Http\Controllers\Api\StepController;
 use Illuminate\Http\Request;
@@ -27,10 +28,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // ステップ新規作成
     Route::post('/steps', [StepController::class, 'store'])->name('steps.store');
     Route::post('/steps/challenges', [StepController::class, 'challenge'])->name('steps.challenge');
-
+    // チャレンジ中のステップ情報
+    Route::group(['prefix' => 'challenge-steps'], function() {
+        Route::get('{step_id}', [ChallengeStepController::class, 'show'])->name('.show');
+    });
     Route::group(['prefix' => 'mypage'], function() {
         Route::get('', [MypageController::class, 'index'])->name('mypage.index');
         Route::post('/profile', [MypageController::class, 'updateProfile'])->name('mypage.update.profile');
+        Route::get('/posted-step', [MypageController::class, 'postedStep'])->name('mypage.postedStep');
+        Route::get('/challenging-step', [MypageController::class, 'challengingStep'])->name('mypage.challengingStep');
         Route::put('/password', [PasswordController::class, 'update'])->name('mypage.update.password');
     });
     // ログアウト

@@ -6,3 +6,19 @@
 .u-hidden {
     display: none;
 }
+
+// 1行表示から溢れる文字を「...」に置き換える
+.u-spread {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+$line-clamp : 2;
+// 指定行(webkit-line-clamp)から溢れる文字を「...」に置き換える
+.u-spread--multi {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $line-clamp;
+}

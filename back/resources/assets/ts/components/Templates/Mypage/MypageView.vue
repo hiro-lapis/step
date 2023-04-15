@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Component, computed, onMounted, ref } from 'vue'
+import { type Component, onMounted, ref } from 'vue'
 import MultiTab from '../../Molecules/MultiTab.vue'
 import ProfileEdit from '../../Organisms/Mypage/ProfileEdit.vue'
 import ChallengingStep from '../../Organisms/Mypage/ChallengingStep.vue'
@@ -26,7 +26,7 @@ const tabGroups = [
 
 // data
 // ref内にはtabs の key名を記載
-const currentTab = ref(Object.keys(tabs)[0]) // プロフィール編集
+const currentTab = ref(Object.keys(tabs)[1]) // プロフィール編集
 
 onMounted(() => {})
 </script>
@@ -41,7 +41,9 @@ onMounted(() => {})
                         v-model:selectedTab="currentTab"
                     >
                         <template v-slot:content>
-                            <component :is="tabs[currentTab]"></component>
+                            <KeepAlive>
+                                <component :is="tabs[currentTab]"></component>
+                            </KeepAlive>
                         </template>
                     </MultiTab>
                 </OutInFadeIn>

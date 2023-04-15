@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ChallengeStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,15 @@ class ChallengeSubStep extends Model
         'image_url',
         'sort_number',
     ];
+
+    protected $appends = [
+        'status_name',
+    ];
+
+    public function getStatusNameAttribute(): string
+    {
+        return ChallengeStatusEnum::string($this->status);
+    }
 
     /** relation */
 

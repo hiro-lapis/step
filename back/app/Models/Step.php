@@ -64,7 +64,10 @@ class Step extends Model
      */
     public function getIsWriterAttribute(): bool
     {
-        return $this->user_id === auth()->user();
+        if (auth()->guest()) {
+            return false;
+        }
+        return $this->user_id === auth()->user()->id;
     }
 
     /** relation */
@@ -101,6 +104,16 @@ class Step extends Model
     public function subSteps(): HasMany
     {
         return $this->hasMany(SubStep::class)->orderBy('sort_number');
+    }
+
+    /**
+     * チャレンジされているステップ情報を取得
+     *
+     * @return HasMany
+     */
+    public function challengeSteps(): HasMany
+    {
+        return $this->hasMany(ChallengeStep::class);
     }
 
     /** query */

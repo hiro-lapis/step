@@ -21,16 +21,16 @@ class ChallengeStepFactory extends Factory
             'challenge_user_id' => null,
             'challenged_at' => now()->format('Y-m-d H:i:s'),
             'cleared_at' => null,
-            'status' => ChallengeStatusEnum::Start,
+            'status' => ChallengeStatusEnum::Challenging,
             // チャレンジ時のステップ情報
             'step_id' => null,
             'post_user_id' => null,
             'category_id' => null,
             'achievement_time_type_id' => null,
-            'name' => null,
-            'image_url' => null,
-            'summary' => null,
-            'merit' => null,
+            'name' => fake()->text(),
+            'image_url' => fake()->imageUrl(),
+            'summary' => fake()->text(),
+            'merit' => fake()->text(),
         ];
     }
 }

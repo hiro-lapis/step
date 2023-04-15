@@ -22,13 +22,13 @@ class ChallengeSubStepFactory extends Factory
             'challenge_step_id' => null,
             'challenged_at' => now()->format('Y-m-d H:i:s'),
             'cleared_at' => null,
-            'status' => ChallengeStatusEnum::Start,
+            'status' => ChallengeStatusEnum::Challenging,
             // チャレンジ時のサブステップ情報
             'sub_step_id' => null,
-            'name' => null,
-            'detail' => null,
-            'image_url' => null,
-            'sort_number' => null,
+            'name' => fake()->text(),
+            'detail' => fake()->text(),
+            'image_url' => fake()->imageUrl(),
+            'sort_number' => fake()->unique()->randomDigit(),
         ];
     }
 }

@@ -10,6 +10,7 @@ import PasswordReset from '../components/Templates/Password/Reset.vue'
 import MypageView from '../components/Templates/Mypage/MypageView.vue'
 import StepEditView from '../components/Templates/Steps/StepEditView.vue'
 import StepShowView from '../components/Templates/Steps/StepShowView.vue'
+import ChallengeStepShowView from '../components/Templates/ChallengeSteps/ChallengeStepShowView.vue'
 import StepListView from '../components/Templates/Steps/StepListView.vue'
 
 // ルート登録
@@ -24,9 +25,9 @@ const routes = [
     { path: '/steps/create', name: 'steps-create', component: StepEditView, },
     { path: '/steps', name: 'steps-list', component: StepListView, },
     { path: '/steps/:id', name: 'steps-show', component: StepShowView, },
+    { path: '/challege-steps/:id', name: 'challenge-steps-show', component: ChallengeStepShowView, },
     { path: '/mypage', name: 'mypage', component: MypageView, },
 ]
-
 
 export const router = createRouter({
     history: createWebHistory(), // 履歴機能ON

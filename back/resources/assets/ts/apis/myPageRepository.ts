@@ -1,6 +1,7 @@
 import axios from './baseRepository'
 import { AxiosResponse } from 'axios'
 import { User } from '../types/User'
+import { Step } from '../types/Step'
 
 /**
  * マイページAPIリポジトリ
@@ -9,6 +10,8 @@ export class MyPageRepository {
     private readonly userUrl = '/api/mypage'
     private readonly updateProfileUrl = '/api/mypage/profile'
     private readonly updatePasswordUrl = '/api/mypage/password'
+    private readonly getPostedStepUrl = '/api/mypage/posted-step'
+    private readonly getChallengingStepUrl = '/api/mypage/challenging-step'
 
     async user(): Promise<AxiosResponse<UserResponse>> {
         return await axios.get(`${this.userUrl}`)
@@ -31,6 +34,12 @@ export class MyPageRepository {
     async passwordUpdate(params: { current_password: string, password: string, password_confirmation: string }): Promise<AxiosResponse<UpdatePasssowrdResponse>> {
         return await axios.post(`${this.updatePasswordUrl}`, params)
     }
+    async getPostedStep(): Promise<AxiosResponse<GetPostedStepResponse>> {
+        return await axios.get(`${this.getPostedStepUrl}`)
+    }
+    async getChallengingStep(): Promise<AxiosResponse<GetChallengingStepResponse>> {
+        return await axios.get(`${this.getChallengingStepUrl}`)
+    }
 }
 
 /**
@@ -44,4 +53,10 @@ export type UpdateProfileResponse = {
     message: string
 }
 export type UpdatePasssowrdResponse = {
+}
+export type GetPostedStepResponse = {
+    steps: Step[]
+}
+export type GetChallengingStepResponse = {
+    steps: Step[]
 }

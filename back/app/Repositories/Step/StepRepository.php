@@ -84,4 +84,19 @@ class StepRepository implements StepRepositoryInterface
             ->with('subSteps')
             ->find($step_id);
     }
+
+    /**
+     * ユーザーIDを元にステップ情報を取得
+     *
+     * @param integer $step_id
+     * @return Collection
+     */
+    public function getByUserId(int $step_id): Collection
+    {
+        return $this->step
+            ->where('user_id', $step_id)
+            ->with(['category:id,name', 'achievementTimeType:id,name'])
+            ->withCount('subSteps')
+            ->get();
+    }
 }

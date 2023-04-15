@@ -3,6 +3,7 @@
 namespace App\Repositories\ChallengeStep;
 
 use App\Models\ChallengeStep;
+use Illuminate\Support\Collection;
 
 class ChallengeStepRepository implements ChallengeStepRepositoryInterface
 {
@@ -33,5 +34,24 @@ class ChallengeStepRepository implements ChallengeStepRepositoryInterface
     {
          $challenge_step->challengeSubSteps()->createMany($data);
          return $challenge_step->challengeSubSteps()->count();
+    }
+
+public function getByChallengeUserId(int $user_id): Collection
+    {
+        return $this->challenge_step->where('challenge_user_id', $user_id)
+            ->with(['challengeSubSteps', 'category', 'achievementTimeType'])
+            ->withCount('challengeSubSteps')
+            ->withCount('clearedSubSteps')
+            ->get();
+    }
+
+    public function findShowData(int $step_id): ChallengeStep
+    {
+        return $this->challenge_step
+            ->with('category')
+            ->with('postUser')
+            ->with('challengeSubSteps')
+            ->withCount('clearedSubSteps')
+            ->find($step_id);
     }
 }

@@ -62,7 +62,7 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    public function step(): HasMany
+    public function steps(): HasMany
     {
         return $this->hasMany(Step::class);
     }
