@@ -224,9 +224,9 @@
 }
 
 // 注文キャンセル
-.c-btn--order-cancel {
+.c-btn--clear {
     @extend %c-btn;
-    @extend .c-btn--x-large;
+    @extend .c-btn--x-small;
     color: #f6f5f4;
     background: #333;
     border: 1px solid #333;

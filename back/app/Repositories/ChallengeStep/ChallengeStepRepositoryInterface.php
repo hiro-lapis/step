@@ -35,7 +35,8 @@ interface ChallengeStepRepositoryInterface
      * チャレンジ詳細画面に表示するデータを取得
      *
      * @param integer $step_id
+     * @param integer $challenge_user_id
      * @return ChallengeStep
      */
-    public function findShowData(int $step_id): ChallengeStep;
+    public function findShowData(int $step_id, int $challenge_user_id): ChallengeStep;
 }

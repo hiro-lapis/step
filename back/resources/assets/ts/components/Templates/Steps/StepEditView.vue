@@ -57,7 +57,6 @@ const create = async () => {
     })
 }
 const subStepLabel = (index: number): string => {
-    console.log(`サブステップ${(index + 1).toString()}`)
     return `サブステップ${(index + 1).toString()}`
 }
 

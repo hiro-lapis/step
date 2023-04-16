@@ -7,6 +7,7 @@ import { MyPageRepository } from './myPageRepository'
 export interface Repositories {
   // リソース増加で随時追加
   auth: AuthRepository,
+  challengeStep: ChallengeStepRepository,
   common: CommonRepository,
   mypage: MyPageRepository,
   step: StepRepository,

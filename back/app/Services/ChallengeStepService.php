@@ -27,7 +27,7 @@ class ChallengeStepService
      */
     public function show(int $step_id): ChallengeStep
     {
-        $step = $this->challenge_step_respository->findShowData($step_id);
+        $step = $this->challenge_step_respository->findShowData($step_id, auth()->id());
         // アクセサの設定
         return $step->setAppends([
             'category_name',

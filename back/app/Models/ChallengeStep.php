@@ -30,6 +30,14 @@ class ChallengeStep extends Model
         'merit',
     ];
 
+    protected $casts = [
+        'challenged_at' => 'datetime:Y年n月j日',
+        'cleared_at' => 'datetime:Y年n月j日',
+        'created_at' => 'datetime:Y年n月j日',
+        'updated_at' => 'datetime:Y年n月j日',
+        'deleted_at' => 'datetime:Y年n月j日',
+    ];
+
     protected $appends = [
         'status_name',
     ];

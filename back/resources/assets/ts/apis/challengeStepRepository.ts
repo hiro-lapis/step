@@ -8,7 +8,7 @@ import { ChallengeStep } from '../types/ChallengeStep'
 export class ChallengeStepRepository {
     private readonly findUrl = '/api/challenge-steps'
     private readonly clearUrl = '/api/challenge-steps'
-    async findChallenge(challenge_step_id: number): Promise<AxiosResponse<FindResponse>> {
+    async find(challenge_step_id: number): Promise<AxiosResponse<FindResponse>> {
         return await axios.get(`${this.findUrl}/${challenge_step_id}`)
     }
     async clear(step_id: number): Promise<AxiosResponse<ClearResponse>> {

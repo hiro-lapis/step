@@ -36,7 +36,13 @@ class ChallengeStepRepository implements ChallengeStepRepositoryInterface
          return $challenge_step->challengeSubSteps()->count();
     }
 
-public function getByChallengeUserId(int $user_id): Collection
+    /**
+     * ユーザーがチャレンジしているステップ情報を取得
+     *
+     * @param integer $user_id
+     * @return Collection
+     */
+    public function getByChallengeUserId(int $user_id): Collection
     {
         return $this->challenge_step->where('challenge_user_id', $user_id)
             ->with(['challengeSubSteps', 'category', 'achievementTimeType'])
@@ -45,13 +51,21 @@ public function getByChallengeUserId(int $user_id): Collection
             ->get();
     }
 
-    public function findShowData(int $step_id): ChallengeStep
+    /**
+     * チャレンジ詳細画面に表示するデータを取得
+     *
+     * @param integer $step_id
+     * @param integer $challenge_user_id
+     * @return ChallengeStep
+     */
+    public function findShowData(int $step_id, int $challenge_user_id): ChallengeStep
     {
         return $this->challenge_step
             ->with('category')
             ->with('postUser')
             ->with('challengeSubSteps')
             ->withCount('clearedSubSteps')
-            ->find($step_id);
+            ->challengeUserId($challenge_user_id)
+            ->firstOrFail($step_id);
     }
 }
