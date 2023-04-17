@@ -23,8 +23,10 @@ class ClearRequest extends FormRequest
      */
     public function rules()
     {
+        // カスタムバリデーション、ログインユーザーIDとチャレンジIDの組み合わせが存在するか
         return [
-            'id' => ['required', 'exists:steps,id'],
+            'challenge_step_id' => ['required', 'exists:challenge_steps,id'],
+            'challenge_sub_step_id' => ['required', 'exists:challenge_sub_steps,id'],
         ];
     }
 
@@ -36,9 +38,6 @@ class ClearRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        // パラメータはstring型なのでキャスト
-        return $this->merge([
-            'id' => (int)$this->route('step_id')
-        ]);
+        //
     }
 }

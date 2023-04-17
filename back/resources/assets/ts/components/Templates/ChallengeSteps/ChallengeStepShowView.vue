@@ -17,25 +17,26 @@ const route = useRoute()
 const router = useRouter()
 
 // data
-const step = ref<ChallengeStep>({
-    id: 0,
-    challenge_user_id: 0,
-    challenged_at: '',
-    cleared_at: '',
-    status: 0,
-    status_name: '',
-    step_id: 0,
-    post_user_id: 0,
-    category_id: 0,
-    name: '',
-    merit: '',
-    challenge_sub_steps: [],
-    challenge_sub_steps_count: 0,
-    cleared_sub_steps_count: 0,
-    achievement_time_type_id: 0,
-    achievement_time_type: { id: 0, name: ''},
-    category: { id: 0, name: ''},
-})
+const step = ref<ChallengeStep>()
+// const step = ref<ChallengeStep>({
+//     id: 0,
+//     challenge_user_id: 0,
+//     challenged_at: '',
+//     cleared_at: '',
+//     status: 0,
+//     status_name: '',
+//     step_id: 0,
+//     post_user_id: 0,
+//     category_id: 0,
+//     name: '',
+//     merit: '',
+//     challenge_sub_steps: [],
+//     challenge_sub_steps_count: 0,
+//     cleared_sub_steps_count: 0,
+//     achievement_time_type_id: 0,
+//     achievement_time_type: { id: 0, name: ''},
+//     category: { id: 0, name: ''},
+// })
 const isInitialized = ref(false)
 // computed
 
@@ -51,18 +52,6 @@ const fetchData = async () => {
             requestStore.setLoading(false)
         })
 }
-// ログインユーザーがサブステップをクリア
-// const clear = async (subStepId: number) => {
-//     if (requestStore.isLoading) return
-//     requestStore.setLoading(true)
-//     await $repositories.step.clear(subStepId)
-//         .then(response => {
-//             console.log(response)
-//             messageStore.setMessage(response.data.message)
-//         }).finally(() => {
-//             requestStore.setLoading(false)
-//         })
-// }
 
 onMounted(() => {
     fetchData()
@@ -73,15 +62,16 @@ onMounted(() => {
     <BaseView className="p-container--steps-show">
         <template v-slot:content>
             <div class="p-step-show__main">
-                <StepPreview
-                    :step="step"
-                >
-                    <template v-slot:bottom>
-                        <!-- コンテンツ下部スロット -->
-                    </template>
-                </StepPreview>
+                    <template v-if="step">
+                        <StepPreview :step="step" :challengeMode="true">
+                            <template v-slot:subStepBottom>
+                                <!-- コンテンツ下部スロット -->
+
+                            </template>
+                    </StepPreview>
+                </template>
             </div>
-            <div v-if="isInitialized" class="p-step-show__aside">
+            <div v-if="isInitialized && step" class="p-step-show__aside">
                 <div class="c-step-supplement">
                     <div class="c-step-supplement__head">
                         <ImageClip :path="step.post_user_image_url!"></ImageClip>

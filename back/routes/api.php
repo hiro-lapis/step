@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // チャレンジ中のステップ情報
     Route::group(['prefix' => 'challenge-steps'], function() {
         Route::get('{step_id}', [ChallengeStepController::class, 'show'])->name('.show');
+        Route::get('/clear', [ChallengeStepController::class, 'clear'])->name('.clear');
     });
     Route::group(['prefix' => 'mypage'], function() {
         Route::get('', [MypageController::class, 'index'])->name('mypage.index');

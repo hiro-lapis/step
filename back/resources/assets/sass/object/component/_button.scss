@@ -226,7 +226,10 @@
 // 注文キャンセル
 .c-btn--clear {
     @extend %c-btn;
-    @extend .c-btn--x-small;
+    width: 60px;
+    height: 26px;
+    line-height: 26px;
+    font-size: 12px;
     color: #f6f5f4;
     background: #333;
     border: 1px solid #333;

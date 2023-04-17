@@ -165,6 +165,11 @@ class ChallengeStepControllerTest extends TestCase
         $this->assertSame(0, $challenge->clear_count);
         $this->assertSame(1, $challenge->fail_count);
 
+        // クリアAPI実行し、チャレンジ状況(サブステップ)が更新されているか
+        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges/clear', ['challenge_sub_step_id' => $step->subSteps[0]->id]);
+        $response->assertOk();
+        $response->dump();
+
         // 達成済に更新し、チャレンジ状況の情報が更新されているか
         $challenge_step->update(['status' => ChallengeStatusEnum::Cleared]);
         $challenge->refresh();

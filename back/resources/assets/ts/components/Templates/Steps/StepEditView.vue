@@ -57,7 +57,7 @@ const create = async () => {
     })
 }
 const subStepLabel = (index: number): string => {
-    return `サブステップ${(index + 1).toString()}`
+    return `サブステップ${(index++).toString()}`
 }
 
 const init = () => {
@@ -124,7 +124,7 @@ onMounted(() => {
                                     <div class="p-form__element">
                                         <TextareaInput
                                             v-model:value="subStep.detail"
-                                            :label="'詳細' + (index + 1).toString()"
+                                            :label="'詳細' + (index as number +1).toString()"
                                             :formId="'substep-' + index.toString()"
                                         />
                                     </div>

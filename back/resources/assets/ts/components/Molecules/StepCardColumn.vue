@@ -3,7 +3,7 @@ import { ChallengeStep } from '../../types/ChallengeStep'
 import { Step } from '../../types/Step'
 import CategoryBadge from '../Atoms/CategoryBadge.vue'
 import StepCountBadge from '../Atoms/StepCountBadge.vue'
-
+import { useTypeGuards } from '../../composables/typeGuards'
 
 // props
 const props = defineProps({
@@ -18,9 +18,7 @@ const stepMerit = (merit: string|null) => {
     }
 return merit
 }
-const isChallengeStep = (step: Step|ChallengeStep): step is ChallengeStep => {
-    return (step as ChallengeStep).challenge_user_id !== undefined
-}
+const { isChallengeStep } = useTypeGuards()
 const getStatusName = (step: Step|ChallengeStep) => {
     if (isChallengeStep(step)) {
         return step.status_name
@@ -33,9 +31,9 @@ const getStatusName = (step: Step|ChallengeStep) => {
     <ul class="c-step-card-column">
         <template :key="step.id" v-for="step in stepList">
             <li class="c-step-card-column__item">
-                <router-link :to="isChallengeStep(step) ? { name: 'challenge-steps-show', params: { id: step.step_id } } : { name: 'steps-show', params: { id: step.id } }" class="c-step-card">
+                <!-- ステップorチャレンジ中ステップ詳細表示情報に合わせて遷移先変更 -->
+                <router-link :to="isChallengeStep(step) ? { name: 'challenge-steps-show', params: { id: step.id } } : { name: 'steps-show', params: { id: step.id } }" class="c-step-card">
                     <div class="c-step-card__head">
-                        <!-- <img src="https://placehold.jp/150x150.png" alt="" class=""> -->
                     </div>
                     <h2 class="c-step-card__title u-spread">{{ step.name }}</h2>
                     <p class="c-step-card__txt u-spread">

@@ -26,7 +26,7 @@ const tabGroups = [
 
 // data
 // ref内にはtabs の key名を記載
-const currentTab = ref(Object.keys(tabs)[1]) // プロフィール編集
+const currentTab = ref(Object.keys(tabs)[0]) // プロフィール編集
 
 onMounted(() => {})
 </script>
