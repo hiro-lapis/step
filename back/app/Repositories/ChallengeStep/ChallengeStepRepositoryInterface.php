@@ -3,6 +3,8 @@
 namespace App\Repositories\ChallengeStep;
 
 use App\Models\ChallengeStep;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 
 interface ChallengeStepRepositoryInterface
@@ -30,6 +32,24 @@ interface ChallengeStepRepositoryInterface
      * @return Collection
      */
     public function getByChallengeUserId(int $user_id): Collection;
+
+    /**
+     * ユーザーがチャレンジしているステップのIDコレクションを取得
+     *
+     * @param integer $user_id
+     * @return Collection
+     */
+    public function getIdsByChallengeUserId(int $user_id): Collection;
+
+    /**
+     * 挑戦中のチャレンジステップ情報を取得
+     *
+     * @param int $challenge_step_id
+     * @param array $params
+     * @return Model
+     * @throws ModelNotFoundException
+     */
+    public function findOrFailInChallengeStep(int $challenge_step_id, array $params): Model;
 
     /**
      * チャレンジ詳細画面に表示するデータを取得

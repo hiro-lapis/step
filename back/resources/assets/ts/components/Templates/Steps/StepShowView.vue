@@ -29,8 +29,15 @@ const step = ref<Step>({
 const isInitialized = ref(false)
 // computed
 const isChallengeable = computed(() => {
-    // ロード完了後で、ログイン中で、投稿ユーザーでないか
-    return isInitialized.value && userStore.isLogin && userStore.user.id !== step.value.user_id
+    // ロード完了後で、ログイン中で、投稿ユーザーでなく、チャレンジ中でもないか
+    return isInitialized.value
+        && userStore.isLogin
+        && userStore.user.id !== step.value.user_id
+        && inNotInChallenge.value
+})
+
+const inNotInChallenge = computed(() => {
+    return userStore.isInChallenge(Number(route.params.id)) === false
 })
 
 // methods

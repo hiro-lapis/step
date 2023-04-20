@@ -44,6 +44,9 @@ class ChallengeStep extends Model
 
     public function getStatusNameAttribute(): string
     {
+        if (!isset($this->status)) {
+            return '';
+        }
         return ChallengeStatusEnum::string($this->status);
     }
 
@@ -180,17 +183,17 @@ class ChallengeStep extends Model
 
     public function scopeChallenging(Builder $query): Builder
     {
-        return $query->where('status', ChallengeStatusEnum::Challenging);
+        return $query->where('challenge_steps.status', ChallengeStatusEnum::Challenging);
     }
 
     public function scopeCleared(Builder $query): Builder
     {
-        return $query->where('status', ChallengeStatusEnum::Cleared);
+        return $query->where('challenge_steps.status', ChallengeStatusEnum::Cleared);
     }
 
     public function scopeFailed(Builder $query): Builder
     {
-        return $query->where('status', ChallengeStatusEnum::Failed);
+        return $query->where('challenge_steps.status', ChallengeStatusEnum::Failed);
     }
 
     /**
@@ -201,6 +204,6 @@ class ChallengeStep extends Model
      */
     public function scopeInChallengeStatus(Builder $query): Builder
     {
-        return $query->whereIn('status', ChallengeStatusEnum::getInChallengeStatuses());
+        return $query->whereIn('challenge_steps.status', ChallengeStatusEnum::getInChallengeStatuses());
     }
 }

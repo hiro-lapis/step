@@ -4,6 +4,8 @@ namespace App\Repositories\ChallengeSubStep;
 
 use App\Enums\ChallengeStatusEnum;
 use App\Models\ChallengeSubStep;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\ItemNotFoundException;
 
 class ChallengeSubStepRepository implements ChallengeSubStepRepositoryInterface
 {
@@ -28,5 +30,27 @@ class ChallengeSubStepRepository implements ChallengeSubStepRepositoryInterface
         }
         $challenge_sub_step->save();
         return $challenge_sub_step;
+    }
+
+    /**
+     * 条件に合致するチャレンジサブステップを取得
+     * @params $params
+     * @return Model
+     * @throws ItemNotFoundException
+     */
+    public function firstOrFailByParams(array $params): Model
+    {
+        $query = $this->challenge_sub_step->query();
+        return $query->join('challenge_steps', function ($query) use ($params) {
+            $query->on('challenge_steps.id', '=', 'challenge_sub_steps.challenge_step_id')
+                // 挑戦しているユーザーIDを条件に絞り込み
+                ->when(isset($params['challenge_user_id']), fn($q) => $q->where('challenge_user_id', $params['challenge_user_id']));
+                // ->when(isset($params['challenge_sub_step_id']), fn($q) => $q->where('challenge_sub_steps.id', $params['challenge_sub_step_id']));
+        })
+            ->challenging()
+            ->with('challengeStep', function($query) {
+                $query->withCount('clearedSubSteps');
+            })
+            ->firstOrFail();
     }
 }

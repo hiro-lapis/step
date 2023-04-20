@@ -32,14 +32,14 @@ class ChallengeStepController extends Controller
     }
 
     /**
-     * ステップへのチャレンジ
+     * チャレンジ中のサブステップのクリア
      *
      *　@param ChallengeRequest $request
      * @return JsonResponse
      */
     public function clear(ClearRequest $request): JsonResponse
     {
-        $result = $this->challenge_step_service->updateClear($request->validated()['id']);
-        return response()->json(['message' => 'チャレンジ開始しました。達成するまでがんばりましょう！']);
+        $message = $this->challenge_step_service->updateClear($request->validated());
+        return response()->json(compact('message'));
     }
 }

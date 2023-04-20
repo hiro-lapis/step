@@ -5,19 +5,22 @@ namespace App\Services;
 
 use App\Enums\ChallengeStatusEnum;
 use App\Models\ChallengeStep;
-use App\Models\Step;
 use App\Repositories\ChallengeStep\ChallengeStepRepositoryInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Repositories\ChallengeSubStep\ChallengeSubStepRepositoryInterface;
+use App\Repositories\Step\StepRepositoryInterface;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ChallengeStepService
 {
     public function __construct(
-        private ChallengeStepRepositoryInterface $challenge_step_respository,
+        private StepRepositoryInterface             $step_respository,
+        private ChallengeStepRepositoryInterface    $challenge_step_repository,
+        private ChallengeSubStepRepositoryInterface $challenge_sub_step_respository,
     )
-    {}
+    {
+    }
 
     /**
      * 詳細情報を取得
@@ -27,7 +30,7 @@ class ChallengeStepService
      */
     public function show(int $step_id): ChallengeStep
     {
-        $step = $this->challenge_step_respository->findShowData($step_id, auth()->id());
+        $step = $this->challenge_step_repository->findShowData($step_id, auth()->id());
         // アクセサの設定
         return $step->setAppends([
             'category_name',
@@ -39,73 +42,101 @@ class ChallengeStepService
     }
 
     /**
-     * ステップへのチャレンジ
+     * チャレンジステップのクリア
+     * サブステップを達成済にし、状態に応じてステップも更新
      *
-     * @param integer $step_id
-     * @return array
+     * @param array $params
+     * @return string クリア結果メッセージ
      * @throws HttpException
      */
-    public function updateClear(int $step_id): array
+    public function updateClear(array $params): string
     {
-        $original_step = $this->step_respository->findShowData($step_id);
-        if (!Gate::allows('store-challenge', $original_step)) {
-            abort(HttpResponse::HTTP_FORBIDDEN);
+
+        $challenge_step = $this->challenge_step_repository
+            ->findOrFailInChallengeStep(
+                $params['challenge_step_id'],
+                $params + ['challenge_user_id' => auth()->user()->id]
+            );
+        // 更新するサブステップを取り出す
+        $target_sub_step = $challenge_step
+            ->challengeSubSteps
+            ->where(function($sub_step) use ($params) {
+                return $sub_step->id === $params['challenge_sub_step_id']
+                    && $sub_step->status === ChallengeStatusEnum::Challenging->value;
+            });
+        // 存在しなかったらNOT FOUND
+        if ($target_sub_step->count() === 0) {
+            abort(404);
         }
+        $target_sub_step = $target_sub_step->first();
 
-        // チャレンジ時点のステップ情報を保存しつつチャレンジ情報作成
-        // ChallengeStepのライフサイクルメソッドでチャレンジ状況も自動更新
-        $data = [
-            'challenge_user_id' => auth()->user()->id,
-            'step_id' => $original_step->id,
-            'challenged_at' => now(),
-            'status' => ChallengeStatusEnum::Challenging->value,
-            'post_user_id' => $original_step->user_id,
-            'category_id' => $original_step->category_id,
-            'achievement_time_type_id' => $original_step->achievement_time_type_id,
-            'name' => $original_step->name,
-            'image_url' => $original_step->image_url,
-            'summary' => $original_step->summary,
-            'merit' => $original_step->merit,
-        ];
-
+        // 次のサブステップを取得
+        $next_sub_step_sort_number = $target_sub_step->sort_number +1;
+        $next_sub_steps = $challenge_step
+            ->challengeSubSteps
+            ->where(function ($sub_step) use ($next_sub_step_sort_number) {
+                return $sub_step->sort_number === $next_sub_step_sort_number;
+            });
         try {
             DB::beginTransaction();
-            $challenge_step = $this->challenge_step_respository->create($data);
-            // チャレンジ時のサブステップデータの作成
-            $original_sub_step_data = $original_step->subSteps->map(function ($sub_step) use ($challenge_step) {
-                return [
-                    'challenge_step_id' => $challenge_step->id,
-                    'sub_step_id' => $sub_step->id,
-                    'challenged_at' => $sub_step->sort_number == 1 ? now() : null, // 最初の子ステップのみチャレンジ状態にする
-                    'status' => $sub_step->sort_number == 1 ? ChallengeStatusEnum::Challenging->value : ChallengeStatusEnum::NotChallenged->value, // 最初の子ステップのみチャレンジ状態にする
-                    'name' => $sub_step->name,
-                    'detail' => $sub_step->detail,
-                    'image_url' => $sub_step->image_url,
-                    'sort_number' => $sub_step->sort_number,
-                ];
-            })->toArray();
-            $this->challenge_step_respository->createManySubStep($challenge_step, $original_sub_step_data);
+            // 対象のサブステップを更新
+            $target_sub_step->update([
+                'cleared_at' => now(),
+                'status' => ChallengeStatusEnum::Cleared->value
+            ]);
+            $next_sub_step_sort_number = $target_sub_step->sort_number +1;
+            // 次のサブステップを取得
+            $next_sub_steps = $challenge_step
+                ->challengeSubSteps
+                ->where(function ($sub_step) use ($next_sub_step_sort_number) {
+                    return $sub_step->sort_number === $next_sub_step_sort_number;
+                });
+            // 次のサブステップがある場合、チャンレジ開始
+            $has_next_sub_step = $next_sub_steps->count() > 0;
+            $next_challenge_sub_step_id = $has_next_sub_step ?
+                    $next_sub_steps->first()->id : null;
+            if ($has_next_sub_step) {
+                \Log::info('HIRO:サブステップ更新');
+                $next_sub_steps->first()->update([
+                    'challenged_at' => now(),
+                    'status' => ChallengeStatusEnum::Challenging->value,
+                ]);
+            } else {
+                \Log::info('HIRO:親ステップ完了へ更新');
+                // 親情報のステップ自体をクリア状態へ更新
+                $challenge_step->update([
+                    'cleared_at' => now(),
+                    'status' => ChallengeStatusEnum::Cleared->value,
+                ]);
+            }
+
             DB::commit();
+            // $challenge_step->refresh();
+            // \Log::info('HIRO:resultの中身' . print_r($challenge_step->challengeSubSteps, true));
         } catch (\Exception $e) {
-            DB::rollBack();
             report($e);
-            throw new HttpException(HttpResponse::HTTP_INTERNAL_SERVER_ERROR, 'チャレンジデータの作成に失敗しました');
+            throw new HttpException(HttpResponse::HTTP_BAD_REQUEST, '更新に失敗しました');
+            DB::rollBack();
         }
 
-        return compact('challenge_step');
+        $message = $has_next_sub_step ? 'クリア情報を更新しました。次のステップに進みましょう！' : 'おめでとうございます、全てのステップを完了しました！';
+        \Log::info('HIRO:messageの中身' . print_r($message, true));
+        return $message;
     }
 
-    // public function getPosted(): array
-    // {
-    //     $steps = $this->step_respository->getByUserId(auth()->user()->id);
-    //     $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time_type_name']));
-    //     return compact('steps');
-    // }
-
-    // public function getChallenging(): array
-    // {
-    //     $steps = $this->challenge_step_respository->getByChallengeUserId(auth()->user()->id);
-    //     $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time_type_name', 'status_name']));
-    //     return compact('steps');
-    // }
+    /**
+     * ユーザーIDからチャレンジ中のステップIDを取得
+     *
+     * @param integer $user_id
+     * @return array
+     */
+    public function getUserChallengeStepIds(int $user_id): array
+    {
+        $challenge_step_ids = $this->challenge_step_repository
+            ->getIdsByChallengeUserId($user_id)
+            ->map(fn($challenge_step) => $challenge_step->step_id)
+            ->flatten()
+            ->toArray();
+        return $challenge_step_ids;
+    }
 }

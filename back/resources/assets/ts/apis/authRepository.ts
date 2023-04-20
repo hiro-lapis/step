@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios'
+import { User } from '../types/User'
 import axios from './baseRepository'
 
 export class AuthRepository {
@@ -15,7 +17,7 @@ export class AuthRepository {
     async register(params: { name: string, email: string, password: string, password_confirmation: string}): Promise<any> {
         return await axios.post(`${this.registerUrl}`, params)
     }
-    async isLogin(): Promise<any> {
+    async isLogin(): Promise<AxiosResponse<IsLoginResponse>> {
         return await axios.get(`${this.isLoginUrl}`)
     }
     async login(params: {email: string, password: string}): Promise<any> {
@@ -30,4 +32,10 @@ export class AuthRepository {
     async forgotReset(params: { email: string, token: string, password: string, password_confirmation: string }): Promise<any> {
         return await axios.post(this.resetPasswordUrl, params)
     }
+}
+
+type IsLoginResponse = {
+    is_login: boolean,
+    user?: User,
+    step_ids: number[]
 }

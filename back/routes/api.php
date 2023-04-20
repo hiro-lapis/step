@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // チャレンジ中のステップ情報
     Route::group(['prefix' => 'challenge-steps'], function() {
         Route::get('{step_id}', [ChallengeStepController::class, 'show'])->name('.show');
-        Route::get('/clear', [ChallengeStepController::class, 'clear'])->name('.clear');
+        Route::put('/clear', [ChallengeStepController::class, 'clear'])->name('.clear');
     });
     Route::group(['prefix' => 'mypage'], function() {
         Route::get('', [MypageController::class, 'index'])->name('mypage.index');
@@ -48,7 +48,7 @@ Route::get('/steps', [StepController::class, 'index'])->name('steps.index');
 Route::get('/steps/{id}', [StepController::class, 'show'])->name('steps.show');
 
 // ユーザーログイン状態確認
-Route::get('is-login', fn () => response()->json(['is_login' => auth()->user() !== null, 'user' => auth()->user()]));
+Route::get('is-login', [MypageController::class, 'isLogin'])->name('mypage.isLogin');
 
 // カテゴリー取得
 Route::get('/categories', CategoryController::class);

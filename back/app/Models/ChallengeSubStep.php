@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ChallengeStatusEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,5 +51,20 @@ class ChallengeSubStep extends Model
     public function subStep(): BelongsTo
     {
         return $this->belongsTo(SubStep::class);
+    }
+
+    public function scopeChallenging(Builder $query): Builder
+    {
+        return $query->where('challenge_sub_steps.status', ChallengeStatusEnum::Challenging);
+    }
+
+    public function scopeCleared(Builder $query): Builder
+    {
+        return $query->where('challenge_sub_steps.status', ChallengeStatusEnum::Cleared);
+    }
+
+    public function scopeFailed(Builder $query): Builder
+    {
+        return $query->where('challenge_sub_steps.status', ChallengeStatusEnum::Failed);
     }
 }

@@ -8,6 +8,8 @@ import { useTypeGuards } from '../../../composables/typeGuards'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { ChallengeStatusJudgement } from '../../../composables/ChallengeStatus'
 import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
+import { ChallengeSubStep } from 'assets/ts/types/ChallengeSubStep';
+import { SubStep } from 'assets/ts/types/SubStep';
 
 const $repositories = inject<Repositories>("$repositories")!
 
@@ -19,6 +21,11 @@ const props = defineProps({
     step: { required: true, type: Object as PropType<Step|ChallengeStep>, }, // プレビュー表示するステップ情報
     readOnly: { required: false, type: Boolean, default: false, }, // 見るだけモードか
 })
+
+interface Emits {
+    (e: 'clear'): void;
+}
+const emit = defineEmits<Emits>()
 
 // computed
 const { isChallengeStep, isChallengeSubStep } = useTypeGuards()
@@ -38,14 +45,19 @@ const statusBgColor = (status: number): string => {
     if (isCleard(status)) return '#65c99b'
     return '#666'
 }
+const showClearBtn = (subStep: SubStep|ChallengeSubStep): boolean => {
+    return isChallengeSubStep(subStep) && isInChallenge(subStep.status)
+}
 // ログインユーザーがサブステップをクリア
 const clear = async (subStepId: number) => {
     if (requestStore.isLoading) return
     requestStore.setLoading(true)
-    await $repositories.challengeStep.clear(subStepId)
+    await $repositories.challengeStep.clear({ challenge_step_id: props.step.id!, challenge_sub_step_id: subStepId})
         .then(response => {
             console.log(response)
             messageStore.setMessage(response.data.message)
+            // 親へクリアイベントを発火してチャレンジ情報更新
+            emit('clear')
         }).finally(() => {
             requestStore.setLoading(false)
         })
@@ -74,7 +86,6 @@ const clear = async (subStepId: number) => {
                         </template>
                     </template>
                 </div>
-                <!-- TODO: メリットや達成時間目安などの情報 -->
             </div>
             <!-- ステップ詳細 -->
             <div class="c-step-preview__body">
@@ -96,7 +107,9 @@ const clear = async (subStepId: number) => {
                             <!-- サブステップ詳細 -->
                             <div class="c-sub-step__content">{{ subStep.detail }}</div>
                             <!-- クリアボタン -->
-                            <slot name="subStepBottom"></slot>
+                            <div v-if="showClearBtn(subStep)" class="c-sub-step__clear-btn">
+                                <button @click="clear(subStep.id!)" class="c-btn--clear">クリア</button>
+                            </div>
                         </div>
                     </template>
                 </div>
@@ -152,10 +165,8 @@ const clear = async (subStepId: number) => {
     &__content {
         font-size: 13px;
     }
-    &__clear-btn__container {
-        position: absolute;
-        right: 0%;
-        bottom: 1%;
+    &__clear-btn {
+        margin-top: 20px;
     }
 }
 

@@ -52,7 +52,6 @@ const fetchData = async () => {
             requestStore.setLoading(false)
         })
 }
-
 onMounted(() => {
     fetchData()
 })
@@ -63,12 +62,11 @@ onMounted(() => {
         <template v-slot:content>
             <div class="p-step-show__main">
                     <template v-if="step">
-                        <StepPreview :step="step" :challengeMode="true">
-                            <template v-slot:subStepBottom>
-                                <!-- コンテンツ下部スロット -->
-
-                            </template>
-                    </StepPreview>
+                        <StepPreview
+                            @clear="fetchData"
+                            :step="step"
+                            :challengeMode="true"
+                        ></StepPreview>
                 </template>
             </div>
             <div v-if="isInitialized && step" class="p-step-show__aside">
