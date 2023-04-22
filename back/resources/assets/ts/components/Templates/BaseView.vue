@@ -26,7 +26,8 @@ onMounted(() => {
     $repositories.auth.isLogin().then(response => {
         if (response.data.is_login) {
             userStore.setLogin(true)
-            userStore.setUser(response.data.user)
+            userStore.setUser(response.data.user!)
+            userStore.setChallengingStepIds(response.data.step_ids)
             // ログイン中で未ログイン限定ページを表示中ならログイン後のTOP画面へ
             if (isGuestOnlyPage) {
                 router.push({ name: 'steps-list' })
@@ -74,7 +75,7 @@ onMounted(() => {
         margin-bottom: 300px;
     }
     &__mypage {
-        max-width: 1440px;
+        max-width: 600px;
         margin-bottom: 300px;
     }
 }

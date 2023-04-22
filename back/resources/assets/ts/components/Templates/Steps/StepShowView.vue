@@ -20,6 +20,7 @@ const step = ref<Step>({
     category_id: 0,
     user_id: 0,
     name: '',
+    merit: '',
     sub_steps: [],
     achievement_time_type_id: 0,
     achievement_time_type: { id: 0, name: ''},
@@ -28,8 +29,15 @@ const step = ref<Step>({
 const isInitialized = ref(false)
 // computed
 const isChallengeable = computed(() => {
-    // ロード完了後で、ログイン中で、投稿ユーザーでないか
-    return isInitialized.value && userStore.isLogin && userStore.user.id !== step.value.user_id
+    // ロード完了後で、ログイン中で、投稿ユーザーでなく、チャレンジ中でもないか
+    return isInitialized.value
+        && userStore.isLogin
+        && userStore.user.id !== step.value.user_id
+        && inNotInChallenge.value
+})
+
+const inNotInChallenge = computed(() => {
+    return userStore.isInChallenge(Number(route.params.id)) === false
 })
 
 // methods
@@ -130,7 +138,9 @@ onMounted(() => {
         align-items: center;
         margin-bottom: 20px;
     }
-    // &__user-information {
-    // }
+    &__user-information {
+        line-height: 1.5;
+        font-size: 12px;
+    }
 }
 </style>

@@ -4,6 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\AchievementTimeType;
 use App\Models\Category;
+use App\Models\ChallengeStep;
+use App\Models\ChallengeSubStep;
+use App\Models\Step;
+use App\Models\SubStep;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,7 +18,7 @@ use Tests\TestCase;
 
 class MyPageControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     private User $user;
     private Category $category;
@@ -141,8 +145,50 @@ class MyPageControllerTest extends TestCase
         $response = $this->actingAs($user)->putJson('/api/mypage/password', $params);
         $response->assertOk();
         $user->refresh();
-        
+
         // 更新後のハッシュ化パスワードとの整合性をチェック
         $this->assertTrue(Hash::check($params['password'], $user->password));
+    }
+
+    public function test_postedStep(): void
+    {
+        $steps = Step::factory(5)
+            ->has(SubStep::factory()->count(2)->sequence(
+                ['sort_number' => 1],
+                ['sort_number' => 2],
+            ))
+            ->create([
+                'user_id' => $this->user->id,
+                'category_id' => $this->category->id,
+                'achievement_time_type_id' => $this->achievement_time_type->id,
+            ]);
+        $response = $this->actingAs($this->user)->getJson('/api/mypage/posted-step');
+        $response->assertOk();
+
+        $this->assertSame(5, count($response->json('steps')));
+        $this->assertSame($response->json('steps')[0]['id'], $steps[0]->id);
+    }
+
+    public function test_challengingStep(): void
+    {
+
+        $steps = ChallengeStep::factory(5)
+            ->has(ChallengeSubStep::factory()->count(2)->sequence(
+                ['sub_step_id' => 1, 'sort_number' => 1],
+                ['sub_step_id' => 2, 'sort_number' => 2],
+            ))
+            ->create([
+                'challenge_user_id' => $this->user->id, // ログインユーザーのチャレンジ情報として作成
+                'challenged_at' => now()->subDays(7),
+                'category_id' => $this->category->id,
+                'achievement_time_type_id' => $this->achievement_time_type->id,
+                'step_id' => 1,
+                'post_user_id' => 1,
+            ]);
+        $response = $this->actingAs($this->user)->getJson('/api/mypage/challenging-step');
+        $response->assertOk();
+        $response->dump();
+        $this->assertSame(5, count($response->json('steps')));
+        $this->assertSame($response->json('steps')[0]['id'], $steps[0]->id);
     }
 }

@@ -20,6 +20,8 @@ glob.sync('resources/assets/ts/app/**/*.ts').map(function(file) {
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 mix.sass('resources/assets/sass/reset.scss', 'public/css');
 
+mix.copyDirectory('resources/assets/images', 'public/images');
+
 mix.webpackConfig({
     module: {
         // rules: [

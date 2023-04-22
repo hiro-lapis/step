@@ -81,6 +81,7 @@ const input = (event: Event) => {
         color: #999;
     }
     &__label {
+        text-align: left;
         display: block;
         padding-left: 5px;
         margin-bottom: 5px;

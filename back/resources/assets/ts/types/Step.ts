@@ -8,12 +8,15 @@ export type Step = {
     category_id: number
     user_id?: number
     name: string
+    merit: string|null
     sub_steps: SubStep[]
     achievement_time_type_id: number
-    achievement_time_type: AchievementTimeType
-    category: Category
+    sub_steps_count?: number
+    achievement_time_type?: AchievementTimeType
+    category?: Category
     created_at?: string
     // 以下アクセサで必要に応じて設定
+    achievement_time_type_name?: AchievementTimeType
     category_name?: string
     user_name?: string
     user_image_url?: string

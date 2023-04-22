@@ -2,11 +2,14 @@
 import { inject, onMounted, provide, ref, reactive, readonly } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
+import StepPreview from '../../Organisms/Steps/StepPreview.vue'
 import AchievementTimeTypeSelectBox from '../../Atoms/AchievementTimeTypeSelectBox.vue'
 import CategoryBadge from '../../Atoms/CategoryBadge.vue'
 import CategorySelectBox from '../../Atoms/CategorySelectBox.vue'
 import TextInput from '../../Atoms/TextInput.vue'
+import TextareaInput from '../../Atoms/TextareaInput.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
+import { Step } from '../../../types/Step'
 
 // utilities
 const requestStore = useRequestStore()
@@ -23,11 +26,12 @@ type CreateData = {
     achievement_time_type_id: number
     sub_steps: Array<{name: string, detail: string, sort_number?: number}>
 }
-const createData = reactive<CreateData>({
+const createData = reactive<Step>({
     name: '',
+    merit: '',
     category_id: 0,
     achievement_time_type_id: 0,
-    sub_steps : [],
+    sub_steps: [{ name: '', detail: '', }],
 })
 
 const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
@@ -52,8 +56,8 @@ const create = async () => {
         requestStore.setLoading(false)
     })
 }
-const subStepLabel = (index: number) => {
-    return `サブステップ${(index + 1)}`
+const subStepLabel = (index: number): string => {
+    return `サブステップ${(index++).toString()}`
 }
 
 const init = () => {
@@ -118,9 +122,10 @@ onMounted(() => {
                                         />
                                     </div>
                                     <div class="p-form__element">
-                                        <TextInput
+                                        <TextareaInput
                                             v-model:value="subStep.detail"
-                                            label="詳細"
+                                            :label="'詳細' + (index as number +1).toString()"
+                                            :formId="'substep-' + index.toString()"
                                         />
                                     </div>
                                 </div>
@@ -144,26 +149,8 @@ onMounted(() => {
                         </div>
                         </div>
                     </div>
-                    <!-- end:p-form__container -->
                     <div class="p-preview">
-                        <div class="p-preview__container">
-                            <div class="p-preview__head">
-                                <h1 class="c-title">{{ createData.name }}</h1>
-                                <div class="step-detail__info">
-                                    <CategoryBadge v-if="createData.category_id" :id="createData.category_id" />
-                                </div>
-                            </div>
-                            <div class="p-preview__body">
-                                <div class="p-preview__sub-step">
-                                    <template v-for="subStep in createData.sub_steps">
-                                        <div>{{ subStep.name }}</div>
-                                        <div>{{ subStep.detail }}</div>
-                                    </template>
-                                </div>
-                            </div>
-                            <div class="step-detail__body">
-                            </div>
-                        </div>
+                        <StepPreview :step="createData" />
                     </div>
                 </div>
         </template>
@@ -217,12 +204,12 @@ onMounted(() => {
 
 .p-preview { // プレビュー
     width: 100%;
-    padding: 20px 40px;
+    display: flex;
     box-sizing: border-box;
     text-align: center;
     @include pc() {
         width: 600px;
-        box-shadow: 0 0 8px #ccc;
+        box-shadow: 0 0 8px #fff;
     }
 }
 

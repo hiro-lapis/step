@@ -5,12 +5,20 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Mypage\UpdateProfileRequest;
 use App\Models\User;
+use App\Services\ChallengeStepService;
+use App\Services\StepService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class MypageController extends Controller
 {
+    public function __construct(
+        private StepService $step_service,
+        private ChallengeStepService $challenge_step_service
+    )
+    {}
+
     /**
      * Display a listing of the resource.
      *
@@ -51,5 +59,34 @@ class MypageController extends Controller
         $user->refresh();
         $message = 'プロフィール情報を更新しました';
         return response()->json(compact('user', 'message'));
+    }
+
+    public function postedStep(): JsonResponse
+    {
+        $result = $this->step_service->getPosted();
+        return response()->json($result);
+    }
+
+    public function challengingStep(): JsonResponse
+    {
+        $result = $this->step_service->getChallenging();
+        return response()->json($result);
+    }
+
+    /**
+     * ログイン状態を返す
+     *
+     * @return JsonResponse
+     */
+    public function isLogin(): JsonResponse
+    {
+        $user = auth()->user();
+        $is_login = $user ? true : false;
+
+        $step_ids = [];
+        if ($is_login) {
+            $step_ids = $this->challenge_step_service->getUserChallengeStepIds($user->id);
+        }
+        return response()->json(compact('user', 'is_login', 'step_ids'));
     }
 }

@@ -30,6 +30,26 @@ class ChallengeStep extends Model
         'merit',
     ];
 
+    protected $casts = [
+        'challenged_at' => 'datetime:Y年n月j日',
+        'cleared_at' => 'datetime:Y年n月j日',
+        'created_at' => 'datetime:Y年n月j日',
+        'updated_at' => 'datetime:Y年n月j日',
+        'deleted_at' => 'datetime:Y年n月j日',
+    ];
+
+    protected $appends = [
+        'status_name',
+    ];
+
+    public function getStatusNameAttribute(): string
+    {
+        if (!isset($this->status)) {
+            return '';
+        }
+        return ChallengeStatusEnum::string($this->status);
+    }
+
     /**
      * モデルの「起動」メソッド
      *
@@ -61,33 +81,32 @@ class ChallengeStep extends Model
         });
     }
 
-        /** accessor */
+    /** accessor */
 
-        public function getPostUserNameAttribute(): string
-        {
-            return $this->postUser->name ?? '';
-        }
+    public function getPostUserNameAttribute(): string
+    {
+        return $this->postUser->name ?? '';
+    }
 
-        public function getPostUserImageUrlAttribute(): string
-        {
-            return $this->postUser->image_url ?? '';
-        }
+    public function getPostUserImageUrlAttribute(): string
+    {
+        return $this->postUser->image_url ?? '';
+    }
 
-        public function getPostUserProfileAttribute(): string
-        {
-            return $this->postUser->profile ?? '';
-        }
+    public function getPostUserProfileAttribute(): string
+    {
+        return $this->postUser->profile ?? '';
+    }
 
-        public function getCategoryNameAttribute(): string
-        {
-            return $this->category->name ?? '';
-        }
+    public function getCategoryNameAttribute(): string
+    {
+        return $this->category->name ?? '';
+    }
 
-        public function getAchievementTimeTypeNameAttribute(): string
-        {
-            return $this->achievementTimeType->name ?? '';
-        }
-
+    public function getAchievementTimeTypeNameAttribute(): string
+    {
+        return $this->achievementTimeType->name ?? '';
+    }
 
     /** relation */
 
@@ -99,6 +118,18 @@ class ChallengeStep extends Model
     public function challengeSubSteps(): HasMany
     {
         return $this->hasMany(ChallengeSubStep::class)->orderBy('sort_number');
+    }
+
+    /**
+     * 並び順を指定して、達成済orチャレンジ中のサブステップを取得
+     *
+     * @return HasMany
+     */
+    public function clearedSubSteps(): HasMany
+    {
+        return $this->hasMany(ChallengeSubStep::class)
+            ->whereIn('status', ChallengeStatusEnum::getClearedStatuses())
+            ->orderBy('sort_number');
     }
 
     /**
@@ -152,17 +183,17 @@ class ChallengeStep extends Model
 
     public function scopeChallenging(Builder $query): Builder
     {
-        return $query->where('status', ChallengeStatusEnum::Challenging);
+        return $query->where('challenge_steps.status', ChallengeStatusEnum::Challenging);
     }
 
     public function scopeCleared(Builder $query): Builder
     {
-        return $query->where('status', ChallengeStatusEnum::Cleared);
+        return $query->where('challenge_steps.status', ChallengeStatusEnum::Cleared);
     }
 
     public function scopeFailed(Builder $query): Builder
     {
-        return $query->where('status', ChallengeStatusEnum::Failed);
+        return $query->where('challenge_steps.status', ChallengeStatusEnum::Failed);
     }
 
     /**
@@ -173,6 +204,6 @@ class ChallengeStep extends Model
      */
     public function scopeInChallengeStatus(Builder $query): Builder
     {
-        return $query->whereIn('status', ChallengeStatusEnum::getInChallengeStatuses());
+        return $query->whereIn('challenge_steps.status', ChallengeStatusEnum::getInChallengeStatuses());
     }
 }

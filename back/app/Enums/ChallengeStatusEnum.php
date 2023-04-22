@@ -21,7 +21,7 @@ enum ChallengeStatusEnum: int
     public static function string(int $status): string
     {
         return match ($status) {
-            self::NotChallenged, self::NotChallenged->value => '未挑戦',
+            self::NotChallenged, self::NotChallenged->value => '未',
             self::Challenging, self::Challenging->value => '挑戦中',
             self::Lating, self::Lating->value => '挑戦中(期限過ぎ)',
             self::Retry, self::Retry->value => '再挑戦',
@@ -37,6 +37,19 @@ enum ChallengeStatusEnum: int
             self::Challenging->value,
             self::Lating->value,
             self::Retry->value,
+        ];
+    }
+
+    /**
+     * 達成済みのステータスを返却
+     *
+     * @return array
+     */
+    public static function getClearedStatuses(): array
+    {
+        return [
+            self::Cleared,
+            self::Lated,
         ];
     }
 

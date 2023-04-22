@@ -1,6 +1,7 @@
 import axios from './baseRepository'
 import { AxiosResponse } from 'axios'
 import { Step } from '../types/Step'
+import { ChallengeStep } from '../types/ChallengeStep'
 
 /**
  * Step CRUDリポジトリ
@@ -8,17 +9,21 @@ import { Step } from '../types/Step'
 export class StepRepository {
     private readonly baseUrl = '/api/steps'
     private readonly findUrl = '/api/steps'
+    private readonly challengeFindUrl = '/api/steps'
     private readonly challengeUrl = '/api/steps/challenges'
 
-    async store(data: { category_id: number, achievement_time_type_id: number,  name: string, page: number }): Promise<any> {
+    async store(data: { category_id: number, achievement_time_type_id: number,  name: string }): Promise<any> {
         return await axios.post(`${this.baseUrl}`, data)
     }
-    async get(data: { key_word: string, category_id: number|null, achievement_time_type_id: number|null }): Promise<any> {
+    async get(data: { key_word: string, category_id: number|null, achievement_time_type_id: number|null, page: number }): Promise<any> {
         // クエリパラメータで送信
         return await axios.get(`${this.baseUrl}`, { params: data })
     }
     async find(step_id: number): Promise<AxiosResponse<FindResponse>> {
         return await axios.get(`${this.findUrl}/${step_id}`)
+    }
+    async findChallenge(challenge_step_id: number): Promise<AxiosResponse<FindChallengeResponse>> {
+        return await axios.get(`${this.challengeFindUrl}/${challenge_step_id}`)
     }
     async challenge(step_id: number): Promise<AxiosResponse<ChallengeResponse>> {
         return await axios.post(`${this.challengeUrl}`, { id: step_id})
@@ -35,6 +40,7 @@ type GetResponse = {
 }
 
 type FindResponse = Step
+type FindChallengeResponse = ChallengeStep
 
 type ChallengeResponse = {
     message: string

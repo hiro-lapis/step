@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CategorySeeder::class,
             AchievementTimeTypeSeeder::class,
-            StepSeeder::class,
+//            StepSeeder::class,
             TestDataSeeder::class
         ]);
         // \App\Models\User::factory(10)->create();

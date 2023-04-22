@@ -40,4 +40,12 @@ interface StepRepositoryInterface
      * @return Step
      */
     public function findShowData(int $step_id): Step;
+
+    /**
+     * ユーザーIDを元にステップ情報を取得
+     *
+     * @param integer $step_id
+     * @return Collection
+     */
+    public function getByUserId(int $step_id): Collection;
 }

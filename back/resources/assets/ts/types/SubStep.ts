@@ -3,4 +3,5 @@ export type SubStep = {
     step_id?: number,
     name: string,
     detail: string,
+    sort_number?: number,
 }

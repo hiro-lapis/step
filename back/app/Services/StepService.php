@@ -136,4 +136,18 @@ class StepService
 
         return compact('challenge_step');
     }
+
+    public function getPosted(): array
+    {
+        $steps = $this->step_respository->getByUserId(auth()->user()->id);
+        $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time_type_name']));
+        return compact('steps');
+    }
+
+    public function getChallenging(): array
+    {
+        $steps = $this->challenge_step_respository->getByChallengeUserId(auth()->user()->id);
+        $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time_type_name', 'status_name']));
+        return compact('steps');
+    }
 }

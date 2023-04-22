@@ -1,27 +1,32 @@
 <script setup lang="ts">
-import { type Component, computed, onMounted, ref } from 'vue'
+import { type Component, onMounted, ref } from 'vue'
+import MultiTab from '../../Molecules/MultiTab.vue'
 import ProfileEdit from '../../Organisms/Mypage/ProfileEdit.vue'
+import ChallengingStep from '../../Organisms/Mypage/ChallengingStep.vue'
+import PostedStep from '../../Organisms/Mypage/PostedStep.vue'
 import OutInFadeIn from '../../Atoms/Transition/OutInFadeIn.vue'
 
 // 動的コンポーネントをinterfaceとして定義し、それを定数の型づけに使う
 interface Tabs {
     profileEdit?: Component,
+    challengingStep?: Component,
+    postedStep?: Component,
 }
 const tabs: Tabs = {
-    profileEdit: ProfileEdit
+    profileEdit: ProfileEdit,
+    challengingStep: ChallengingStep,
+    postedStep: PostedStep,
 }
+
+const tabGroups = [
+    { label: 'プロフィール編集', value: 'profileEdit', color: '#fff'},
+    { label: '登録済ステップ', value: 'postedStep', color: 'red'},
+    { label: 'チャレンジ中のステップ', value: 'challengingStep', color: 'green'},
+]
 
 // data
 // ref内にはtabs の key名を記載
-const currentTab = ref('profileEdit')
-
-// computed
-const pageTitle = computed(() => {
-    switch (currentTab.value) {
-        case 'profileEdit':
-            return 'プロフィール編集';
-    }
-})
+const currentTab = ref(Object.keys(tabs)[0]) // プロフィール編集
 
 onMounted(() => {})
 </script>
@@ -30,11 +35,17 @@ onMounted(() => {})
     <BaseView className="p-container__mypage">
         <template v-slot:content>
             <div class="c-multi-page__container">
-                {{ pageTitle }}
                 <OutInFadeIn>
-                    <keep-alive>
-                        <component :is="tabs[currentTab]"></component>
-                    </keep-alive>
+                    <MultiTab
+                        :tabs="tabGroups"
+                        v-model:selectedTab="currentTab"
+                    >
+                        <template v-slot:content>
+                            <KeepAlive>
+                                <component :is="tabs[currentTab]"></component>
+                            </KeepAlive>
+                        </template>
+                    </MultiTab>
                 </OutInFadeIn>
             </div>
         </template>
@@ -47,9 +58,10 @@ onMounted(() => {})
     &__container {
         width: 100%;
         min-height: 300px;
-        @include pc() {
-            box-shadow: 0 0 2px #ccc;
-        }
+        transition: all 0.8s ease;
+        // @include pc() {
+        //     box-shadow: 0 0 2px #ccc;
+        // }
     }
     &__head {
         font-size: 24px;
