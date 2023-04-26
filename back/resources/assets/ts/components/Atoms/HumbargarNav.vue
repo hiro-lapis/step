@@ -24,7 +24,7 @@ const logout = () => {
 				</li>
 			</router-link>
 			<template v-if="isLogin">
-				<router-link :to="{ name: 'idea-create' }">
+				<router-link :to="{ name: 'steps-create' }">
 					<li class="c-sp-nav__list-item">
 						<a href="#" class="c-sp-nav__list-link">ステップを登録</a>
 					</li>

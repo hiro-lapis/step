@@ -10,6 +10,9 @@
 
 .c-icon {
     cursor: pointer;
+    &--small {
+        font-size: 12px;
+    }
     &--large {
         font-size: 24px;
     }

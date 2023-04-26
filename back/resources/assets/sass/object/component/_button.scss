@@ -231,3 +231,13 @@
     @extend .c-btn--large;
     @extend .c-btn--agree;
 }
+
+.c-btn--twitter-share {
+    @extend %c-btn;
+    width: 80px;
+    height: 24px;
+    line-height: 20px;
+    font-size: 12px;
+    @extend .c-btn--small;
+    @extend .c-btn--create;
+}

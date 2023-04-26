@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
-import { ChallengeStep } from 'assets/ts/types/ChallengeStep';
-import { PropType } from 'vue'
-import { Step } from '../../../types/Step'
-import CategoryBadge from '../../Atoms/CategoryBadge.vue'
-import { useTypeGuards } from '../../../composables/typeGuards'
-import { Repositories } from '../../../apis/repositoryFactory'
-import { ChallengeStatusJudgement } from '../../../composables/ChallengeStatus'
+import { computed, inject, PropType } from 'vue'
 import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
-import { ChallengeSubStep } from 'assets/ts/types/ChallengeSubStep';
-import { SubStep } from 'assets/ts/types/SubStep';
+import { useTypeGuards } from '../../../composables/typeGuards'
+import { ChallengeStatusJudgement } from '../../../composables/ChallengeStatus'
+import { Repositories } from '../../../apis/repositoryFactory'
+import { ChallengeStep } from 'assets/ts/types/ChallengeStep'
+import { ChallengeSubStep } from 'assets/ts/types/ChallengeSubStep'
+import { Step } from '../../../types/Step'
+import { SubStep } from 'assets/ts/types/SubStep'
+import CategoryBadge from '../../Atoms/CategoryBadge.vue'
+import TwitterShareIcon from '../../Atoms/TwitterShareIcon.vue'
 
 const $repositories = inject<Repositories>("$repositories")!
 
@@ -72,6 +72,10 @@ const clear = async (subStepId: number) => {
                 <h1 class="c-title--step">{{ step.name }}</h1>
                 <div class="c-step-preview__information">
                     <CategoryBadge v-if="step.category_id" :id="step.category_id" />
+                    <!-- ハッシュタグ：カテゴリー名、本文：ステップ名 -->
+                    <template v-if="readOnly">
+                        <TwitterShareIcon v-if="!requestStore.isLoading" :id="'step-preview'" :text="step.name" :hashtags="step.category_name!" />
+                    </template>
                     <template v-if="!!step.created_at">
                         <template v-if="isChallengeStep(step)">
                             <div class="c-step-preview__challenge-information">
@@ -130,6 +134,7 @@ const clear = async (subStepId: number) => {
     width: 100%; // 親要素の幅いっぱいに広げる
     overflow-wrap: break-word;
     word-wrap: break-word; // 溢れる文字を折り返す
+    box-sizing: border-box;
     &__head {
         margin-bottom: 30px;
     }
