@@ -3,6 +3,7 @@ import { computed, inject } from 'vue'
 import { useUserStore,useRequestStore } from '../store/globalStore'
 import { router } from '../routes/routes'
 import { Repositories } from '../apis/repositoryFactory'
+import HumbargarNav from '../components/Atoms/HumbargarNav.vue'
 
 // utility
 const requestStore = useRequestStore()
@@ -28,11 +29,9 @@ const logout = () => {
         })
 }
 
-/**
- * ページのモードに合わせたTOPページ名
- */
+// ログイン状態で遷移先変更
 const topPageName = computed(() => {
-    return userStore.isLogin ? 'steps-list' : 'login'
+    return userStore.isLogin ? 'steps-list' : 'home'
 })
 /**
  * ページがユーザーかどうか
@@ -115,6 +114,9 @@ const userImage = computed(() => {
                     </template>
                 </ul>
             </nav>
+            <div class="c-sp-menu">
+                <HumbargarNav />
+            </div>
         </header>
     </div>
 </template>
@@ -123,8 +125,17 @@ const userImage = computed(() => {
 // ロゴ文字だけをリクエスト
 // https://developers.google.com/fonts/docs/css2?hl=ja#optimizing_your_font_requests
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Subrayada&display=swap&text=Step');
+@import "../../sass/foundation/_breakpoints.scss";
+
 .c-logo {
     font-family: 'Montserrat Subrayada', sans-serif;
     letter-spacing: normal;
+}
+
+.c-sp-menu {
+    display: inline-block;
+    @include mq() {
+        display: none;
+    }
 }
 </style>

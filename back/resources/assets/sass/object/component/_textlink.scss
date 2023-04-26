@@ -7,3 +7,8 @@
         text-decoration: underline;
     }
 }
+
+.c-text-link--footer {
+    @extend .c-text-link;
+    color: #fff;
+}

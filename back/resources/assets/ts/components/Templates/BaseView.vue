@@ -61,6 +61,10 @@ onMounted(() => {
 // 適宜propsで変更する
 .p-container {
     max-width: 1440px;
+    &--top {
+        max-width: 100%;
+        margin-top: 50px;
+    }
     &__steps-list {
         max-width: 1000px;
     }

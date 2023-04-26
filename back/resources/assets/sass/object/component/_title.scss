@@ -3,11 +3,27 @@
 /* ==========================================================================
  Title
 ========================================================================== */
-.c-title {
+
+%c-title {
     padding: 0.5em 0;
-    font-size: 16px;
+    // font-size: 16px;
     line-height: 1.5;
     text-align: center;
+    white-space: pre-line; // \nによる改行
+    // color: #333;
+    font-size: 13px;
+    @include pc() {
+        font-size: 25px;
+    }
+}
+
+.c-title {
+    @extend %c-title;
+    // padding: 0.5em 0;
+    font-size: 16px;
+    // line-height: 1.5;
+    // text-align: center;
+    // white-space: pre-line; // \nによる改行
     color: #333;
     @include pc() {
         font-size: 25px;
@@ -88,16 +104,50 @@
         color: $color_theme_user;
     }
 }
+.c-title--main-page-link {
+    @extend %c-title;
+    position: relative;
+    padding: 1rem 1.5rem;
+    // color: transparent;
+    // background-image: linear-gradient(180deg, rgba(62, 161, 219, 1) 11.2%, rgba(93, 52, 236, 1) 100.2%);
+    color: $color_black9;
+    $font-size_s: 1.2rem;
+    background-color: $font-color_default;
+    background-clip: text;
+    width: fit-content;
+    font-size: 25px;
+    // font-weight: bold;
+    text-align: center;
+    &::before {
+        background-image: var(--gradient);
+        left: -10px;
+        transform: rotate(-30deg);
+    }
+    &::after {
+        background-image: var(--gradient);
+        right: -10px;
+        transform: rotate(30deg);
+    }
+    &::before, &::after {
+        // --gradient: linear-gradient(109.6deg, rgba(62, 161, 219, 1) 11.2%, rgba(93, 52, 236, 1) 100.2%);
+        background-color: $color_black9;
+        position: absolute;
+        top: 10px;
+        width: 2px;
+        height: 30px;
+        content: '';
+    }
+}
 
-// ショップTOPページタイトル
+// ヒーローバナータイトル
 .c-title--hero-banner {
-    font-size: 24px;
-}
-// ショップTOPページサブタイトル
-.c-title--hero-banner--sub {
-    font-size: 12px;
-}
-
-.c-title--needs--shop {
-
+    @extend .c-title;
+    font-size: clamp(14px, 1vw, 25px); // window横幅(1vw単位)に応じて14~25pxで可変
+    @include mq() {
+        font-size: clamp(14px, 2.7vw, 25px);
+    }
+    @include pc() {
+        font-size: clamp(14px, 2.7vw, 27px);
+    }
+    font-weight: bold;
 }
