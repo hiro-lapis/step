@@ -7,6 +7,7 @@
 */
 .l-container {
     margin: 65px auto;
+    min-height: calc(100vh - 130px);  // コンテンツが少なくても最低限の高さを維持
 }
 .l-container--mypage {
     margin: 65px 0;

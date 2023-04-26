@@ -36,6 +36,7 @@ export const router = createRouter({
 
 // 未ログイン状態で表示できるページ
 export const guestPageName = [
+    'home',
     'register',
     'login',
     'password-forgot',
@@ -55,7 +56,6 @@ export const guestOnlyPageName = [
 // 画面遷移、ブラウザリロード時共通処理
 // 認証が必要なページを開いているときはログインページへリダイレクト
 router.beforeEach(async (to: RouteLocationNormalized, from, next) => {
-    console.log('here')
     console.log(to)
     // name 未定義のルートへのアクセスは一律homeへ
     if (to.name === null || to.name === undefined) {

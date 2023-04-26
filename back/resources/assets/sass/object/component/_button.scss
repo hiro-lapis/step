@@ -149,7 +149,7 @@
     @extend .c-btn--agree;
 }
 // TOPページ商品一覧ページ
-.c-btn--form-link-index {
+.c-btn--step-list {
     @extend .c-btn;
     @extend .c-btn--x-large;
     @extend .c-btn--agree;
@@ -178,19 +178,6 @@
     @extend .c-btn;
     @extend .c-btn--x-large;
     @extend .c-btn--update;
-}
-// カートから削除
-.c-btn--remove-item {
-    @extend %c-btn;
-    @extend .c-btn--minimum;
-    @extend .c-btn--delete;
-    width: 100%;
-}
-// 購入確定
-.c-btn--settle {
-    @extend %c-btn;
-    @extend .c-btn--x-large;
-    @extend .c-btn--purchase;
 }
 // プロフィール更新
 .c-btn--update-profile {
@@ -221,35 +208,6 @@
     @extend %c-btn;
     @extend .c-btn--x-large;
     @extend .c-btn--create;
-}
-
-// 注文キャンセル
-.c-btn--clear {
-    @extend %c-btn;
-    width: 60px;
-    height: 26px;
-    line-height: 26px;
-    font-size: 12px;
-    color: #f6f5f4;
-    background: #333;
-    border: 1px solid #333;
-    &:hover {
-        color: #333;
-        background: #f6f5f4;
-    }
-}
-
-// 注文カード:商品詳細をみる
-.c-btn--product-detail {
-    @extend %c-btn;
-    @extend .c-btn--x-small;
-    @extend .c-btn--create;
-}
-// 注文カード:商品をキャンセル
-.c-btn--cancel-order-detail {
-    @extend %c-btn;
-    @extend .c-btn--x-small;
-    @extend .c-btn--danger;
 }
 
 // SNSでログイン

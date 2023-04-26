@@ -7,13 +7,14 @@
     font-family: 'Montserrat Subrayada', sans-serif;
     letter-spacing: normal;
     &__container {
-        width: 210px;
+        width: auto;
+        // width: 210px;
         @include pc() {
             width: 180px;
             transition: all 0.3s;
         }
         &--footer {
-            width: 300px;
+            width: 70px;
             transition: all 0.3s;
         }
     }
@@ -27,7 +28,7 @@
 %c-header {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content:  space-between;
     position: fixed;
     top: 0;
     z-index: 1;
@@ -55,7 +56,7 @@
 // ②PCメニュー
 .c-nav {
     display: none;
-    @include pc() {
+    @include mq() {
         display: inline-block;
     }
     &__list {
