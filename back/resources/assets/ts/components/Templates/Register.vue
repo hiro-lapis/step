@@ -73,7 +73,7 @@ const convertKeysToSnakeCase = (obj: Object) => {
             <div class="p-register-form">
                 <div class="p-register-form__container">
                     <div class="p-register-form__head">
-                        <h2 class="c-title">アカウント登録</h2>
+                        <h2 class="c-title--register">アカウント登録</h2>
                     </div>
                     <div class="p-register-form__body">
                         <div class="p-register-form__element"></div>
@@ -113,12 +113,24 @@ const convertKeysToSnakeCase = (obj: Object) => {
                                 placeHolder="パスワード(確認用)"
                             />
                         </div>
-                        <button
-                            class="c-btn--register"
-                            @click="register"
-                        >
-                            アカウント登録
-                        </button>
+                        <div class="p-register-form__element">
+                            <button
+                                class="c-btn--register"
+                                @click="register"
+                            >
+                                アカウント登録
+                            </button>
+                        </div>
+                        <div class="p-register-form__element">
+                            <BorderLine />
+                        </div>
+                        <div class="p-register-form__text-link">
+                            <router-link :to="{ name: 'login' }">
+                                <span class="c-text-link p-link">
+                                    アカウントをお持ちの方はこちら
+                                </span>
+                            </router-link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -154,14 +166,17 @@ const convertKeysToSnakeCase = (obj: Object) => {
         }
     }
     &__head {
-        margin-bottom: 25px;
+        margin-bottom: 10px;
+        @include mq() {
+            margin-bottom: 20px;
+        }
     }
     &__body {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 100%;
-        @include pc() {
+        @include mq() {
             width: 400px;
         }
     }
@@ -171,6 +186,10 @@ const convertKeysToSnakeCase = (obj: Object) => {
         &:nth-of-type(6) {
             margin-bottom: 10px;
         }
+    }
+    &__text-link {
+        text-align: left;
+        width: 100%;
     }
 }
 </style>

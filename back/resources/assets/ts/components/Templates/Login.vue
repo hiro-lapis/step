@@ -82,7 +82,7 @@ const login = () => {
                                 ログイン
                             </button>
                         </div>
-                        <div class="p-login-form__btn-box">
+                        <div class="p-login-form__element">
                             <BorderLine />
                         </div>
                         <div class="p-login-form__text-link">

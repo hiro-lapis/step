@@ -11,21 +11,21 @@
     text-align: center;
     white-space: pre-line; // \nによる改行
     font-size: 13px;
-    @include pc() {
+    @include mq() {
         font-size: 25px;
     }
 }
 // 見出しの共通font-size
 %c-title--font-size {
     font-size: 16px;
-    @include pc() {
+    @include mq() {
         font-size: 25px;
     }
 }
 // ページタイトルの共通font-size
 %c-title--font-size--page {
     font-size: 25px;
-    @include pc() {
+    @include mq() {
         font-size: 30px;
     }
 }

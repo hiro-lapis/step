@@ -1,30 +1,16 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useUserStore, useRequestStore } from '../../../ts/store/globalStore'
-import { Repositories } from '../../apis/repositoryFactory'
+import { computed, ref } from 'vue'
+import { useUserStore } from '../../../ts/store/globalStore'
+import { useAuthFunc } from '../../composables/auth'
 
 // utilities
 const userStore = useUserStore()
-const requestStore = useRequestStore()
-const $repositories = inject<Repositories>('$repositories')!
-const router = useRouter()
 // data
 const isActive = ref(false)
 
 const isLogin = computed(() => userStore.isLogin)
-const logout = (next: string) => {
-    if (!isLogin.value) return
-    if (!requestStore.isLoading) return
-    requestStore.setLoading(true)
-    $repositories.auth.logout()
-        .then(response => {
-                requestStore.setLoading(true)
-                // 遷移先ページのis_login APIでstoreユーザー情報の解除
-                userStore.setLogin(false)
-                router.push({ name: next })
-        })
-}
+// methods
+const { logout } = useAuthFunc()
 </script>
 
 <template>

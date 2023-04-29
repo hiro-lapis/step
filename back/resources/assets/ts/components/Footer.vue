@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import FadeIn from './Atoms/Transition/FadeIn.vue'
-import { computed, onBeforeUnmount, onMounted, ref, StyleValue } from 'vue'
-import axios from 'axios'
-import { router } from '../routes/routes'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useUserStore } from '../store/globalStore'
 
 // utility
@@ -14,36 +11,13 @@ defineProps({
 })
 // data
 const windowSize = ref(0)
-const isActive = ref(false)
-const nextRoute = ref('')
 
 // methods
-
 const onResize = () => {
     windowSize.value = window.innerWidth
 }
-const logout = async(next: string) => {
-    // ローディングONtNextPage(
-    axios
-        .post("/api/logout")
-        .then(response => {
-            // ログイン状態解除
-            userStore.setLogin(false)
-
-            setTimeout(() => {
-                router.push({ name: next });
-            }, 2000)
-        })
-        .finally(() => {
-            // ローディングOFF
-        })
-}
-const setNextPage = (next) => {
-    // ログアウト後に表示するページ設定をしてログアウト
-    nextRoute.value = next;
-}
+// computed
 const isLogin = computed(() => userStore.isLogin)
-
 const logoRoute = computed(() => isLogin.value ? { name: 'steps-list' } : { name: 'home' })
 onMounted(() => {
     onResize()
