@@ -30,8 +30,6 @@ const registerData = reactive({
 // computed
 const loading = computed(() => requestStore.isLoading)
 
-// watch
-
 // methods
 const register = async () => {
     if (loading.value) return
@@ -44,8 +42,7 @@ const register = async () => {
             requestStore.setLoading(false)
             userStore.setUser(response.data.user)
             userStore.setLogin(true)
-
-            // インデックス画面へ遷移
+            // 一覧画面へ遷移
             messageStore.setMessage('登録ありがとうございます！テーマ一覧へ遷移します。')
             router.push({ name: 'steps-list' })
         })
@@ -79,16 +76,6 @@ const convertKeysToSnakeCase = (obj: Object) => {
                         <h2 class="c-title">アカウント登録</h2>
                     </div>
                     <div class="p-register-form__body">
-                        <!-- SNSで登録 -->
-                        <div class="p-register-form__element">
-                            <a href="/login/google" class="c-btn c-btn--large c-btn--social-login">
-                                <div class="c-img--icon--sns">
-                                    <img class="u-vertical-align--b" src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/icon-google.png" alt="googleアイコン">
-                                </div>
-                                <span class="c-btn--social-login__text">Googleアカウントで登録</span>
-                            </a>
-                        </div>
-                        <border-line />
                         <div class="p-register-form__element"></div>
 
                         <!-- Eメールとパスワードで登録 -->
@@ -161,10 +148,9 @@ const convertKeysToSnakeCase = (obj: Object) => {
         box-sizing: border-box;
         text-align: center;
         overflow: hidden;
-        @include pc() {
+        @include mq() {
             width: 500px;
             box-shadow: 0 0 8px #ccc;
-            // border: 1px solid #d6d6d6; // くっきりラインタイプ
         }
     }
     &__head {

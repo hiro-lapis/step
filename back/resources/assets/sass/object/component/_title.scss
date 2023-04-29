@@ -15,21 +15,28 @@
         font-size: 25px;
     }
 }
-// ページタイトルの共通スタイル
-%c-title--page {
+// 見出しの共通font-size
+%c-title--font-size {
+    font-size: 16px;
+    @include pc() {
+        font-size: 25px;
+    }
+}
+// ページタイトルの共通font-size
+%c-title--font-size--page {
     font-size: 25px;
     @include pc() {
-        font-size: 16px;
+        font-size: 30px;
     }
 }
 
 .c-title {
     @extend %c-title;
-    font-size: 16px;
-    color: #333;
-    @include pc() {
-        font-size: 25px;
-    }
+    // font-size: 16px;
+    // color: #333;
+    // @include pc() {
+    //     font-size: 25px;
+    // }
     &--white {
         color: white;
     }
@@ -70,7 +77,7 @@
     &--login,
     &--register {
         @extend %c-title;
-        @extend %c-title--page;
+        @extend %c-title--font-size--page;
     }
 }
 

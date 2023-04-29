@@ -18,10 +18,13 @@ const logout = () => {
             if (response.status === 204) {
                 // vuexのログイン状態も解除
                 userStore.setLogin(false)
-                // TOP画面へ遷移
-                setTimeout(() => {
-                    router.push({ name: 'login' })
-                }, 2000)
+                // 今いるページがログイン必須のページだったらTOPへ
+                if (router.currentRoute.value.meta.requireAuth) {
+                    // TOP画面へ遷移
+                    setTimeout(() => {
+                        router.push({ name: 'login' })
+                    }, 2000)
+                }
             }
         })
         .finally(() => {

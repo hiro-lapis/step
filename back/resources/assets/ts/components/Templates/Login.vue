@@ -34,8 +34,7 @@ const login = () => {
         $repositories.auth.login(loginData)
             .then(res => {
                 requestStore.setLoading(false)
-                const data: User = res.data
-                userStore.setUser(data)
+                userStore.setUser(res.data)
                 userStore.setLogin(true)
                 router.push({ name: 'steps-list'})
             }).catch(error => {
@@ -124,7 +123,7 @@ const login = () => {
         box-sizing: border-box;
         text-align: center;
         overflow: hidden;
-        @include pc() {
+        @include mq() {
             width: 500px;
             box-shadow: 0 0 8px #ccc;
         }

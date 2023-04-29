@@ -32,7 +32,7 @@ const logout = async(next: string) => {
 
             setTimeout(() => {
                 router.push({ name: next });
-            }, 2000);
+            }, 2000)
         })
         .finally(() => {
             // ローディングOFF

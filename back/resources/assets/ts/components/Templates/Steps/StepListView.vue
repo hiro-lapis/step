@@ -53,7 +53,6 @@ onMounted(() => init())
 <template>
     <BaseView className="p-container__steps-list">
         <template v-slot:content>
-            <h1>ステップ一覧</h1>
             <div class="p-steps-list__body">
                 <StepCardList
                     :stepList="stepList"
