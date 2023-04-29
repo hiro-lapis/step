@@ -38,6 +38,18 @@ const logout = () => {
 						<span class="c-nav__list-link">ログアウト</span>
 					</li>
 			</template>
+      <template v-else>
+        <router-link :to="{ name: 'login' }">
+          <li class="c-sp-nav__list-item">
+            <a href="#" class="c-sp-nav__list-link">ログイン</a>
+          </li>
+        </router-link>
+        <router-link :to="{ name: 'register' }">
+          <li class="c-sp-nav__list-item">
+            <a href="#" class="c-sp-nav__list-link">新規登録</a>
+          </li>
+        </router-link>
+      </template>
 		</ul>
 	</nav>
 	<label for="icon-checkbox" class="c-sp-menu-icon" :class="{ active: isActive }" @click="isActive = !isActive">
@@ -47,39 +59,6 @@ const logout = () => {
 
 <style lang="scss" scoped>
 @import '../../../sass/foundation/breakpoints';
-
-/* ③SPメニュー */
-.c-sp-nav {
-  position: absolute;
-  top: 50px;
-  left: 0;
-  width: 100%;
-  height: calc(100vh + 50px);
-  background: #FFE0B2;
-  transform: translateX(100%);
-  transition: 0.5s;
-  &.active {
-    visibility: visible;
-    opacity: 1;
-    transition-delay: 0s;
-    transform: translateX(0%);
-  }
-    @include mq() {
-      display: none;
-    }
-  &__list {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    color: #fb8c00;
-    border-bottom: 1px solid #fb8c00;
-    &-item {
-      padding-bottom: 15px;
-      padding-top: 15px;
-      border-bottom: black 1px solid;
-    }
-  }
-}
 
 // ④SPアイコン
 // ハンバーガーメニューアイコン
@@ -98,7 +77,8 @@ const logout = () => {
   &__body {
     display: block;
     position: absolute;
-    top: 55%;
+    top: 4px;
+    // top: 55%;
     margin-top: -0.3em;
     width: 100%;
     height: 0.2em;
