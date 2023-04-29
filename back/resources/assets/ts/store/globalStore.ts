@@ -82,14 +82,14 @@ export const useMessageInfoStore = defineStore('messageInfo', () => {
     const setMessage = (message: string) => {
         messageInfo.message = message
         messageInfo.isError = false
-        // 5s後にリセット
-        setTimeout(() => messageInfo.message = '', 5000)
+        // 10s後にリセット
+        setTimeout(() => messageInfo.message = '', 10000)
     }
     const setErrorMessage = (message: string) => {
         messageInfo.message = message
         messageInfo.isError = true
-        // 5s後にリセット
-        setTimeout(() => messageInfo.message = '', 5000)
+        // 10s後にリセット
+        setTimeout(() => messageInfo.message = '', 10000)
     }
     return {
         messageInfo,

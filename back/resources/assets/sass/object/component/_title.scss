@@ -4,26 +4,28 @@
  Title
 ========================================================================== */
 
+// タイトルの共通スタイル
 %c-title {
     padding: 0.5em 0;
-    // font-size: 16px;
     line-height: 1.5;
     text-align: center;
     white-space: pre-line; // \nによる改行
-    // color: #333;
     font-size: 13px;
     @include pc() {
         font-size: 25px;
     }
 }
+// ページタイトルの共通スタイル
+%c-title--page {
+    font-size: 25px;
+    @include pc() {
+        font-size: 16px;
+    }
+}
 
 .c-title {
     @extend %c-title;
-    // padding: 0.5em 0;
     font-size: 16px;
-    // line-height: 1.5;
-    // text-align: center;
-    // white-space: pre-line; // \nによる改行
     color: #333;
     @include pc() {
         font-size: 25px;
@@ -65,51 +67,17 @@
             border-bottom: solid 2px #1E88E5; // 見出しアンダーライン
         }
     }
+    &--login,
+    &--register {
+        @extend %c-title;
+        @extend %c-title--page;
+    }
 }
 
-.c-title--how-to-use--append {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: -30px;
-    right: 305px;
-    font-size: 14px;
-    transform: rotate(22deg);
-    &::before,
-    &::after {
-        content: "";
-        width: 3px;
-        height: 30px;
-        background-color: #ff914d;
-    }
-    &::before {
-        margin-right: 20px;
-        transform: rotate(-35deg);
-    }
-    &::after {
-        margin-left: 20px;
-        transform: rotate(35deg);
-    }
-}
-.c-title--how-to-use {
-    @extend .c-title;
-    position: relative;
-    padding-bottom: 20px;
-    font-size: 26px;
-    text-align: center;
-    &__accent {
-        margin: 0 5px;
-        font-size: 40px;
-        color: $color_theme_user;
-    }
-}
 .c-title--main-page-link {
     @extend %c-title;
     position: relative;
     padding: 1rem 1.5rem;
-    // color: transparent;
-    // background-image: linear-gradient(180deg, rgba(62, 161, 219, 1) 11.2%, rgba(93, 52, 236, 1) 100.2%);
     color: $color_black9;
     $font-size_s: 1.2rem;
     background-color: $font-color_default;
@@ -129,7 +97,6 @@
         transform: rotate(30deg);
     }
     &::before, &::after {
-        // --gradient: linear-gradient(109.6deg, rgba(62, 161, 219, 1) 11.2%, rgba(93, 52, 236, 1) 100.2%);
         background-color: $color_black9;
         position: absolute;
         top: 10px;
