@@ -43,8 +43,8 @@ const setNextPage = (next) => {
     nextRoute.value = next;
 }
 const isLogin = computed(() => userStore.isLogin)
-const pcSize = computed(() => windowSize.value > 400)
 
+const logoRoute = computed(() => isLogin.value ? { name: 'steps-list' } : { name: 'home' })
 onMounted(() => {
     onResize()
     window.removeEventListener("resize", onResize)
@@ -60,7 +60,7 @@ onBeforeUnmount(() => {
         <!-- pc footer -->
         <div class="c-footer u-color--user">
             <div class="c-footer__head">
-                <router-link :to="{ name: 'todo' }">
+                <router-link :to="logoRoute">
                     <div class="c-logo__container--footer">
                         <img src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/logos/logo-full.png" class="c-logo"/>
                     </div>
