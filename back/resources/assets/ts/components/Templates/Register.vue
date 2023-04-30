@@ -30,8 +30,6 @@ const registerData = reactive({
 // computed
 const loading = computed(() => requestStore.isLoading)
 
-// watch
-
 // methods
 const register = async () => {
     if (loading.value) return
@@ -44,8 +42,7 @@ const register = async () => {
             requestStore.setLoading(false)
             userStore.setUser(response.data.user)
             userStore.setLogin(true)
-
-            // インデックス画面へ遷移
+            // 一覧画面へ遷移
             messageStore.setMessage('登録ありがとうございます！テーマ一覧へ遷移します。')
             router.push({ name: 'steps-list' })
         })
@@ -76,19 +73,9 @@ const convertKeysToSnakeCase = (obj: Object) => {
             <div class="p-register-form">
                 <div class="p-register-form__container">
                     <div class="p-register-form__head">
-                        <h2 class="c-title">アカウント登録</h2>
+                        <h2 class="c-title--register">アカウント登録</h2>
                     </div>
                     <div class="p-register-form__body">
-                        <!-- SNSで登録 -->
-                        <div class="p-register-form__element">
-                            <a href="/login/google" class="c-btn c-btn--large c-btn--social-login">
-                                <div class="c-img--icon--sns">
-                                    <img class="u-vertical-align--b" src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/icon-google.png" alt="googleアイコン">
-                                </div>
-                                <span class="c-btn--social-login__text">Googleアカウントで登録</span>
-                            </a>
-                        </div>
-                        <border-line />
                         <div class="p-register-form__element"></div>
 
                         <!-- Eメールとパスワードで登録 -->
@@ -126,12 +113,24 @@ const convertKeysToSnakeCase = (obj: Object) => {
                                 placeHolder="パスワード(確認用)"
                             />
                         </div>
-                        <button
-                            class="c-btn--register"
-                            @click="register"
-                        >
-                            アカウント登録
-                        </button>
+                        <div class="p-register-form__element">
+                            <button
+                                class="c-btn--register"
+                                @click="register"
+                            >
+                                アカウント登録
+                            </button>
+                        </div>
+                        <div class="p-register-form__element">
+                            <BorderLine />
+                        </div>
+                        <div class="p-register-form__text-link">
+                            <router-link :to="{ name: 'login' }">
+                                <span class="c-text-link p-link">
+                                    アカウントをお持ちの方はこちら
+                                </span>
+                            </router-link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -161,21 +160,23 @@ const convertKeysToSnakeCase = (obj: Object) => {
         box-sizing: border-box;
         text-align: center;
         overflow: hidden;
-        @include pc() {
+        @include mq() {
             width: 500px;
             box-shadow: 0 0 8px #ccc;
-            // border: 1px solid #d6d6d6; // くっきりラインタイプ
         }
     }
     &__head {
-        margin-bottom: 25px;
+        margin-bottom: 10px;
+        @include mq() {
+            margin-bottom: 20px;
+        }
     }
     &__body {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 100%;
-        @include pc() {
+        @include mq() {
             width: 400px;
         }
     }
@@ -185,6 +186,10 @@ const convertKeysToSnakeCase = (obj: Object) => {
         &:nth-of-type(6) {
             margin-bottom: 10px;
         }
+    }
+    &__text-link {
+        text-align: left;
+        width: 100%;
     }
 }
 </style>

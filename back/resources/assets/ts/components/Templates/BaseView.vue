@@ -8,7 +8,6 @@ import Footer from '../Footer.vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../store/globalStore'
 import { Repositories } from '../../apis/repositoryFactory'
-import { guestPageName, guestOnlyPageName } from '../../routes/routes'
 
 // utilities
 const router = useRouter()
@@ -21,8 +20,8 @@ defineProps({
 })
 onMounted(() => {
     // ログイン状態チェック
-    const isGuestOnlyPage = guestOnlyPageName.includes(router.currentRoute.value.name!.toString())
-    const isGuestPage = guestPageName.includes(router.currentRoute.value.name!.toString())
+    const isGuestOnlyPage = router.currentRoute.value.meta.guestOnly
+    const isGuestPage = !router.currentRoute.value.meta.requiresAuth
     $repositories.auth.isLogin().then(response => {
         if (response.data.is_login) {
             userStore.setLogin(true)
@@ -67,6 +66,7 @@ onMounted(() => {
     }
     &__steps-list {
         max-width: 1000px;
+        position: relative;
     }
     &--steps-form {
         max-width: 1440px;

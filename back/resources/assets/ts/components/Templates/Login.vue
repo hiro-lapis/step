@@ -25,7 +25,7 @@ const loginData = reactive({
 const loading = computed(() => {
     return requestStore.isLoading
 })
-
+// methods
 const login = () => {
     // 多重送信防止
     if (loading.value) return
@@ -34,8 +34,7 @@ const login = () => {
         $repositories.auth.login(loginData)
             .then(res => {
                 requestStore.setLoading(false)
-                const data: User = res.data
-                userStore.setUser(data)
+                userStore.setUser(res.data)
                 userStore.setLogin(true)
                 router.push({ name: 'steps-list'})
             }).catch(error => {
@@ -54,20 +53,9 @@ const login = () => {
             <div class="p-login-form">
                 <div class="p-login-form__container">
                     <div class="p-login-form__head">
-                        <h2 class="c-title">ログイン</h2>
+                        <h2 class="c-title--login">ログイン</h2>
                     </div>
                     <div class="p-login-form__body">
-                        <!-- SNSでログイン -->
-                        <div class="p-login-form__element">
-                            <a href="/login/google" class="c-btn c-btn--large c-btn--social-login">
-                                <div class="c-img--icon--sns">
-                                    <img class="u-vertical-align--b" src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/icon-google.png" alt="googleアイコン">
-                                </div>
-                                <span class="c-btn--social-login__text">Googleアカウントでログイン</span>
-                            </a>
-                        </div>
-                        <BorderLine />
-                        <span class="p-login-form__element"></span>
                         <!-- Eメールでログイン -->
                         <div class="p-login-form__element">
                             <TextInput
@@ -93,6 +81,9 @@ const login = () => {
                                 class="c-btn--login">
                                 ログイン
                             </button>
+                        </div>
+                        <div class="p-login-form__element">
+                            <BorderLine />
                         </div>
                         <div class="p-login-form__text-link">
                             <router-link :to="{ name: 'register' }">
@@ -132,13 +123,16 @@ const login = () => {
         box-sizing: border-box;
         text-align: center;
         overflow: hidden;
-        @include pc() {
+        @include mq() {
             width: 500px;
             box-shadow: 0 0 8px #ccc;
         }
     }
     &__head {
-        margin-bottom: 30px;
+        margin-bottom: 10px;
+        @include pc() {
+            margin-bottom: 30px;
+        }
     }
     &__body {
         display: flex;
@@ -150,11 +144,12 @@ const login = () => {
         margin-bottom: 15px;
     }
     &__btn-box {
-        margin-bottom: 5px;
+        margin-bottom: 20px;
         width: 100%;
     }
     &__text-link {
         text-align: left;
+        width: 100%;
     }
 }
 

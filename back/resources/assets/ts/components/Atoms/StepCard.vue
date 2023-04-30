@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { PropType } from 'vue'
+import { computed, PropType } from 'vue'
 import { ChallengeStep } from '../../types/ChallengeStep'
 import { Step } from '../../types/Step'
-import { ChallengeStatusJudgement } from '../../composables/ChallengeStatus'
 import CategoryBadge from './CategoryBadge.vue'
-import StepCountBadge from './StepCountBadge.vue'
+import StepProgressionCountBadge from './StepProgressionCountBadge.vue'
+import SubStepCountBadge from './SubStepCountBadge.vue'
+import { useTypeGuards } from '../../composables/typeGuards'
 
+/**
+ * ステップカード
+ * widthは親コンポーネントに任せる。単体・複数カラム両方の形式応じて幅が変わるため
+ */
 
 // props
 const props = defineProps({
@@ -14,40 +19,38 @@ const props = defineProps({
 })
 // computed
 // カードクリック時の遷移先を返す
-const getRoute = (step: Step|ChallengeStep) => {
-    if (props.challengeMode && isChallengeStep(step)) {
-        return { name: 'challenge-step', params: { id: step.step_id } }
+const getShowRoute = computed(() => {
+    if (props.challengeMode && isChallengeStep(props.step!)) {
+        return { name: 'challenge-steps-show', params: { id: props.step.step_id } }
     }
-    return { name: 'step', params: { id: step.id } }
-}
+    return { name: 'steps-show', params: { id: props.step!.id } }
+})
+
 // methods
-const stepMerit = (merit: string|null) => {
-    if (merit === null) {
-        return '　'
-    }
-return merit
-}
-const isChallengeStep = (step: Step|ChallengeStep): step is ChallengeStep => {
-    return (step as ChallengeStep).challenge_user_id !== undefined
-}
-const getStatusName = (step: Step|ChallengeStep) => {
-    if (isChallengeStep(step)) {
-        return step.status_name
-    }
-    return ''
-}
+const stepMerit = (merit: string|null) => merit === null ? '　' : merit
+const { isChallengeStep } = useTypeGuards()
+const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step.status_name : ''
 </script>
 
 <template>
-    <router-link :to="getRoute" class="c-step-card">
+    <router-link :to="getShowRoute" class="c-step-card">
         <h2 class="c-step-card__title u-spread">{{ step!.name }}</h2>
         <p class="c-step-card__txt u-spread">
             <p>{{ stepMerit(step!.merit!) }}</p>
             <div class="u-margin-b-05p">
                 <CategoryBadge :id="step!.category_id" />
-                <span class="u-margin-l-1p">
-                    <StepCountBadge :step="step!" />
-                </span>
+                <!-- チャレンジ進捗 -->
+                <template v-if="isChallengeStep(step!)">
+                    <span class="u-margin-l-1p">
+                        <StepProgressionCountBadge :step="step!" />
+                    </span>
+                </template>
+                <template v-else>
+                    <!-- サブステップ数 -->
+                    <span class="u-margin-l-1p">
+                        <SubStepCountBadge :step="step!" />
+                    </span>
+                </template>
                 <span v-if="challengeMode" class="u-margin-l-1p">
                     {{ getStatusName(step!) }}
                 </span>
@@ -88,5 +91,4 @@ const getStatusName = (step: Step|ChallengeStep) => {
         opacity: 0.7;
     }
 }
-/*hover*/
 </style>

@@ -1,52 +1,18 @@
 [<script setup lang="ts">
-import { computed, inject } from 'vue'
-import { useUserStore,useRequestStore } from '../store/globalStore'
-import { router } from '../routes/routes'
-import { Repositories } from '../apis/repositoryFactory'
+import { computed } from 'vue'
+import { useUserStore } from '../store/globalStore'
 import HumbargarNav from '../components/Atoms/HumbargarNav.vue'
+import { useAuthFunc } from '../composables/auth'
 
 // utility
-const requestStore = useRequestStore()
 const userStore = useUserStore()
-const $repositories = inject<Repositories>('$repositories')!
-
-const logout = () => {
-    requestStore.setLoading(true)
-    // axiosでログイン情報を削除
-    $repositories.auth.logout()
-        .then(response => {
-            if (response.status === 204) {
-                // vuexのログイン状態も解除
-                userStore.setLogin(false)
-                // TOP画面へ遷移
-                setTimeout(() => {
-                    router.push({ name: 'login' })
-                }, 2000)
-            }
-        })
-        .finally(() => {
-            requestStore.setLoading(false)
-        })
-}
-
+// methods
+const { logout } = useAuthFunc()
+// computed
 // ログイン状態で遷移先変更
-const topPageName = computed(() => {
-    return userStore.isLogin ? 'steps-list' : 'home'
-})
-/**
- * ページがユーザーかどうか
- */
-const userMode = computed(() => {
-    return true
-})
-
-const isLogin = computed(() => {
-    return userStore.isLogin
-})
-
-const userImage = computed(() => {
-    return userStore.user.image_url ?? ''
-})
+const topPageName = computed(() => userStore.isLogin ? 'steps-list' : 'home')
+const isLogin = computed(() => userStore.isLogin)
+const userImage = computed(() => userStore.user.image_url ?? '')
 </script>
 
 <template>
@@ -74,7 +40,7 @@ const userImage = computed(() => {
                                 <a href="#" class="c-nav__list-link">ステップ一覧</a>
                             </li>
                         </router-link>
-                        <li @click="logout" class="c-nav__list-item">
+                        <li @click="logout()" class="c-nav__list-item">
                             <span class="c-nav__list-link">ログアウト</span>
                         </li>
                         <router-link :to="{ name: 'mypage' }">
@@ -85,11 +51,6 @@ const userImage = computed(() => {
                                         alt="ログインユーザー画像"
                                     />
                                 </div>
-                            </li>
-                        </router-link>
-                        <router-link :to="{ name: 'todo' }">
-                            <li class="c-nav__list-item">
-                                <cart-icon />
                             </li>
                         </router-link>
                     </template>

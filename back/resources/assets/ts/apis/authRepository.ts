@@ -20,7 +20,7 @@ export class AuthRepository {
     async isLogin(): Promise<AxiosResponse<IsLoginResponse>> {
         return await axios.get(`${this.isLoginUrl}`)
     }
-    async login(params: {email: string, password: string}): Promise<any> {
+    async login(params: {email: string, password: string}): Promise<AxiosResponse<LoginResponse>> {
         return await axios.post(`${this.loginUrl}`, params)
     }
     async logout(): Promise<any> {
@@ -39,3 +39,5 @@ type IsLoginResponse = {
     user?: User,
     step_ids: number[]
 }
+
+type LoginResponse = User

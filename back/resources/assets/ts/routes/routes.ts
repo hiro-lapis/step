@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteLocationNormalized } from 'vue-router'
+import { createRouter, createWebHistory, RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 
 import { useUserStore } from '../store/globalStore'
 import Top from '../components/Templates/Top.vue'
@@ -13,20 +13,20 @@ import StepShowView from '../components/Templates/Steps/StepShowView.vue'
 import ChallengeStepShowView from '../components/Templates/ChallengeSteps/ChallengeStepShowView.vue'
 import StepListView from '../components/Templates/Steps/StepListView.vue'
 
+
 // ルート登録
-const routes = [
-    { path: '/', name: 'home', component: Top, },
-    { path: '/todo', name: 'todo', component: GoodMorning }, // 未作成画面の仮リンク先
-    { path: '/register', name: 'register', component: Register }, // 未作成画面の仮リンク先
-    { path: '/good-morning', name: 'good-morning', component: GoodMorning },
-    { path: '/login', name: 'login', component: Login },
-    { path: '/password/forgot', name: 'password-forgot', component: PasswordForgot, },
-    { path: '/password/reset', name: 'password-reset', component: PasswordReset, },
-    { path: '/steps/create', name: 'steps-create', component: StepEditView, },
-    { path: '/steps', name: 'steps-list', component: StepListView, },
-    { path: '/steps/:id', name: 'steps-show', component: StepShowView, },
-    { path: '/challege-steps/:id', name: 'challenge-steps-show', component: ChallengeStepShowView, },
-    { path: '/mypage', name: 'mypage', component: MypageView, },
+const routes: Array<RouteRecordRaw> = [
+    // { path: '/todo', name: 'todo', component: GoodMorning, meta: { title: 'TOPページ', requireAuth: false, guestOnly: false, },  }, // 未作成画面の仮リンク先
+    { path: '/', name: 'home', component: Top, meta: { title: 'TOPページ', requiresAuth: false, guestOnly: false, }, },
+    { path: '/register', name: 'register', component: Register, meta: { title: 'アカウント登録', requiresAuth: false, guestOnly: true, },  },
+    { path: '/login', name: 'login', component: Login, meta: { title: 'ログイン', requiresAuth: false, guestOnly: true, },  },
+    { path: '/password/forgot', name: 'password-forgot', component: PasswordForgot, meta: { title: 'パスワード再発行', requiresAuth: false, guestOnly: true, } },
+    { path: '/password/reset', name: 'password-reset', component: PasswordReset, meta: { title: 'パスワードリセット', requiresAuth: false, guestOnly: true, }, },
+    { path: '/steps/create', name: 'steps-create', component: StepEditView, meta: { title: 'ステップ新規作成', requiresAuth: true, guestOnly: false, },  },
+    { path: '/steps', name: 'steps-list', component: StepListView, meta: { title: 'ステップ一覧', requiresAuth: false, guestOnly: false, },   },
+    { path: '/steps/:id', name: 'steps-show', component: StepShowView, meta: { title: 'ステップ詳細', requiresAuth: false, guestOnly: false, }, },
+    { path: '/challege-steps/:id', name: 'challenge-steps-show', component: ChallengeStepShowView, meta: { title: 'チャレンジ中のステップ詳細', requiresAuth: true, guestOnly: false, }, },
+    { path: '/mypage', name: 'mypage', component: MypageView, meta: { title: 'マイページ', requiresAuth: true, guestOnly: false, }, },
 ]
 
 export const router = createRouter({
@@ -34,27 +34,7 @@ export const router = createRouter({
     routes,
 })
 
-// 未ログイン状態で表示できるページ
-export const guestPageName = [
-    'home',
-    'register',
-    'login',
-    'password-forgot',
-    'password-reset',
-    'steps-list',
-    'steps-show',
-]
-
-// 未ログイン状態の時のみ表示するページ
-export const guestOnlyPageName = [
-    'register',
-    'login',
-    'password-forgot',
-    'password-reset',
-]
-
 // 画面遷移、ブラウザリロード時共通処理
-// 認証が必要なページを開いているときはログインページへリダイレクト
 router.beforeEach(async (to: RouteLocationNormalized, from, next) => {
     console.log(to)
     // name 未定義のルートへのアクセスは一律homeへ
@@ -62,9 +42,9 @@ router.beforeEach(async (to: RouteLocationNormalized, from, next) => {
         console.log('undefined route accessed')
         next({ name: 'home' })
     } else {
-        const loginRequired = !guestPageName.includes(to.name!.toString())
         const user = useUserStore()
-        if (loginRequired && !user.isLogin) next({ name: 'login' })
+        // 認証必須のページには
+        if (to.meta.requiresAuth && !user.isLogin) next({ name: 'login' })
         else next()
     }
 })

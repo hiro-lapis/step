@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useUserStore } from '../../../ts/store/globalStore'
-import { Repositories } from '../../apis/repositoryFactory'
+import { useAuthFunc } from '../../composables/auth'
 
+// utilities
 const userStore = useUserStore()
-const $repositories = inject<Repositories>('$repositories')!
-
+// data
 const isActive = ref(false)
 
 const isLogin = computed(() => userStore.isLogin)
-const logout = () => {
-  userStore.setLogin(false)
-}
+// methods
+const { logout } = useAuthFunc()
 </script>
 
 <template>
@@ -34,10 +33,24 @@ const logout = () => {
 						<a href="#" class="c-sp-nav__list-link">マイページ</a>
 					</li>
 				</router-link>
-					<li @click="logout" class="c-nav__list-item">
-						<span class="c-nav__list-link">ログアウト</span>
-					</li>
+                <a href="" @click="logout('top')">
+                    <li class="c-sp-nav__list-item">
+                        <a class="c-sp-nav__list-item">ログアウト</a>
+                    </li>
+                </a>
 			</template>
+      <template v-else>
+        <router-link :to="{ name: 'login' }">
+          <li class="c-sp-nav__list-item">
+            <a href="#" class="c-sp-nav__list-link">ログイン</a>
+          </li>
+        </router-link>
+        <router-link :to="{ name: 'register' }">
+          <li class="c-sp-nav__list-item">
+            <a href="#" class="c-sp-nav__list-link">新規登録</a>
+          </li>
+        </router-link>
+      </template>
 		</ul>
 	</nav>
 	<label for="icon-checkbox" class="c-sp-menu-icon" :class="{ active: isActive }" @click="isActive = !isActive">
@@ -47,39 +60,41 @@ const logout = () => {
 
 <style lang="scss" scoped>
 @import '../../../sass/foundation/breakpoints';
+@import '../../../sass/foundation/_variable';
 
-/* ③SPメニュー */
+/* 3.SPメニュー */
 .c-sp-nav {
-  position: absolute;
-  top: 50px;
-  left: 0;
-  width: 100%;
-  height: calc(100vh + 50px);
-  background: #FFE0B2;
-  transform: translateX(100%);
-  transition: 0.5s;
-  &.active {
-    visibility: visible;
-    opacity: 1;
-    transition-delay: 0s;
-    transform: translateX(0%);
-  }
-    @include mq() {
-      display: none;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh + 50px);
+    background: $color_base;
+    transform: translateX(100%);
+    transition: 0.5s;
+    &.active {
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0s;
+      transform: translateX(0%);
     }
-  &__list {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    color: #fb8c00;
-    border-bottom: 1px solid #fb8c00;
-    &-item {
-      padding-bottom: 15px;
-      padding-top: 15px;
-      border-bottom: black 1px solid;
+      @include mq() {
+        display: none;
+      }
+    &__list {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      color: $color_base;
+      border-bottom: 1px solid $color_base;
+      &-item {
+        padding-bottom: 15px;
+        padding-top: 15px;
+        border-bottom: $color_base 1px solid;
+      }
     }
-  }
 }
+
 
 // ④SPアイコン
 // ハンバーガーメニューアイコン
@@ -98,13 +113,14 @@ const logout = () => {
   &__body {
     display: block;
     position: absolute;
-    top: 55%;
+    top: 4px;
+    // top: 55%;
     margin-top: -0.3em;
     width: 100%;
     height: 0.2em;
     text-align: initial;
     border-radius: 1px;
-    background-color: #eeeeee;
+    background-color: $color_base;
     transition: transform 0.3s ease-in;
     &:after,
     &:before {

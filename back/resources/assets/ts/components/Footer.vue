@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import FadeIn from './Atoms/Transition/FadeIn.vue'
-import { computed, onBeforeUnmount, onMounted, ref, StyleValue } from 'vue'
-import axios from 'axios'
-import { router } from '../routes/routes'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useUserStore } from '../store/globalStore'
 
 // utility
@@ -10,41 +7,18 @@ const userStore = useUserStore()
 
 // props
 defineProps({
-    isFix: { required: true, type: Boolean, default: false}, // 下部固定フラグ
+    isFix: { required: false, type: Boolean, default: false}, // 下部固定フラグ
 })
 // data
 const windowSize = ref(0)
-const isActive = ref(false)
-const nextRoute = ref('')
 
 // methods
-
 const onResize = () => {
     windowSize.value = window.innerWidth
 }
-const logout = async(next: string) => {
-    // ローディングONtNextPage(
-    axios
-        .post("/api/logout")
-        .then(response => {
-            // ログイン状態解除
-            userStore.setLogin(false)
-
-            setTimeout(() => {
-                router.push({ name: next });
-            }, 2000);
-        })
-        .finally(() => {
-            // ローディングOFF
-        })
-}
-const setNextPage = (next) => {
-    // ログアウト後に表示するページ設定をしてログアウト
-    nextRoute.value = next;
-}
+// computed
 const isLogin = computed(() => userStore.isLogin)
-const pcSize = computed(() => windowSize.value > 400)
-
+const logoRoute = computed(() => isLogin.value ? { name: 'steps-list' } : { name: 'home' })
 onMounted(() => {
     onResize()
     window.removeEventListener("resize", onResize)
@@ -60,7 +34,7 @@ onBeforeUnmount(() => {
         <!-- pc footer -->
         <div class="c-footer u-color--user">
             <div class="c-footer__head">
-                <router-link :to="{ name: 'todo' }">
+                <router-link :to="logoRoute">
                     <div class="c-logo__container--footer">
                         <img src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/logos/logo-full.png" class="c-logo"/>
                     </div>

@@ -7,7 +7,6 @@ import Footer from '../Footer.vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../store/globalStore'
 import { Repositories } from '../../apis/repositoryFactory'
-import { guestPageName } from '../../routes/routes'
 
 // utilities
 const router = useRouter()

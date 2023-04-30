@@ -34,9 +34,8 @@
     z-index: 1;
     box-sizing: border-box;
     padding: 0 30px;
-    height: 50px;
+    height: $header-hight; // _variable
     width: 100%;
-    // overflow: hidden;
     text-align: center;
     transition: opacity 0.3s ease-in, visibility 0.3s ease-in 0.3s;
     @include pc() {
@@ -47,10 +46,6 @@
 .c-header--user {
     @extend %c-header;
     background-color: $color_theme_user;
-}
-.c-header--shop {
-    @extend %c-header;
-    background-color: $color_theme_shop;
 }
 
 // ②PCメニュー

@@ -2,20 +2,14 @@
 import { inject, onMounted, ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
-import TextInput from '../../Atoms/TextInput.vue'
-import CategorySelectBox from '../../Atoms/CategorySelectBox.vue'
 import StepCardList from '../../Molecules/StepCardList.vue'
 import PaginationList from '../../Atoms/PaginationList.vue'
-import AchievementTimeTypeSelectBox from '../../Atoms/AchievementTimeTypeSelectBox.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { Step } from '../../../types/Step'
 
 // utilities
 const requestStore = useRequestStore()
-const messageStore = useMessageInfoStore()
 const $repositories = inject<Repositories>("$repositories")!
-const router = useRouter()
-const route = useRoute()
 
 // props
 // data
@@ -53,7 +47,6 @@ onMounted(() => init())
 <template>
     <BaseView className="p-container__steps-list">
         <template v-slot:content>
-            <h1>ステップ一覧</h1>
             <div class="p-steps-list__body">
                 <StepCardList
                     :stepList="stepList"
@@ -77,8 +70,11 @@ onMounted(() => init())
     }
     &__pagination {
         width: 100%;
+        height: 30px;
         justify-content: center;
         display: flex;
+        position: absolute; // コンテンツ最下部に固定
+        bottom: 0;
     }
 }
 </style>

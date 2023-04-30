@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Step } from '../../types/Step'
+import StepCard from '../Atoms/StepCard.vue'
 
 // props
 defineProps({
@@ -16,20 +17,7 @@ defineProps({
     <ul class="c-step-card-list">
         <template :key="step.id" v-for="step in stepList">
             <li class="c-step-card-list__item">
-                <router-link :to="{ name: 'steps-show', params: { id: step.id } }" class="c-step-card">
-                    <div class="c-step-card__head">
-                        <!-- <img src="https://placehold.jp/150x150.png" alt="" class=""> -->
-                    </div>
-                    <!-- TODO：説明文表示追加 -->
-                    <!-- TODO：カテゴリバッジ追加 -->
-                    <!-- TODO：設定された画像の表示 -->
-                    <h2 class="c-step-card__title u-spread">{{ step.name }}</h2>
-                    <p class="c-step-card__txt">
-                        テストテキストテストテキストテストテキスト
-                        <br>
-                        <span>達成目安時間: {{ step.achievement_time_type_name! }}</span>
-                    </p>
-                </router-link>
+                <StepCard :step="step" />
             </li>
         </template>
     </ul>
