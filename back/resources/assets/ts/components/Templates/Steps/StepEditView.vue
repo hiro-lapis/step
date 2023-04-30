@@ -123,6 +123,7 @@ onMounted(() => {
                                     <div class="p-form__element">
                                         <TextareaInput
                                             v-model:value="subStep.detail"
+                                            height="200"
                                             :label="'詳細' + (index as number +1).toString()"
                                             :formId="'substep-' + index.toString()"
                                         />

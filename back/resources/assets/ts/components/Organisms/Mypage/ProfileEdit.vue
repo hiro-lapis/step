@@ -125,6 +125,7 @@ onMounted(() => {
                 formId="profile"
                 placeHoler="自己紹介文"
                 counter
+                height="200"
             />
         </div>
         <div class="c-multi-page--profile__btn-container">

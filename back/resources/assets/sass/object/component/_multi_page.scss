@@ -45,14 +45,15 @@
         margin-bottom: 5px;
     }
     &__btn-container {
-        height: 200px;
+        height: 135px;
         margin-bottom: 10px;
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-between;
         flex-direction: column;
         @include pc() {
             height: initial;
             flex-direction: row;
+            justify-content: space-evenly;
         }
     }
 }
