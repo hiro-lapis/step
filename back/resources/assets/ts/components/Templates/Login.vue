@@ -3,7 +3,6 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { computed, inject, reactive } from 'vue'
 import { useUserStore, useMessageInfoStore, useRequestStore } from '../../store/globalStore'
-import { User } from 'assets/ts/types/User'
 import TextInput from '../Atoms/TextInput.vue'
 import BorderLine from '../Atoms/BorderLine.vue'
 import { Repositories } from '../../apis/repositoryFactory'
@@ -12,7 +11,7 @@ import { Repositories } from '../../apis/repositoryFactory'
 const userStore = useUserStore()
 const requestStore = useRequestStore()
 const messageStore = useMessageInfoStore()
-const $repositories = inject<Repositories>("$repositories")!
+const $repositories = inject<Repositories>('$repositories')!
 const router = useRouter()
 
 // data
@@ -30,7 +29,7 @@ const login = () => {
     // 多重送信防止
     if (loading.value) return
     requestStore.setLoading(true)
-    $repositories.auth.getCsrf().then(response => {
+    $repositories.auth.getCsrf().then(() => {
         $repositories.auth.login(loginData)
             .then(res => {
                 requestStore.setLoading(false)

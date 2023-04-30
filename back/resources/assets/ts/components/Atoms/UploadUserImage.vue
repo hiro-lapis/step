@@ -18,7 +18,6 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 // data
-const message = ref('')
 const file = ref<File|null>(null)
 const previewMode = ref(true)
 const confirmedImage = ref<string | ArrayBuffer | null>('')
@@ -60,6 +59,7 @@ const createImage = (file: File) => {
     let reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = (e: ProgressEvent) => {
+        console.log(e)
         confirmedImage.value = reader.result
     }
     emit('update:upload-image', file)

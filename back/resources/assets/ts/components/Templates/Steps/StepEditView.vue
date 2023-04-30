@@ -4,7 +4,6 @@ import { useRouter, useRoute } from 'vue-router'
 import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
 import StepPreview from '../../Organisms/Steps/StepPreview.vue'
 import AchievementTimeTypeSelectBox from '../../Atoms/AchievementTimeTypeSelectBox.vue'
-import CategoryBadge from '../../Atoms/CategoryBadge.vue'
 import CategorySelectBox from '../../Atoms/CategorySelectBox.vue'
 import TextInput from '../../Atoms/TextInput.vue'
 import TextareaInput from '../../Atoms/TextareaInput.vue'
@@ -14,18 +13,18 @@ import { Step } from '../../../types/Step'
 // utilities
 const requestStore = useRequestStore()
 const messageStore = useMessageInfoStore()
-const $repositories = inject<Repositories>("$repositories")!
+const $repositories = inject<Repositories>('$repositories')!
 const router = useRouter()
 const route = useRoute()
 
 // data
 const isEdit = ref(false)
-type CreateData = {
-    name: string
-    category_id: number
-    achievement_time_type_id: number
-    sub_steps: Array<{name: string, detail: string, sort_number?: number}>
-}
+// type CreateData = {
+//     name: string
+//     category_id: number
+//     achievement_time_type_id: number
+//     sub_steps: Array<{name: string, detail: string, sort_number?: number}>
+// }
 const createData = reactive<Step>({
     name: '',
     merit: '',
@@ -47,7 +46,7 @@ const create = async () => {
     categorySelect.value?.validate()
 
     requestStore.setLoading(true)
-    await $repositories.step.store(createData).then((response) => {
+    await $repositories.step.store(createData).then(() => {
         messageStore.setMessage('ステップが登録されました')
         setTimeout(() => {
             router.push({ name: 'steps-list' })
@@ -113,7 +112,7 @@ onMounted(() => {
                                     required
                                 />
                             </div>
-                            <template v-for="(subStep, index) in createData.sub_steps">
+                            <template :key="index" v-for="(subStep, index) in createData.sub_steps">
                                 <div class="p-form__element">
                                     <div class="p-form__element">
                                         <TextInput
@@ -124,6 +123,7 @@ onMounted(() => {
                                     <div class="p-form__element">
                                         <TextareaInput
                                             v-model:value="subStep.detail"
+                                            height="200"
                                             :label="'詳細' + (index as number +1).toString()"
                                             :formId="'substep-' + index.toString()"
                                         />

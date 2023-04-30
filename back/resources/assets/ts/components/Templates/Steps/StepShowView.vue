@@ -7,7 +7,7 @@ import StepPreview from '../../Organisms/Steps/StepPreview.vue'
 import { Step } from '../../../types/Step'
 import ImageClip from '../../Atoms/ImageClip.vue'
 
-const $repositories = inject<Repositories>("$repositories")!
+const $repositories = inject<Repositories>('$repositories')!
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
 const userStore = useUserStore()

@@ -10,10 +10,10 @@ const props = defineProps({
     className: { required: false, type: String, default: 'c-input--large', }, // クラス名(default: 横幅いっぱい表示のクラス)
     errorKey: { required: false, type: String, default: '' },
     formId: { required: false, type: String, default: '', }, // ラベルとinputを紐付けるid
-    inline: { required: false, type: Boolean, default: '', }, // エラーメッセージ不要な時にインライン化
+    inline: { required: false, type: Boolean, default: false, }, // エラーメッセージ不要な時にインライン化
     label: { required: false, type:String, default: '', }, // 入力ラベル
     placeHolder: { required: false, type: String, default: '' }, // プレースホルダー
-    required: { required: false, type: Boolean, default: '', }, // 入力必須マーク
+    required: { required: false, type: Boolean, default: false, }, // 入力必須マーク
     rules: { required: false, type: Array<Function>, default: []}, // バリデーションルール関数
     type: { required: false, type: String, default: 'text' }, // inputのtype属性
     value: { required: false, type:String, default: '', }, // 編集画面などの初期値

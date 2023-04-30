@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed } from 'vue'
 
 // props
 const props = defineProps({
@@ -12,7 +12,7 @@ interface Emits {
 const emit = defineEmits<Emits>()
 // data
 // computed
-type colors = 'pink'|'lightGreen'|'yellow'|'green'|'blue'
+// type colors = 'pink'|'lightGreen'|'yellow'|'green'|'blue'
 const color = computed(() => {
     return ColorTypes[props.id] ?? '#999'
 })
@@ -41,7 +41,7 @@ const CategoryType = {
 
 <template>
     <span @click="clicked">
-        <template v-if="id" @click="clickCategory">
+        <template v-if="id">
             <span
                 class="c-badge--category"
                 :style="{ backgroundColor: color }"

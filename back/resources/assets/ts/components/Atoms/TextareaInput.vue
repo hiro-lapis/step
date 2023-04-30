@@ -11,6 +11,7 @@ const props = defineProps({
     required: { required: false, type: Boolean, default: false },
     counter: { required: false, type: Boolean, default: false },
     max: { required: false, type: Number, default: null },
+    height: { required: false, type: String, default: '100' }, // textareaの高さ(px)
     rules: { required: false, type: Array<Function>, default: []}, // バリデーションルール関数
     value: { required: true, type: String, },
 })
@@ -56,11 +57,12 @@ const input = (event: Event) => {
         <!-- cols/rowsは指定せず、スタイリングで調整 -->
         <textarea
             :value="value"
-            @input.trim="$event => input($event)"
+            @input="$event => input($event)"
             :id="formId"
             :class="className"
             :placeholder="placeHolder"
             :required="required"
+            :style=" { height: height + 'px' }"
         />
     </div>
 </template>

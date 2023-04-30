@@ -12,7 +12,7 @@ import UploadUserImage from '../../Atoms/UploadUserImage.vue'
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
 const userStore = useUserStore()
-const $repositories = inject<Repositories>("$repositories")!
+const $repositories = inject<Repositories>('$repositories')!
 
 // data
 const user = reactive<User>({
@@ -125,6 +125,7 @@ onMounted(() => {
                 formId="profile"
                 placeHoler="自己紹介文"
                 counter
+                height="200"
             />
         </div>
         <div class="c-multi-page--profile__btn-container">

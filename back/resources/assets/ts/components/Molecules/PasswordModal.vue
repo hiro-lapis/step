@@ -9,7 +9,7 @@ const requestStore = useRequestStore()
 const $repositories = inject<Repositories>('$repositories')!
 
 // props
-const props = defineProps({
+defineProps({
     title: { required: true, type: String, },
     passwordExists: { required: false, type: Boolean, default: true }, // パスワード設定済ユーザーか
 })
@@ -31,7 +31,7 @@ const updatePassword = async () => {
     if (requestStore.isLoading) return
     requestStore.setLoading(true)
     $repositories.mypage.passwordUpdate(passwordData)
-        .then(response => {
+        .then(() => {
             // fortify APIのためメッセージはフロント側でセット
             messageStore.setMessage('パスワードを変更しました')
             reset()

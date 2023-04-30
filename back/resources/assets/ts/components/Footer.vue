@@ -21,7 +21,7 @@ const isLogin = computed(() => userStore.isLogin)
 const logoRoute = computed(() => isLogin.value ? { name: 'steps-list' } : { name: 'home' })
 onMounted(() => {
     onResize()
-    window.removeEventListener("resize", onResize)
+    window.removeEventListener('resize', onResize)
 })
 onBeforeUnmount(() => {
     onResize()

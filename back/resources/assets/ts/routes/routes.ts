@@ -2,7 +2,6 @@ import { createRouter, createWebHistory, RouteLocationNormalized, RouteRecordRaw
 
 import { useUserStore } from '../store/globalStore'
 import Top from '../components/Templates/Top.vue'
-import GoodMorning from '../components/Templates/GoodMorning.vue'
 import Login from '../components/Templates/Login.vue'
 import Register from '../components/Templates/Register.vue'
 import PasswordForgot from '../components/Templates/Password/Forgot.vue'
@@ -16,7 +15,6 @@ import StepListView from '../components/Templates/Steps/StepListView.vue'
 
 // ルート登録
 const routes: Array<RouteRecordRaw> = [
-    // { path: '/todo', name: 'todo', component: GoodMorning, meta: { title: 'TOPページ', requireAuth: false, guestOnly: false, },  }, // 未作成画面の仮リンク先
     { path: '/', name: 'home', component: Top, meta: { title: 'TOPページ', requiresAuth: false, guestOnly: false, }, },
     { path: '/register', name: 'register', component: Register, meta: { title: 'アカウント登録', requiresAuth: false, guestOnly: true, },  },
     { path: '/login', name: 'login', component: Login, meta: { title: 'ログイン', requiresAuth: false, guestOnly: true, },  },

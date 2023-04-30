@@ -12,7 +12,7 @@ import { Repositories } from '../../apis/repositoryFactory'
 // utilities
 const router = useRouter()
 const userStore = useUserStore()
-const $repositories = inject<Repositories>("$repositories")!
+const $repositories = inject<Repositories>('$repositories')!
 
 // props
 defineProps({

@@ -1,4 +1,4 @@
-[<script setup lang="ts">
+<script setup lang="ts">
 import { computed } from 'vue'
 import { useUserStore } from '../store/globalStore'
 import HumbargarNav from '../components/Atoms/HumbargarNav.vue'

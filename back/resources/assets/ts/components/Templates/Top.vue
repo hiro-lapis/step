@@ -1,20 +1,15 @@
 <script setup lang="ts">
-import { inject, onMounted } from 'vue'
-import LoadingIcon from '../Atoms/LoadingIcon.vue'
-import NotifyMessage from '../Atoms/NotifyMessage.vue'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '../../store/globalStore'
-import { Repositories } from '../../apis/repositoryFactory'
+// import { inject } from 'vue'
+// import { useRouter } from 'vue-router'
+// import { useUserStore } from '../../store/globalStore'
+// import { Repositories } from '../../apis/repositoryFactory'
 import HeroBanner from '../Organisms/Top/HeroBanner.vue'
 import CategoryIntroduction from '../Organisms/Top/CategoryIntroduction.vue'
 import FeatureIntrocution from '../Organisms/Top/FeatureIntrocution.vue'
 import MainPageLink from '../Organisms/Top/MainPageLink.vue'
 
 // utilities
-const router = useRouter()
-const userStore = useUserStore()
-const $repositories = inject<Repositories>("$repositories")!
-console.log(userStore)
+
 // props
 // data
 // emits

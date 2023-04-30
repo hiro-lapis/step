@@ -2,19 +2,19 @@
 // 挑戦中のステップを表示するページ
 // ステップへの挑戦後にステップを編集してサブステップが更新されたり削除されたりした場合を考慮して、画面を別に作る
 import { inject, onMounted, ref } from 'vue'
-import { useMessageInfoStore, useRequestStore, useUserStore } from '../../../store/globalStore'
+import { useRequestStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import StepPreview from '../../Organisms/Steps/StepPreview.vue'
 import { ChallengeStep } from '../../../types/ChallengeStep'
 import ImageClip from '../../Atoms/ImageClip.vue'
 
-const $repositories = inject<Repositories>("$repositories")!
-const messageStore = useMessageInfoStore()
+const $repositories = inject<Repositories>('$repositories')!
+// const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
-const userStore = useUserStore()
+// const userStore = useUserStore()
 const route = useRoute()
-const router = useRouter()
+// const router = useRouter()
 
 // data
 const step = ref<ChallengeStep>()
