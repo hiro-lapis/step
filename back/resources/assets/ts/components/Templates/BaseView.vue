@@ -66,6 +66,7 @@ onMounted(() => {
     }
     &__steps-list {
         max-width: 1000px;
+        position: relative;
     }
     &--steps-form {
         max-width: 1440px;

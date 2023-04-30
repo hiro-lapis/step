@@ -7,7 +7,7 @@ const userStore = useUserStore()
 
 // props
 defineProps({
-    isFix: { required: true, type: Boolean, default: false}, // 下部固定フラグ
+    isFix: { required: false, type: Boolean, default: false}, // 下部固定フラグ
 })
 // data
 const windowSize = ref(0)

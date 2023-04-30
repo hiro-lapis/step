@@ -2,11 +2,13 @@
 /* ==========================================================================
  Container
 ========================================================================== */
+@import "../foundation/_variable";
+
 /**
 ページ共通レイアウト
 */
 .l-container {
-    margin: 65px auto;
+    margin: calc($header-hight + 15px) auto 30px;
     min-height: calc(100vh - 130px);  // コンテンツが少なくても最低限の高さを維持
 }
 .l-container--mypage {

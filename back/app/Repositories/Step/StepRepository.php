@@ -65,6 +65,7 @@ class StepRepository implements StepRepositoryInterface
         }
         return $query->with('category:id,name')
             ->with('achievementTimeType:id,name')
+            ->withCount('subSteps')
             ->addSelect('steps.*')
             ->paginate();
     }
