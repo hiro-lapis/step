@@ -11,12 +11,14 @@ import { SubStep } from 'assets/ts/types/SubStep'
 import CategoryBadge from '../../Atoms/CategoryBadge.vue'
 import TwitterShareIcon from '../../Atoms/TwitterShareIcon.vue'
 
-const $repositories = inject<Repositories>("$repositories")!
+const $repositories = inject<Repositories>('$repositories')!
 
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
 
 // props
+// const props = defineProps<StepProps>()
+
 const props = defineProps({
     step: { required: true, type: Object as PropType<Step|ChallengeStep>, }, // プレビュー表示するステップ情報
     readOnly: { required: false, type: Boolean, default: false, }, // 見るだけモードか
@@ -30,16 +32,21 @@ const emit = defineEmits<Emits>()
 // computed
 const { isChallengeStep, isChallengeSubStep } = useTypeGuards()
 // ステップ・チャレンジステップの型が異なるため、型に応じたサブステップを表示
-const subSteps = computed(() => {
+const subStepList = computed(() => {
     if ('sub_steps' in props.step ) {
-        return props.step.sub_steps
+        return props.step.sub_steps!
     } else {
-        return props.step.challenge_sub_steps
+        return props.step.challenge_sub_steps!
     }
 })
 
 // methods
 const { isInChallenge, isCleard } = ChallengeStatusJudgement()
+// サブステップのインデックスを文字列で返す
+const indexString = (index: number): string => {
+    return (index + 1).toString()
+}
+// サブステップのステータスに応じた背景色を返す
 const statusBgColor = (status: number): string => {
     if (isInChallenge(status)) return '#ea352e'
     if (isCleard(status)) return '#65c99b'
@@ -52,9 +59,8 @@ const showClearBtn = (subStep: SubStep|ChallengeSubStep): boolean => {
 const clear = async (subStepId: number) => {
     if (requestStore.isLoading) return
     requestStore.setLoading(true)
-    await $repositories.challengeStep.clear({ challenge_step_id: props.step.id!, challenge_sub_step_id: subStepId})
+    await $repositories.challengeStep.clear({ challenge_step_id: (props.step as ChallengeStep).id, challenge_sub_step_id: subStepId})
         .then(response => {
-            console.log(response)
             messageStore.setMessage(response.data.message)
             // 親へクリアイベントを発火してチャレンジ情報更新
             emit('clear')
@@ -94,27 +100,45 @@ const clear = async (subStepId: number) => {
             <!-- ステップ詳細 -->
             <div class="c-step-preview__body">
                 <div class="c-sub-step__container">
-                    <template v-for="(subStep, index) in subSteps">
-                        <div class="c-sub-step">
-                            <!-- サブステップ見出し -->
-                            <div class="c-sub-step__header">
-                                <div class="c-title--sub-step">
-                                    <span class="c-sub-step__header--prefix">ステップ{{ (index + 1).toString() + ' ' }}</span>
-                                    <span class="c-sub-step__header--name">{{ subStep.name }}</span>
-                                    <template v-if="isChallengeSubStep(subStep)">
-                                        <span class="c-sub-step__header--status-name" :style="{ 'background-color': statusBgColor(subStep.status) }">
-                                            {{ subStep.status_name! }}
-                                        </span>
-                                    </template>
+                    <!-- チャレンジ中の表示 (prodビルドエラー解消のためcomputed(subStepList)は使わない)-->
+                    <template v-if="isChallengeStep(step)">
+                        <template :key="i" v-for="(subStep, i) in step.challenge_sub_steps!">
+                            <div class="c-sub-step">
+                                <!-- サブステップ見出し -->
+                                <div class="c-sub-step__header">
+                                    <div class="c-title--sub-step">
+                                        <span class="c-sub-step__header--prefix">ステップ{{ indexString(i) + ' ' }}</span>
+                                        <span class="c-sub-step__header--name">{{ subStep.name }}</span>
+                                        <template v-if="isChallengeSubStep(subStep)">
+                                            <span class="c-sub-step__header--status-name" :style="{ 'background-color': statusBgColor(subStep.status) }">
+                                                {{ subStep.status_name! }}
+                                            </span>
+                                        </template>
+                                    </div>
+                                </div>
+                                <!-- サブステップ詳細 -->
+                                <div class="c-sub-step__content">{{ subStep.detail }}</div>
+                                <!-- クリアボタン -->
+                                <div v-if="showClearBtn(subStep)" class="c-sub-step__clear-btn">
+                                    <button @click="clear(subStep.id!)" class="c-btn--clear">クリア</button>
                                 </div>
                             </div>
-                            <!-- サブステップ詳細 -->
-                            <div class="c-sub-step__content">{{ subStep.detail }}</div>
-                            <!-- クリアボタン -->
-                            <div v-if="showClearBtn(subStep)" class="c-sub-step__clear-btn">
-                                <button @click="clear(subStep.id!)" class="c-btn--clear">クリア</button>
+                        </template>
+                    </template>
+                    <template v-else>
+                        <template :key="i" v-for="(subStep, j) in step.sub_steps">
+                            <div class="c-sub-step">
+                                <!-- サブステップ見出し -->
+                                <div class="c-sub-step__header">
+                                    <div class="c-title--sub-step">
+                                        <span class="c-sub-step__header--prefix">ステップ{{ indexString(j) + ' ' }}</span>
+                                        <span class="c-sub-step__header--name">{{ subStep.name }}</span>
+                                    </div>
+                                </div>
+                                <!-- サブステップ詳細 -->
+                                <div class="c-sub-step__content">{{ (subStep as SubStep).detail }}</div>
                             </div>
-                        </div>
+                        </template>
                     </template>
                 </div>
             </div>

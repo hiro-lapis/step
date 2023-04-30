@@ -15,7 +15,7 @@ defineProps({
 
 <template>
     <ul class="c-step-card-list">
-        <template :key="step.id" v-for="step in stepList">
+        <template :key="i" v-for="(step, i) in stepList">
             <li class="c-step-card-list__item">
                 <StepCard :step="step" />
             </li>
@@ -67,25 +67,6 @@ defineProps({
 	color: inherit;
 	text-decoration: none;
 	transition: color .3s;
-    // &__head {
-    //     position: relative;
-    //     transition: .3s;
-    //     img{
-    //        position: absolute;
-    //        left: 0;
-    //        top: 0;
-    //        max-width: none;
-    //        width: 100%;
-    //        height: 100%;
-    //        object-fit: cover;
-    //        border-radius: 5px 5px 0 0;
-    //    }
-    // }
-    // &__head::before {
-    //     content: "";
-    //     display: block;
-    //     padding-top: 56.25%;
-    // }
     &__title {
         margin-left: 20px;
     }

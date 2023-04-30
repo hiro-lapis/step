@@ -12,7 +12,7 @@ defineProps({
 
 <template>
     <ul class="c-step-card-column">
-        <template :key="step.id" v-for="step in stepList">
+        <template :key="i" v-for="(step, i) in stepList">
             <li class="c-step-card-column__item">
                 <StepCard :step="step" />
             </li>
