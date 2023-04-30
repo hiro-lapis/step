@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
 // props
-const props = defineProps({
+defineProps({
     label : { required: true, type: String, },
     side : { required: true, type: String, validator: (v: string) => ['left', 'right'].includes(v), default: 'right' },
     value: { required: false, type:String, default: '', }, // 親と連携するvalue
     className: { required: false, type: String, default: '', },
 })
 // data
-const selectedOption = ref(props.value)
 // computed
 // methods
 </script>

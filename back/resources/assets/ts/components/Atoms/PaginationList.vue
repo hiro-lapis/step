@@ -20,7 +20,7 @@ const emitPage = (page: number) => {
     if (props.currentPage === page) {
         return;
     }
-    emit("change:page", page);
+    emit('change:page', page);
 }
 const isActive = (page: number) =>  {
     return page === props.currentPage
@@ -80,12 +80,12 @@ const showNext = computed(() => {
     return props.currentPage < props.lastPage;
 })
 // 現在のページが総ページより5(一度に表示するページ番号数)以上か判定
-const isLargerThanPageRange = computed(() => {
-    return props.lastPage - props.currentPage >= 5;
-})
-const halfOfTotal = computed(() => {
-    return Math.ceil(props.lastPage / 2);
-})
+// const isLargerThanPageRange = computed(() => {
+//     return props.lastPage - props.currentPage >= 5;
+// })
+// const halfOfTotal = computed(() => {
+//     return Math.ceil(props.lastPage / 2);
+// })
 const halfOfRange = computed(() => {
     return Math.ceil(pageRange.value / 2);
 })

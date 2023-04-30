@@ -56,7 +56,7 @@ const input = (event: Event) => {
         <!-- cols/rowsは指定せず、スタイリングで調整 -->
         <textarea
             :value="value"
-            @input.trim="$event => input($event)"
+            @input="$event => input($event)"
             :id="formId"
             :class="className"
             :placeholder="placeHolder"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, PropType } from 'vue'
+import { inject, PropType } from 'vue'
 import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
 import { useTypeGuards } from '../../../composables/typeGuards'
 import { ChallengeStatusJudgement } from '../../../composables/ChallengeStatus'
@@ -32,13 +32,13 @@ const emit = defineEmits<Emits>()
 // computed
 const { isChallengeStep, isChallengeSubStep } = useTypeGuards()
 // ステップ・チャレンジステップの型が異なるため、型に応じたサブステップを表示
-const subStepList = computed(() => {
-    if ('sub_steps' in props.step ) {
-        return props.step.sub_steps!
-    } else {
-        return props.step.challenge_sub_steps!
-    }
-})
+// const subStepList = computed(() => {
+//     if ('sub_steps' in props.step ) {
+//         return props.step.sub_steps!
+//     } else {
+//         return props.step.challenge_sub_steps!
+//     }
+// })
 
 // methods
 const { isInChallenge, isCleard } = ChallengeStatusJudgement()
@@ -126,7 +126,7 @@ const clear = async (subStepId: number) => {
                         </template>
                     </template>
                     <template v-else>
-                        <template :key="i" v-for="(subStep, j) in step.sub_steps">
+                        <template :key="j" v-for="(subStep, j) in step.sub_steps">
                             <div class="c-sub-step">
                                 <!-- サブステップ見出し -->
                                 <div class="c-sub-step__header">

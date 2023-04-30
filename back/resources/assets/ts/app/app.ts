@@ -89,6 +89,6 @@ requireComponent.keys().forEach(fileName => {
 import repository from '../apis/repositoryFactory'
 
 app.config.globalProperties.$repositories = repository()
-app.provide("$repositories", app.config.globalProperties.$repositories);
+app.provide('$repositories', app.config.globalProperties.$repositories);
 
 app.mount("#app")

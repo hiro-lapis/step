@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 import { Repositories } from '../../apis/repositoryFactory'
 import RequiredBadge from './RequiredBadge.vue'
 
 // utilities
-const $repositories = inject<Repositories>("$repositories")!
+const $repositories = inject<Repositories>('$repositories')!
 
 // props
 const props = defineProps({
@@ -27,15 +27,15 @@ const initialState = ref(true)
 
 // computed
 // methods
-const isSeleted = (category_id: number) => {
-    return props.value === category_id
-}
+// const isSeleted = (category_id: number) => {
+//     return props.value === category_id
+// }
 const fetchData = async () => {
     await $repositories.common.category()
         .then(response => {
             categoryList.value = response.data
         })
-        .catch(error => {
+        .catch(() => {
             console.log('error is occured on fetch categories')
         })
 }

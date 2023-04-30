@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { inject, reactive } from 'vue'
-import { useRoute } from 'vue-router'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { useRequestStore, useMessageInfoStore } from '../../../store/globalStore'
 import TextInput from '../../Atoms/TextInput.vue'
@@ -21,7 +20,7 @@ const send = () => {
     $repositories.auth.getCsrf()
         .then(() => {
             $repositories.auth.forgotPassword(forgotData)
-                .then((response) => {
+                .then(() => {
                     messageStore.setMessage('パスワードリセットメールを送信しました。<br>確認の上パスワード再発行の手続きを進めてください。')
                 }).finally(() => {
                     requestStore.setLoading(false)

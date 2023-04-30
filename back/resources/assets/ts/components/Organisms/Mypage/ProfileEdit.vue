@@ -12,7 +12,7 @@ import UploadUserImage from '../../Atoms/UploadUserImage.vue'
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
 const userStore = useUserStore()
-const $repositories = inject<Repositories>("$repositories")!
+const $repositories = inject<Repositories>('$repositories')!
 
 // data
 const user = reactive<User>({

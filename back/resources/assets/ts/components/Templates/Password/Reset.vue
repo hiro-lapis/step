@@ -35,7 +35,7 @@ const update = () => {
                     password: resetData.password,
                     password_confirmation: resetData.passwordConfirmation
                 })
-                .then(response => {
+                .then(() => {
                     messageStore.setMessage('パスワードを変更しました')
                     // ログインページへ遷移
                     router.push({ name: 'login' })
@@ -43,17 +43,17 @@ const update = () => {
                 .finally(() => {
                     requestStore.setLoading(false)
                 })
-    })
+        })
 }
 onMounted(() => {
-        // クエリパラメータのtokenをリセット情報にセット
-        if (route.query.token && typeof route.query.token === 'string') {
-            resetData.token = route.query.token;
-        }
+    // クエリパラメータのtokenをリセット情報にセット
+    if (route.query.token && typeof route.query.token === 'string') {
+        resetData.token = route.query.token;
+    }
 
-        if (route.query.email) {
-            resetData.email = route.query.email as string;
-        }
+    if (route.query.email) {
+        resetData.email = route.query.email as string;
+    }
 })
 </script>
 

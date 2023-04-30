@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { inject, onMounted, ref, reactive } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
+import { useRequestStore } from '../../../store/globalStore'
 import StepCardList from '../../Molecules/StepCardList.vue'
 import PaginationList from '../../Atoms/PaginationList.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
@@ -9,7 +8,7 @@ import { Step } from '../../../types/Step'
 
 // utilities
 const requestStore = useRequestStore()
-const $repositories = inject<Repositories>("$repositories")!
+const $repositories = inject<Repositories>('$repositories')!
 
 // props
 // data
@@ -29,14 +28,14 @@ const paginationInfo = reactive({
 const fetchData = () => {
     requestStore.setLoading(true)
     $repositories.step.get(condition)
-    .then(response => {
-        stepList.value = response.data.result.data
-        paginationInfo.current_page = response.data.result.current_page
-        paginationInfo.last_page = response.data.result.last_page
-        paginationInfo.total = response.data.result.total
-    }).finally(() =>
-        requestStore.setLoading(false)
-    )
+        .then(response => {
+            stepList.value = response.data.result.data
+            paginationInfo.current_page = response.data.result.current_page
+            paginationInfo.last_page = response.data.result.last_page
+            paginationInfo.total = response.data.result.total
+        }).finally(() =>
+            requestStore.setLoading(false)
+        )
 }
 const init = () => {
     fetchData()

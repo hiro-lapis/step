@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { computed, inject, reactive, ref } from 'vue'
+import { computed, inject, reactive } from 'vue'
 import { useUserStore, useMessageInfoStore, useRequestStore } from '../../store/globalStore'
 import TextInput from '../Atoms/TextInput.vue'
 import BorderLine from '../Atoms/BorderLine.vue'
@@ -24,7 +24,7 @@ const registerData = reactive({
     name: '',
     email: '',
     password: '',
-    passwordConfirmation: '',
+    password_confirmation: '',
 })
 
 // computed
@@ -35,7 +35,7 @@ const register = async () => {
     if (loading.value) return
     requestStore.setLoading(true)
     // パラメータのセット
-    const params = convertKeysToSnakeCase(registerData)
+    const params = registerData
 
     $repositories.auth.register(params as RegisterData)
         .then(response => {
@@ -51,20 +51,20 @@ const register = async () => {
         })
 }
 
-const toSnakeCase = (str: string) => {
-  return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-}
+// const toSnakeCase = (str: string) => {
+//     return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+// }
 
-const convertKeysToSnakeCase = (obj: Object) => {
-  const snakeCaseObj = {};
-  for (let key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      const snakeCaseKey = toSnakeCase(key);
-      snakeCaseObj[snakeCaseKey] = obj[key];
-    }
-  }
-  return snakeCaseObj;
-}
+// const convertKeysToSnakeCase = (obj: Object) => {
+//     const snakeCaseObj = {}
+//     for (let key in obj) {
+//         if (obj.hasOwnProperty(key)) {
+//             const snakeCaseKey = toSnakeCase(key)
+//             snakeCaseObj[snakeCaseKey] = obj[key]
+//         }
+//     }
+//     return snakeCaseObj
+// }
 </script>
 
 <template>

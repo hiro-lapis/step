@@ -7,7 +7,7 @@ import StepCardColumn from '../../Molecules/StepCardColumn.vue'
 
 // utilities
 const requestStore = useRequestStore()
-const $repositories = inject<Repositories>("$repositories")!
+const $repositories = inject<Repositories>('$repositories')!
 
 // data
 const steps = ref<Step[]>([])

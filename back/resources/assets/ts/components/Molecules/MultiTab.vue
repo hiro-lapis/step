@@ -3,7 +3,7 @@ interface Tab {
     value: string
     label: string
 }
-const props = defineProps({
+defineProps({
     tabs: { required: true, type: Array as () => Tab[], },
     selectedTab: { required: true, type: String, },
 })
@@ -15,7 +15,7 @@ const emit = defineEmits<Emits>()
 
 <template>
     <div class="c-multi-tab">
-        <template v-for="tab in tabs">
+        <template :key="tab.value" v-for="tab in tabs">
             <input
                 class="c-multi-tab__radio"
                 type="radio"
@@ -48,7 +48,7 @@ const emit = defineEmits<Emits>()
     &__body {
         padding: 15px 10px;
         background: #fff;
-    	min-height: 150px; // エリアの高さ
+        min-height: 150px; // エリアの高さ
     }
     &__label {
         background: #fff;
@@ -70,7 +70,7 @@ const emit = defineEmits<Emits>()
         transition: transform 0.5s, opacity 0.5s;
         transition: transform 0.5s, opacity 0.5s, -webkit-transform 0.5s;
         opacity: 1;
-	    transform: translateY(0px);
+        transform: translateY(0px);
         &--1 {
             @extend .c-multi-tab__panel;
             background: #80CBC4;

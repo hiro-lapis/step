@@ -2,7 +2,6 @@
 import { computed, PropType } from 'vue'
 import { Step } from '../../types/Step'
 import { ChallengeStep } from '../../types/ChallengeStep'
-import { useTypeGuards } from 'assets/ts/composables/typeGuards'
 
 // props
 const props = defineProps({
