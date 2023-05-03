@@ -33,4 +33,16 @@ class UpdateRequest extends FormRequest
             'sub_steps.*.detail' => ['required', 'string',],
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'ステップ名',
+            'category_id' => 'カテゴリー',
+            'achievement_time_type_id' => '達成時間タイプ',
+            'sub_steps' => '子ステップ',
+            'sub_steps.*.name' => '子ステップ名',
+            'sub_steps.*.detail' => '子ステップ詳細',
+        ];
+    }
 }
