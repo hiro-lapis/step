@@ -244,9 +244,10 @@ const clear = async (subStepId: number) => {
             border-radius: 5px;
         }
     }
-    &__content {
+    &__content { // 左寄せ、改行反映する
         font-size: 13px;
         text-align: left;
+        white-space: pre-wrap;
     }
     &__clear-btn {
         margin-top: 20px;
