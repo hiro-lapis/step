@@ -246,6 +246,7 @@ const clear = async (subStepId: number) => {
     }
     &__content {
         font-size: 13px;
+        text-align: left;
     }
     &__clear-btn {
         margin-top: 20px;
