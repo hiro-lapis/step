@@ -6,11 +6,15 @@ import CategoryBadge from './CategoryBadge.vue'
 import StepProgressionCountBadge from './StepProgressionCountBadge.vue'
 import SubStepCountBadge from './SubStepCountBadge.vue'
 import { useTypeGuards } from '../../composables/typeGuards'
+import { useUserStore } from '../../store/globalStore'
 
 /**
  * ステップカード
  * widthは親コンポーネントに任せる。単体・複数カラム両方の形式応じて幅が変わるため
  */
+
+// utilities
+const userStore = useUserStore()
 
 // props
 const props = defineProps({
@@ -18,6 +22,10 @@ const props = defineProps({
     challengeMode: { require: false, type: Boolean, default: false,}
 })
 // computed
+const showEditBtn = computed(() => {
+    if (props.challengeMode || isChallengeStep(props.step!)) return false
+    return userStore.user.id === props.step!.user_id
+})
 // カードクリック時の遷移先を返す
 const getShowRoute = computed(() => {
     if (props.challengeMode && isChallengeStep(props.step!)) {
@@ -58,22 +66,28 @@ const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step
             <span>
                 達成目安時間: {{ step!.achievement_time_type!.name }}
             </span>
+            <!-- <span v-if="showEditBtn"> -->
+                <!-- <router-link :to="{ name: 'steps-edit', params: { id: step!.id}}"> -->
+                    <!-- <i class="c-icon--edit u-float-shadow fa fa-pen"></i> -->
+                    <!-- <span class="c-step-card__edit-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span> -->
+                <!-- </router-link> -->
+            <!-- </span> -->
         </p>
     </router-link>
 </template>
 
 <style scoped lang="scss">
 .c-step-card {
+    position: relative;
 	display: block;
 	border: 1px solid #e7e7e7;
 	border-radius: 5px;
 	color: inherit;
 	text-decoration: none;
-	transition: color .3s;
+	transition: all .3s;
     padding: 10px 20px;
-    &:hover {
-        color: #999;
-    }
     &__title {
         margin-bottom: 10px;
         background-repeat: no-repeat;
@@ -86,9 +100,19 @@ const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step
     &__txt {
         font-size: 12px;
     }
-
-    :hover .card__head {
+    &:hover .c-step-card__title {
         opacity: 0.7;
+    }
+    &__edit-icon {
+        cursor: pointer;
+        color: #f6f5f4;
+        background-color: #666;
+        // カードの右上に配置する
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 5px;
+        border-radius: 50%;
     }
 }
 </style>

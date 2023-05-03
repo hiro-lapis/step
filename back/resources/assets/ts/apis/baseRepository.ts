@@ -14,7 +14,7 @@
  * CSRF token as a header based on the value of the 'XSRF' token cookie.
  */
 
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useMessageInfoStore } from '../store/globalStore';
 
 // グローバルオブジェクトへの登録
@@ -47,27 +47,53 @@ axios.interceptors.request.use((req): any => {
 // リクエスト実行後の後処理
 axios.interceptors.response.use(
     (res): any => {
-        console.log('res', res)
         return res;
     },
-    (error) => {
+    (error: AxiosError<{ message?: string, errors?: Array<Record<string, string>>}>) => {
         // pinia初期化後のinterceptor内でstore使用
         const msg = useMessageInfoStore()
-        switch (error.response.status) {
-            case 422:
-                if (error.response.data.errors && typeof error.response.data.errors === 'object') {
-                    const keys = Object.keys(error.response.data.errors)
-                    let messages = ''
-                    // 各項目の配列形式で入っているバリデーションメッセージを改行区切りでセット
-                    keys.forEach((key) => {
-                            error.response.data.errors[key].forEach(e => {
-                                messages += e + '\n'
-                            })
-                    })
-                    msg.setErrorMessage(messages)
-                }
-                break
+        let messages = ''
+
+        // reponse.data.messageがあればそれを表示メッセージに追加
+        if (error.response!.data && error.response!.data.message!) {
+            messages += error.response!.data.message + '\n'
         }
+        // errorsという配列があればメッセージに追加
+        if (error.response!.data.errors && typeof error.response!.data.errors === 'object') {
+            const keys = Object.keys(error.response!.data.errors)
+            // 各項目の配列形式で入っているバリデーションメッセージを改行区切りでセット
+            keys.forEach((key) => {
+                    error.response!.data.errors?[key].forEach(e => {
+                        messages += e + '\n'
+                    }) : ''
+            })
+        }
+        // サーバー側からメッセージがない場合は、エラーのステータスコードによってメッセージをセット
+        if (messages === '') {
+            const res = error.response!
+            switch (res.status) {
+                case 401:
+                    messages = '認証に失敗しました。'
+                    break
+                case 403:
+                    messages = 'アクセス権限がありません。'
+                    break
+                case 404:
+                    messages = 'データが見つかりませんでした。'
+                    break
+                case 405:
+                    messages = '許可されていないメソッドです。'
+                    break
+                case 500:
+                    messages = 'サーバー側でエラーが発生しました。'
+                    break
+                case 503:
+                    messages = 'サーバーがメンテナンス中です。'
+                    break
+            }
+        }
+        // 一連のエラー情報を表示
+        msg.setErrorMessage(messages)
       return Promise.reject(error);
     }
 )

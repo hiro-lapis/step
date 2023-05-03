@@ -13,4 +13,12 @@ interface SubStepRepositoryInterface
      * @return SubStep
      */
     public function create(array $params): SubStep;
+
+    /**
+     * 子ステップ情報を削除
+     *
+     * @param integer $step_id
+     * @return int
+     */
+    public function deleteByStepId(int $step_id): int;
 }

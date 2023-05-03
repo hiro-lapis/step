@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, PropType } from 'vue'
+import { computed, inject, PropType } from 'vue'
 import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
 import { useTypeGuards } from '../../../composables/typeGuards'
 import { ChallengeStatusJudgement } from '../../../composables/ChallengeStatus'
@@ -9,7 +9,9 @@ import { ChallengeSubStep } from 'assets/ts/types/ChallengeSubStep'
 import { Step } from '../../../types/Step'
 import { SubStep } from 'assets/ts/types/SubStep'
 import CategoryBadge from '../../Atoms/CategoryBadge.vue'
+import EditToolTip from '../../Atoms/EditToolTip.vue'
 import TwitterShareIcon from '../../Atoms/TwitterShareIcon.vue'
+import { RouterLocation } from '../../../types/common/Router'
 
 const $repositories = inject<Repositories>('$repositories')!
 
@@ -21,14 +23,21 @@ const requestStore = useRequestStore()
 
 const props = defineProps({
     step: { required: true, type: Object as PropType<Step|ChallengeStep>, }, // プレビュー表示するステップ情報
-    readOnly: { required: false, type: Boolean, default: false, }, // 見るだけモードか
+    readOnly: { required: false, type: Boolean, default: false, }, // 閲覧モード(twitter,編集ボタン表示)
 })
 
 interface Emits {
     (e: 'clear'): void;
+    (e: 'delete'): void;
 }
 const emit = defineEmits<Emits>()
-
+const editToolTipMenus = [
+    {
+        name: '編集',
+        icon: 'edit',
+        to: { name: 'steps-edit', params: { id: props.step.id }} as RouterLocation,
+    },
+]
 // computed
 const { isChallengeStep, isChallengeSubStep } = useTypeGuards()
 // ステップ・チャレンジステップの型が異なるため、型に応じたサブステップを表示
@@ -55,6 +64,23 @@ const statusBgColor = (status: number): string => {
 const showClearBtn = (subStep: SubStep|ChallengeSubStep): boolean => {
     return isChallengeSubStep(subStep) && isInChallenge(subStep.status)
 }
+// Twitterシェア,編集ボタンを表示領域を表示するか
+const showActionUi = computed(() => {
+    return props.readOnly && !requestStore.isLoading
+})
+const deleteStep = async () => {
+    if (!confirm('削除しますか？')) return
+    if (requestStore.isLoading) return
+    requestStore.setLoading(true)
+    await $repositories.step.delete(props.step.id!)
+        .then(response => {
+            messageStore.setMessage(response.data.message)
+            // 親へ削除イベントを発火。削除後の挙動はページ側で制御
+            emit('delete')
+        }).finally(() => {
+            requestStore.setLoading(false)
+        })
+}
 // ログインユーザーがサブステップをクリア
 const clear = async (subStepId: number) => {
     if (requestStore.isLoading) return
@@ -74,26 +100,38 @@ const clear = async (subStepId: number) => {
     <div class="c-step-preview">
         <div class="c-step-preview__container">
             <div class="c-step-preview__head">
+                <div v-if="showActionUi" class="c-step-preview__action-ui">
+                    <span class="c-step-card__edit-icon">
+                        <TwitterShareIcon v-if="!requestStore.isLoading" :id="'step-preview'" :text="step.name" :hashtags="step.category_name!" />
+                        <span class="u-margin-l-2p">
+                            <EditToolTip
+                                :menus="editToolTipMenus"
+                            >
+                            <template v-slot:bottom>
+                                <p class="c-edit-tool-tip__txt" @click="deleteStep">削除</p>
+                                <!-- <ConfirmDialog :open-txt="'削除'">
+                                </ConfirmDialog> -->
+                            </template>
+                            </EditToolTip>
+                        </span>
+                    </span>
+                </div>
                 <!-- ステップ名 -->
                 <h1 class="c-title--step">{{ step.name }}</h1>
                 <div class="c-step-preview__information">
                     <CategoryBadge v-if="step.category_id" :id="step.category_id" />
-                    <!-- ハッシュタグ：カテゴリー名、本文：ステップ名 -->
-                    <template v-if="readOnly">
-                        <TwitterShareIcon v-if="!requestStore.isLoading" :id="'step-preview'" :text="step.name" :hashtags="step.category_name!" />
+                    <!-- チャレンジ中のステップ情報表示時 -->
+                    <template v-if="isChallengeStep(step)">
+                        <div class="c-step-preview__challenge-information">
+                            <span class="u-margin-l-1p">挑戦開始:{{ step.challenged_at }}</span>
+                            <template v-if="step.cleared_at">
+                                <span class="u-margin-l-1p">達成:{{ step.cleared_at }}</span>
+                            </template>
+                        </div>
                     </template>
-                    <template v-if="!!step.created_at">
-                        <template v-if="isChallengeStep(step)">
-                            <div class="c-step-preview__challenge-information">
-                                <span class="u-margin-l-1p">挑戦開始:{{ step.challenged_at }}</span>
-                                <template v-if="step.cleared_at">
-                                    <span class="u-margin-l-1p">達成:{{ step.cleared_at }}</span>
-                                </template>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <span class="u-margin-l-1p">{{ step.created_at }}</span>
-                        </template>
+                    <!-- ステップ詳細画面 -->
+                    <template v-if="!isChallengeStep(step) && !!step.created_at">
+                        <span class="u-margin-l-1p">投稿日:{{ step.created_at }}</span>
                     </template>
                 </div>
             </div>
@@ -154,13 +192,18 @@ const clear = async (subStepId: number) => {
 
 .c-step-preview {
     background-color: #fff;
-    padding: 0px 20px 20px;
+    padding: 20px;
     width: 100%; // 親要素の幅いっぱいに広げる
     overflow-wrap: break-word;
     word-wrap: break-word; // 溢れる文字を折り返す
     box-sizing: border-box;
     &__head {
         margin-bottom: 30px;
+    }
+    &__action-ui {
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: right;
     }
     &__information {
         display: flex;
@@ -169,16 +212,22 @@ const clear = async (subStepId: number) => {
     &__challenge-information {
         font-size: 12px;
     }
-    &__container {
-        overflow: hidden; // 見出し線など溢れるデザインを非表示
-    }
     &__bottom {
         display: flex;
         justify-content: center;
     }
 }
+.c-edit-tool-tip__txt {
+    font-size: 12px;
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 .c-sub-step {
     margin-bottom: 25px;
+    overflow: hidden; // 見出し線など溢れるデザインを非表示
     &__header {
         margin-bottom: 20px;
         &--status-name {

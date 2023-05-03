@@ -45,6 +45,7 @@
     }
     &--step {
         @extend .c-title;
+        padding: 0.25em 0;
         text-align: left;
     }
     &--sub-step {

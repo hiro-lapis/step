@@ -21,6 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     { path: '/password/forgot', name: 'password-forgot', component: PasswordForgot, meta: { title: 'パスワード再発行', requiresAuth: false, guestOnly: true, } },
     { path: '/password/reset', name: 'password-reset', component: PasswordReset, meta: { title: 'パスワードリセット', requiresAuth: false, guestOnly: true, }, },
     { path: '/steps/create', name: 'steps-create', component: StepEditView, meta: { title: 'ステップ新規作成', requiresAuth: true, guestOnly: false, },  },
+    { path: '/steps/edit/:id', name: 'steps-edit', component: StepEditView, meta: { title: 'ステップ編集', requiresAuth: true, guestOnly: false, },  },
     { path: '/steps', name: 'steps-list', component: StepListView, meta: { title: 'ステップ一覧', requiresAuth: false, guestOnly: false, },   },
     { path: '/steps/:id', name: 'steps-show', component: StepShowView, meta: { title: 'ステップ詳細', requiresAuth: false, guestOnly: false, }, },
     { path: '/challege-steps/:id', name: 'challenge-steps-show', component: ChallengeStepShowView, meta: { title: 'チャレンジ中のステップ詳細', requiresAuth: true, guestOnly: false, }, },

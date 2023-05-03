@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Steps\ChallengeRequest;
 use App\Http\Requests\Steps\CreateRequest;
+use App\Http\Requests\Steps\DeleteRequest;
+use App\Http\Requests\Steps\UpdateRequest;
 use App\Http\Requests\Steps\IndexRequest;
 use App\Http\Requests\Steps\ShowRequest;
 use App\Services\StepService;
@@ -47,7 +49,7 @@ class StepController extends Controller
      * Display the specified resource.
      *
      * @param  ShowRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function show(ShowRequest $request): JsonResponse
     {
@@ -58,13 +60,13 @@ class StepController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  UpdateRequest $request
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request): JsonResponse
     {
-        //
+        $result = $this->step_service->update($request->validated());
+        return response()->json(['step' => $result['step']], $result['status']);
     }
 
     /**
@@ -76,17 +78,18 @@ class StepController extends Controller
     public function challenge(ChallengeRequest $request): JsonResponse
     {
         $result = $this->step_service->challenge($request->validated()['id']);
-        return response()->json(['message' => 'チャレンジ開始しました。達成するまでがんばりましょう！']);
+        return response()->json(['message' => $result['message']], $result['status']);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * ステップ投稿者によるステップ情報の削除
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return DeleteRequest
      */
-    public function destroy($id)
+    public function destroy(DeleteRequest $request)
     {
-        //
+        $result = $this->step_service->delete($request->validated());
+        return response()->json(['message' => $result['message']], $result['status']);
     }
 }

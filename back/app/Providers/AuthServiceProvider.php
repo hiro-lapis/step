@@ -4,7 +4,9 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+use App\Enums\ChallengeStatusEnum;
 use App\Models\ChallengeStep;
+use App\Models\ChallengeSubStep;
 use App\Models\Step;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -37,6 +39,26 @@ class AuthServiceProvider extends ServiceProvider
             // 現在挑戦中でないか
             $in_challenging = ChallengeStep::stepId($step->id)->challengeUserId($user->id)->challenging()->exists();
             if ($in_challenging) return false;
+            return true;
+        });
+        // チャレンジ更新
+        Gate::define('update-challenge-sub-step', function (User $user, ChallengeStep $challenge_step, ChallengeSubStep $challenge_sub_step) {
+            // 自身が投稿したチャレンジか
+            if ($user->id !== $challenge_step->user_id) return false;
+            // 対象のサブステップが現在挑戦中か
+            if (!ChallengeStatusEnum::isInChallenge($challenge_sub_step->status)) return false;
+            return true;
+        });
+        // ステップ更新
+        Gate::define('edit-step', function (User $user, Step $step) {
+            // 自身が投稿したステップか
+            if ($user->id !== $step->user_id) return false;
+            return true;
+        });
+        // ステップ削除
+        Gate::define('delete-step', function (User $user, Step $step) {
+            // 自身が投稿したステップか
+            if ($user->id !== $step->user_id) return false;
             return true;
         });
     }

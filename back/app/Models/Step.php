@@ -140,4 +140,9 @@ class Step extends Model
         return $query->join('categories', 'categories.id', '=', 'steps.category_id')
             ->join('achievement_time_types', 'achievement_time_types.id', '=', 'steps.achievement_time_type_id');
     }
+
+    public function scopeWriterUser(Builder $query, int $user_id): Builder
+    {
+        return $query->where('steps.user_id', $user_id);
+    }
 }

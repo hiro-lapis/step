@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Enums\ChallengeStatusEnum;
-use App\Models\ChallengeStep;
 use App\Models\Step;
 use App\Repositories\ChallengeStep\ChallengeStepRepositoryInterface;
 use App\Repositories\Step\StepRepositoryInterface;
@@ -43,8 +42,8 @@ class StepService
         $params['user_id'] = auth()->user()->id;
         $step = null;
         $status = Response::HTTP_OK;
-        DB::beginTransaction();
         try {
+            DB::beginTransaction();
             // ステップ登録
             $step = $this->step_respository->create($params)->fresh();
             // 子ステップ登録
@@ -57,6 +56,41 @@ class StepService
             report($e);
             $status = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
+        return compact('step', 'status');
+    }
+
+    /**
+     * ステップの更新
+     *
+     * @param array $params
+     * @return array
+     */
+    public function update(array $params): array
+    {
+        $status = Response::HTTP_OK;
+        $message = '';
+        DB::beginTransaction();
+        try {
+            // 著者でない時は更新不可
+            $step = $this->step_respository->findOrFailByUserId($params['id'], auth()->user()->id);
+            if (!Gate::allows('edit-step', $step)) {
+                abort(HttpResponse::HTTP_FORBIDDEN);
+            }
+            // ステップ更新
+            $this->step_respository->update($step, collect($params)->except('sub_steps')->toArray());
+            // 子ステップ更新
+            $this->sub_step_respository->deleteByStepId($step->id);
+            $sub_step_params = collect($params['sub_steps']);
+            $count = $this->step_respository->updateOrCreateSubSteps($step, $sub_step_params);
+            if ($count !== $sub_step_params->count()) throw new Exception('子ステップの更新件数が一致しません');
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            report($e);
+            $status = Response::HTTP_INTERNAL_SERVER_ERROR;
+        }
+        // 詳細情報取得
+        $step = $this->show($step->id);
         return compact('step', 'status');
     }
 
@@ -81,6 +115,35 @@ class StepService
     }
 
     /**
+     * ステップ情報の論理削除
+     *
+     * @param array $params
+     * @return array
+     */
+    public function delete(array $params): array
+    {
+        $step_id = $params['id'];
+        $status = HttpResponse::HTTP_OK;
+        $message = __('messages.delete_success');
+        $step = $this->step_respository->findOrFailByUserId($step_id, auth()->user()->id);
+        if (!Gate::allows('delete-step', $step)) {
+            abort(HttpResponse::HTTP_FORBIDDEN, __('messages.step_delete_forbidden'));
+        }
+        try {
+            DB::beginTransaction();
+            $this->sub_step_respository->deleteByStepId($step->id);
+            $this->step_respository->delete($step);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            report($e);
+            $status = HttpResponse::HTTP_INTERNAL_SERVER_ERROR;
+            $message = __('messages.database_error_has_occured');
+        }
+        return compact('status', 'message');
+    }
+
+    /**
      * ステップへのチャレンジ
      *
      * @param integer $step_id
@@ -89,11 +152,12 @@ class StepService
      */
     public function challenge(int $step_id): array
     {
+        $status = HttpResponse::HTTP_OK;
+        $message = __('messages.challenge_started');
         $original_step = $this->step_respository->findShowData($step_id);
         if (!Gate::allows('store-challenge', $original_step)) {
-            abort(HttpResponse::HTTP_FORBIDDEN);
+            abort(HttpResponse::HTTP_FORBIDDEN, __('message.challenge_forbidden'));
         }
-
         // チャレンジ時点のステップ情報を保存しつつチャレンジ情報作成
         // ChallengeStepのライフサイクルメソッドでチャレンジ状況も自動更新
         $data = [
@@ -131,10 +195,12 @@ class StepService
         } catch (\Exception $e) {
             DB::rollBack();
             report($e);
-            throw new HttpException(HttpResponse::HTTP_INTERNAL_SERVER_ERROR, 'チャレンジデータの作成に失敗しました');
+            $status = HttpResponse::HTTP_INTERNAL_SERVER_ERROR;
+            $message = __('messages.database_error_has_occured');
+
         }
 
-        return compact('challenge_step');
+        return compact('status', 'message');
     }
 
     public function getPosted(): array
