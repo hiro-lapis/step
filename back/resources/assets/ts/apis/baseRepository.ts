@@ -47,7 +47,6 @@ axios.interceptors.request.use((req): any => {
 // リクエスト実行後の後処理
 axios.interceptors.response.use(
     (res): any => {
-        // console.log('res', res)
         return res;
     },
     (error: AxiosError<{ message?: string, errors?: Array<Record<string, string>>}>) => {
@@ -58,7 +57,6 @@ axios.interceptors.response.use(
         // reponse.data.messageがあればそれを表示メッセージに追加
         if (error.response!.data && error.response!.data.message!) {
             messages += error.response!.data.message + '\n'
-            // msg.setErrorMessage(error.response.data.message)
         }
         // errorsという配列があればメッセージに追加
         if (error.response!.data.errors && typeof error.response!.data.errors === 'object') {
@@ -70,8 +68,29 @@ axios.interceptors.response.use(
                     }) : ''
             })
         }
+        // サーバー側からメッセージがない場合は、エラーのステータスコードによってメッセージをセット
         if (messages === '') {
-            messages = 'エラーが発生しました。画面をリロードしてください。'
+            const res = error.response!
+            switch (res.status) {
+                case 401:
+                    messages = '認証に失敗しました。'
+                    break
+                case 403:
+                    messages = 'アクセス権限がありません。'
+                    break
+                case 404:
+                    messages = 'データが見つかりませんでした。'
+                    break
+                case 405:
+                    messages = '許可されていないメソッドです。'
+                    break
+                case 500:
+                    messages = 'サーバー側でエラーが発生しました。'
+                    break
+                case 503:
+                    messages = 'サーバーがメンテナンス中です。'
+                    break
+            }
         }
         // 一連のエラー情報を表示
         msg.setErrorMessage(messages)

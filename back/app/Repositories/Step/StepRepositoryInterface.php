@@ -55,15 +55,6 @@ interface StepRepositoryInterface
      *
      * @param integer $step_id
      * @param integer $user_id
-     * @return Collection
-     */
-    public function isAuthor(int $step_id, int $user_id): bool;
-
-    /**
-     * ステップIDとユーザーIDをもとにステップ情報の著者かどうかをチェック
-     *
-     * @param integer $step_id
-     * @param integer $user_id
      * @return Step
      */
     public function findOrFailByUserId(int $step_id, int $user_id): Step;

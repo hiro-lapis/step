@@ -91,14 +91,6 @@ class StepRepository implements StepRepositoryInterface
             ->find($step_id);
     }
 
-    public function isAuthor(int $step_id, int $user_id): bool
-    {
-        return $this->step
-            ->writerUser($user_id)
-            ->where('id', $step_id)
-            ->exists($step_id);
-    }
-
     public function findOrFailByUserId(int $step_id, int $user_id): Step
     {
         return $this->step->writerUser($user_id)->findOrFail($step_id);
