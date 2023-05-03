@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import RequiredBadge from './RequiredBadge.vue'
+import ErrorMessage from './ErrorMessage.vue'
 
 // props
 const props = defineProps({
