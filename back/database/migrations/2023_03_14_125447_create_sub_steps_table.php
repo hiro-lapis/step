@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sub_steps', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('サブステップ名');
-            $table->string('detail')->comment('詳細');
+            $table->text('detail')->comment('詳細');
             $table->string('image_url')->nullable()->comment('サブステップのサムネイル画像URL');
             $table->unsignedBigInteger('step_id')->comment('メインのステップID');
             $table->unsignedTinyInteger('sort_number')->comment('並び順');
