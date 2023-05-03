@@ -98,3 +98,18 @@ export const useMessageInfoStore = defineStore('messageInfo', () => {
         setErrorMessage,
     }
 })
+
+export const useConfirmDialogStore = defineStore('dialog', () => {
+    // data
+    const dialog = ref(false)
+    // computed
+    const open = computed(() => dialog.value)
+    // method
+    const setDialog = (state: boolean) => dialog.value = state
+    return {
+        dialog,
+        open,
+        setDialog,
+    }
+
+})

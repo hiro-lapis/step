@@ -265,4 +265,27 @@ class StepControllerTest extends TestCase
             $this->assertSame($params['sub_steps'][$key]['sort_number'], $sub_step->sort_number);
         }
     }
+
+    public function test_deleteStep(): void
+    {
+        // 自分が作者のステップ情報(子ステップ2つ)を作成 (sort_numberを設定しつつ作成)
+        $step = Step::factory()
+            ->has(SubStep::factory()->count(2)->sequence(
+                ['sort_number' => 1],
+                ['sort_number' => 2],
+            ))
+            ->create([
+                'user_id' => $this->user->id,
+                'category_id' => $this->category->id,
+                'achievement_time_type_id' => $this->achievement_time_type->id,
+            ]);
+        // ステップ削除
+        $response = $this->actingAs($this->user)->deleteJson('/api/steps/delete', ['id' => $step->id]);
+        $response->dump();
+        $response->assertOk();
+        // ステップが削除されているか
+        $this->assertFalse(Step::where('id', $step->id)->exists());
+        // 子ステップが削除されているか
+        $this->assertFalse(SubStep::where('step_id', $step->id)->exists());
+    }
 }

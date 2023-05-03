@@ -9,6 +9,7 @@ import { ChallengeStep } from '../types/ChallengeStep'
 export class StepRepository {
     private readonly baseUrl = '/api/steps'
     private readonly editUrl = '/api/steps/edit'
+    private readonly deleteUrl = '/api/steps/delete'
     private readonly findUrl = '/api/steps'
     private readonly challengeFindUrl = '/api/steps'
     private readonly challengeUrl = '/api/steps/challenges'
@@ -18,6 +19,9 @@ export class StepRepository {
     }
     async update (data: Step): Promise<AxiosResponse<UpdateResponse>> {
         return await axios.put(`${this.editUrl}`, data)
+    }
+    async delete (step_id: number): Promise<any> {
+        return await axios.delete(`${this.deleteUrl}`, { data: { id: step_id } })
     }
     async get(data: { key_word: string, category_id: number|null, achievement_time_type_id: number|null, page: number }): Promise<any> {
         // クエリパラメータで送信

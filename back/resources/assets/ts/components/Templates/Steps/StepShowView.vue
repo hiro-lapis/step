@@ -69,6 +69,12 @@ const gotoLogin = () => router.push({ name: 'login'})
 onMounted(() => {
     fetchData()
 })
+// 3s待ってから一覧画面へ遷移
+const gotoStepList = () => {
+    setTimeout(() => {
+        router.push({ name: 'steps-list' })
+    }, 3000)
+}
 </script>
 
 <template>
@@ -78,6 +84,7 @@ onMounted(() => {
                 <StepPreview
                     :step="step"
                     readOnly
+                    @delete="gotoStepList"
                 >
                     <template v-slot:bottom>
                         <button

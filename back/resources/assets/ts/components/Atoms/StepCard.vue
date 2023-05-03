@@ -66,11 +66,14 @@ const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step
             <span>
                 達成目安時間: {{ step!.achievement_time_type!.name }}
             </span>
-            <span v-if="showEditBtn">
-                <router-link :to="{ name: 'steps-edit', params: { id: step!.id}}">
-                    <i class="c-icon--edit u-float-shadow fa fa-pen"></i>
-                </router-link>
-            </span>
+            <!-- <span v-if="showEditBtn"> -->
+                <!-- <router-link :to="{ name: 'steps-edit', params: { id: step!.id}}"> -->
+                    <!-- <i class="c-icon--edit u-float-shadow fa fa-pen"></i> -->
+                    <!-- <span class="c-step-card__edit-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span> -->
+                <!-- </router-link> -->
+            <!-- </span> -->
         </p>
     </router-link>
 </template>
@@ -97,9 +100,19 @@ const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step
     &__txt {
         font-size: 12px;
     }
-
     &:hover .c-step-card__title {
         opacity: 0.7;
+    }
+    &__edit-icon {
+        cursor: pointer;
+        color: #f6f5f4;
+        background-color: #666;
+        // カードの右上に配置する
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 5px;
+        border-radius: 50%;
     }
 }
 </style>

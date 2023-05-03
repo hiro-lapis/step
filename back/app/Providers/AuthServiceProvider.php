@@ -55,5 +55,11 @@ class AuthServiceProvider extends ServiceProvider
             if ($user->id !== $step->user_id) return false;
             return true;
         });
+        // ステップ削除
+        Gate::define('delete-step', function (User $user, Step $step) {
+            // 自身が投稿したステップか
+            if ($user->id !== $step->user_id) return false;
+            return true;
+        });
     }
 }

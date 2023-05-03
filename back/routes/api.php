@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/steps/challenges', [StepController::class, 'challenge'])->name('steps.challenge');
     // ステップ更新
     Route::put('/steps/edit', [StepController::class, 'update'])->name('steps.update');
+    Route::delete('/steps/delete', [StepController::class, 'destroy'])->name('steps.destroy');
     // チャレンジ中のステップ情報
     Route::group(['prefix' => 'challenge-steps'], function() {
         Route::get('{step_id}', [ChallengeStepController::class, 'show'])->name('.show');

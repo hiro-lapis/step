@@ -75,4 +75,12 @@ interface StepRepositoryInterface
      * @return Collection
      */
     public function getByUserId(int $user_id): Collection;
+
+    /**
+     * ステップ情報を論理削除
+     *
+     * @param Step $step
+     * @return bool
+     */
+    public function delete(Step $step): bool;
 }

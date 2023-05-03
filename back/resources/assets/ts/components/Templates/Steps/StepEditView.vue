@@ -20,12 +20,6 @@ const route = useRoute()
 
 // data
 const isEdit = ref(false)
-// type CreateData = {
-//     name: string
-//     category_id: number
-//     achievement_time_type_id: number
-//     sub_steps: Array<{name: string, detail: string, sort_number?: number}>
-// }
 const createData = reactive<Step>({
     id: 0,
     name: '',

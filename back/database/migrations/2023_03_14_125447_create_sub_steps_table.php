@@ -25,6 +25,7 @@ return new class extends Migration
             $table->unique(['step_id', 'sort_number']);
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

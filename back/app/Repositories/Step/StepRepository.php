@@ -118,4 +118,9 @@ class StepRepository implements StepRepositoryInterface
             ->withCount('subSteps')
             ->get();
     }
+
+    public function delete(Step $step): bool
+    {
+        return $step->delete();
+    }
 }
