@@ -79,7 +79,7 @@ class StepService
             // ステップ更新
             $this->step_respository->update($step, collect($params)->except('sub_steps')->toArray());
             // 子ステップ更新
-            $this->sub_step_respository->deleteByStepId($step->id);
+            $this->sub_step_respository->forceDeleteByStepId($step->id);
             $sub_step_params = collect($params['sub_steps']);
             $count = $this->step_respository->updateOrCreateSubSteps($step, $sub_step_params);
             if ($count !== $sub_step_params->count()) throw new Exception('子ステップの更新件数が一致しません');

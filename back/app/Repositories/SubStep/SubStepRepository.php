@@ -21,4 +21,9 @@ class SubStepRepository implements SubStepRepositoryInterface
     {
         return $this->sub_step->where('step_id', $step_id)->delete();
     }
+
+    public function forceDeleteByStepId(int $step_id): int
+    {
+        return $this->sub_step->where('step_id', $step_id)->forceDelete();
+    }
 }

@@ -21,4 +21,12 @@ interface SubStepRepositoryInterface
      * @return int
      */
     public function deleteByStepId(int $step_id): int;
+
+    /**
+     * 子ステップ情報を物理削除
+     *
+     * @param integer $step_id
+     * @return int
+     */
+    public function forceDeleteByStepId(int $step_id): int;
 }
