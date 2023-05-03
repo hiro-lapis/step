@@ -104,7 +104,7 @@ class StepControllerTest extends TestCase
         // ユーザー2人それぞれステップを5件づつ登録
         User::factory()
             ->count(2)
-            ->hasStep(5, [
+            ->hasSteps(5, [
                 'category_id' => $this->category->id,
                 'achievement_time_type_id' => $this->achievement_time_type->id,
             ])
@@ -216,5 +216,53 @@ class StepControllerTest extends TestCase
         $this->assertSame(0, $challenge->challenging_count);
         $this->assertSame(1, $challenge->clear_count);
         $this->assertSame(0, $challenge->fail_count);
+    }
+
+    public function test_updateStep(): void
+    {
+        // 自分が作者のステップ情報(子ステップ2つ)を作成 (sort_numberを設定しつつ作成)
+        $step = Step::factory()
+            ->has(SubStep::factory()->count(2)->sequence(
+                ['sort_number' => 1],
+                ['sort_number' => 2],
+            ))
+            ->create([
+                'user_id' => $this->user->id,
+                'category_id' => $this->category->id,
+                'achievement_time_type_id' => $this->achievement_time_type->id,
+            ]);
+        // 編集後の情報を設定
+        $sub_step_count = 5;
+        $sub_steps = [];
+        for ($i=1; $i <= $sub_step_count; $i++) {
+            $sub_steps[] = [
+                'name' => '編集後のサブステップ' . $i,
+                'detail' => '編集後のサブステップ詳細' . $i,
+                'sort_number' => $i,
+            ];
+        }
+        $category = Category::factory()->create();
+        $achievement_time_type = AchievementTimeType::factory()->create();
+        $params = [
+            'id' => $step->id,
+            'category_id' => $category->id,
+            'achievement_time_type_id' => $achievement_time_type->id,
+            'name' => '編集後のステップ名',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response->dump();
+        $response->assertOk();
+        // 更新後の情報と比較
+        $step->refresh();
+        $this->assertSame($params['name'], $step->name);
+        $this->assertSame($params['category_id'], $step->category_id);
+        $this->assertSame($params['achievement_time_type_id'], $step->achievement_time_type_id);
+        $this->assertSame($sub_step_count, $step->subSteps->count());
+        foreach ($step->subSteps as $key => $sub_step) {
+            $this->assertSame($params['sub_steps'][$key]['name'], $sub_step->name);
+            $this->assertSame($params['sub_steps'][$key]['detail'], $sub_step->detail);
+            $this->assertSame($params['sub_steps'][$key]['sort_number'], $sub_step->sort_number);
+        }
     }
 }

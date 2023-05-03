@@ -4,6 +4,7 @@
 ========================================================================== */
 .c-form {
     &--idea {
+        /* offset-x | offset-y | blur-radius | color */
         box-shadow: 0 0 8px #ccc; // うっすらカゲを作るタイプ
         &__container {
             width: 100%;

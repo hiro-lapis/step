@@ -8,12 +8,16 @@ import { ChallengeStep } from '../types/ChallengeStep'
  */
 export class StepRepository {
     private readonly baseUrl = '/api/steps'
+    private readonly editUrl = '/api/steps/edit'
     private readonly findUrl = '/api/steps'
     private readonly challengeFindUrl = '/api/steps'
     private readonly challengeUrl = '/api/steps/challenges'
 
     async store(data: { category_id: number, achievement_time_type_id: number,  name: string }): Promise<any> {
         return await axios.post(`${this.baseUrl}`, data)
+    }
+    async update (data: Step): Promise<AxiosResponse<UpdateResponse>> {
+        return await axios.put(`${this.editUrl}`, data)
     }
     async get(data: { key_word: string, category_id: number|null, achievement_time_type_id: number|null, page: number }): Promise<any> {
         // クエリパラメータで送信
@@ -40,6 +44,10 @@ type GetResponse = {
 }
 
 type FindResponse = Step
+type UpdateResponse = {
+    status: boolean
+    step: Step
+}
 type FindChallengeResponse = ChallengeStep
 
 type ChallengeResponse = {

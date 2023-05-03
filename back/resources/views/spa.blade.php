@@ -27,7 +27,7 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
-        <!-- Font awesome -->
+        <!-- Font awesome https://fontawesome.com/v5/search -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
         <!-- Styles -->
         <link href="{{ asset('css/reset.css') }}" rel="stylesheet">

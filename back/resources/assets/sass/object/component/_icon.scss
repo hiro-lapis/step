@@ -21,19 +21,14 @@
         width: 24px; // 並べて表示することが多いツイッターと幅・配置を合わせる
         text-align: left;
     }
-
-    &--edit {
-        cursor: pointer;
-        color: #f6f5f4;
-        // アイデアカードの右上に配置する
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        transition: all 0.3s;
+    &--elipsis {
+        @extend %c-icon;
+        color: #555;
         &:hover {
-            opacity: 0.8;
+            color: #999;
         }
     }
+
     &--side-menu {
         color: $color_black8;
         font-size: 20px;

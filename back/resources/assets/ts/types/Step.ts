@@ -4,7 +4,7 @@ import { SubStep } from './SubStep'
 import { User } from './User'
 
 export type Step = {
-    id?: number|null,
+    id?: number,
     category_id: number
     user_id?: number
     name: string
@@ -14,6 +14,7 @@ export type Step = {
     sub_steps_count?: number
     achievement_time_type?: AchievementTimeType
     category?: Category
+    is_writer?: boolean
     created_at?: string
     // 以下アクセサで必要に応じて設定
     achievement_time_type_name?: AchievementTimeType

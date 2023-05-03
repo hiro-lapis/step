@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useMessageInfoStore, useRequestStore, useUserStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
-import { useRoute, useRouter } from 'vue-router'
 import StepPreview from '../../Organisms/Steps/StepPreview.vue'
-import { Step } from '../../../types/Step'
 import ImageClip from '../../Atoms/ImageClip.vue'
+import { Step } from '../../../types/Step'
 
 const $repositories = inject<Repositories>('$repositories')!
 const messageStore = useMessageInfoStore()
@@ -16,7 +16,7 @@ const router = useRouter()
 
 // data
 const step = ref<Step>({
-    id: 0,
+    id: Number(route.params.id) ?? 0,
     category_id: 0,
     user_id: 0,
     name: '',
@@ -77,6 +77,7 @@ onMounted(() => {
             <div class="p-step-show__main">
                 <StepPreview
                     :step="step"
+                    readOnly
                 >
                     <template v-slot:bottom>
                         <button

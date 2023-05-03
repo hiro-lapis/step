@@ -1,0 +1,18 @@
+@charset "utf-8";
+/* ==========================================================================
+ Hover action
+========================================================================== */
+
+// ホバー時アクションの基本
+%u-hover-action-base {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.u-float-shadow {
+    @extend %u-hover-action-base;
+    &:hover {
+        box-shadow: 1px 2px 5px 0px rgba(204, 204, 204, 0.94);
+        transform: translateY(-2px);
+    }
+}

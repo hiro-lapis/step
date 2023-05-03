@@ -17,6 +17,15 @@ interface StepRepositoryInterface
     public function create(array $params): Step;
 
     /**
+     * 引数にとったステップ情報を更新
+     *
+     * @params Step $step
+     * @params array $params
+     * @return bool
+     */
+    public function update(Step $step, array $params): bool;
+
+    /**
      * 引数にとったステップ情報に紐づける形で子ステップを登録更新
      *
      * @param Step $step
@@ -42,10 +51,28 @@ interface StepRepositoryInterface
     public function findShowData(int $step_id): Step;
 
     /**
-     * ユーザーIDを元にステップ情報を取得
+     * ステップIDとユーザーIDをもとにステップ情報の著者かどうかをチェック
      *
      * @param integer $step_id
+     * @param integer $user_id
      * @return Collection
      */
-    public function getByUserId(int $step_id): Collection;
+    public function isAuthor(int $step_id, int $user_id): bool;
+
+    /**
+     * ステップIDとユーザーIDをもとにステップ情報の著者かどうかをチェック
+     *
+     * @param integer $step_id
+     * @param integer $user_id
+     * @return Step
+     */
+    public function findOrFailByUserId(int $step_id, int $user_id): Step;
+
+    /**
+     * ユーザーIDを元にステップ情報を取得
+     *
+     * @param integer $user_id
+     * @return Collection
+     */
+    public function getByUserId(int $user_id): Collection;
 }

@@ -61,6 +61,40 @@ class StepService
     }
 
     /**
+     * ステップの更新
+     *
+     * @param array $params
+     * @return array
+     */
+    public function update(array $params): array
+    {
+        $status = Response::HTTP_OK;
+        DB::beginTransaction();
+        try {
+            // 著者でない時は更新不可
+            $step = $this->step_respository->findOrFailByUserId($params['id'], auth()->user()->id);
+            if (!Gate::allows('edit-step', $step)) {
+                abort(HttpResponse::HTTP_FORBIDDEN);
+            }
+            // ステップ更新
+            $this->step_respository->update($step, collect($params)->except('sub_steps')->toArray());
+            // 子ステップ更新
+            $this->sub_step_respository->deleteByStepId($step->id);
+            $sub_step_params = collect($params['sub_steps']);
+            $count = $this->step_respository->updateOrCreateSubSteps($step, $sub_step_params);
+            if ($count !== $sub_step_params->count()) throw new Exception('子ステップの更新件数が一致しません');
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            report($e);
+            $status = Response::HTTP_INTERNAL_SERVER_ERROR;
+        }
+        // 詳細情報取得
+        $step = $this->show($step->id);
+        return compact('step', 'status');
+    }
+
+    /**
      * 詳細情報を取得
      *
      * @param integer $step_id

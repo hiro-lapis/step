@@ -58,27 +58,4 @@ defineProps({
 		width: calc((100% - 140px) / 4);
 	}
 }
-
-
-.c-step-card {
-	display: block;
-	border: 1px solid #e7e7e7;
-	border-radius: 5px;
-	color: inherit;
-	text-decoration: none;
-	transition: color .3s;
-    &__title {
-        margin-left: 20px;
-    }
-    &__txt {
-        margin: 20px;
-    }
-    :hover {
-        color: #999;
-    }
-    :hover .card__head {
-        opacity: 0.7;
-    }
-}
-/*hover*/
 </style>

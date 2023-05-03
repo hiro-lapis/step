@@ -19,6 +19,11 @@ class StepRepository implements StepRepositoryInterface
         return $this->step->create($params);
     }
 
+    public function update(Step $step, array $params): bool
+    {
+        return $step->update($params);
+    }
+
     public function updateOrCreateSubSteps(Step $step, Collection $sub_step_params): int
     {
         $sort_number = 1;
@@ -86,16 +91,29 @@ class StepRepository implements StepRepositoryInterface
             ->find($step_id);
     }
 
+    public function isAuthor(int $step_id, int $user_id): bool
+    {
+        return $this->step
+            ->writerUser($user_id)
+            ->where('id', $step_id)
+            ->exists($step_id);
+    }
+
+    public function findOrFailByUserId(int $step_id, int $user_id): Step
+    {
+        return $this->step->writerUser($user_id)->findOrFail($step_id);
+    }
+
     /**
      * ユーザーIDを元にステップ情報を取得
      *
-     * @param integer $step_id
+     * @param integer $user_id
      * @return Collection
      */
-    public function getByUserId(int $step_id): Collection
+    public function getByUserId(int $user_id): Collection
     {
         return $this->step
-            ->where('user_id', $step_id)
+            ->where('user_id', $user_id)
             ->with(['category:id,name', 'achievementTimeType:id,name'])
             ->withCount('subSteps')
             ->get();

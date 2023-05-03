@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, onMounted, provide, ref, reactive, readonly } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
+import { useMessageInfoStore, useRequestStore, useUserStore } from '../../../store/globalStore'
 import StepPreview from '../../Organisms/Steps/StepPreview.vue'
 import AchievementTimeTypeSelectBox from '../../Atoms/AchievementTimeTypeSelectBox.vue'
 import CategorySelectBox from '../../Atoms/CategorySelectBox.vue'
@@ -12,6 +12,7 @@ import { Step } from '../../../types/Step'
 
 // utilities
 const requestStore = useRequestStore()
+const userStore = useUserStore()
 const messageStore = useMessageInfoStore()
 const $repositories = inject<Repositories>('$repositories')!
 const router = useRouter()
@@ -26,6 +27,7 @@ const isEdit = ref(false)
 //     sub_steps: Array<{name: string, detail: string, sort_number?: number}>
 // }
 const createData = reactive<Step>({
+    id: 0,
     name: '',
     merit: '',
     category_id: 0,
@@ -55,13 +57,51 @@ const create = async () => {
         requestStore.setLoading(false)
     })
 }
-const subStepLabel = (index: number): string => {
-    return `サブステップ${(index++).toString()}`
+const update = async () => {
+    if (requestStore.isLoading) return
+    categorySelect.value?.validate()
+    requestStore.setLoading(true)
+    await $repositories.step.update(createData).then((response) => {
+        messageStore.setMessage('ステップが更新されました')
+        // 詳細画面へ遷移
+        setTimeout(() => {
+            router.push({ name: 'steps-show', params: { id: response.data.step.id! } })
+        }, 3000)
+    }).finally(() => {
+        requestStore.setLoading(false)
+    })
 }
-
+const getStep = () => {
+    requestStore.setLoading(true)
+        // 編集画面の場合、ステップ情報を取得
+        $repositories.step.find(Number(route.params.id))
+            .then(res => {
+                const step = res.data
+                createData.id = step.id!
+                createData.name = step.name
+                createData.merit = step.merit
+                createData.category_id = step.category_id
+                createData.achievement_time_type_id = step.achievement_time_type_id
+                createData.sub_steps = step.sub_steps
+                requestStore.setLoading(false)
+                // ログインユーザーとステップのユーザーが異なる場合、ステップ一覧にリダイレクト
+                if ('is_writer' in step && !step.is_writer) {
+                    messageStore.setErrorMessage('他のユーザーのステップは編集できません')
+                    setTimeout(() => {
+                        router.push({ name: 'steps-list' })
+                    }, 3000)
+                }
+            })
+}
+const subStepLabel = (index: number): string => {
+    return `サブステップ${(index + 1).toString()}`
+}
 const init = () => {
     // 編集画面か判定
     isEdit.value = route.name === 'steps-edit'
+    if (isEdit.value) {
+        getStep()
+    }
     // カテゴリー情報を取得し各種コンポーネントで使用
     $repositories.common.category()
         .then(res => {
@@ -145,6 +185,14 @@ onMounted(() => {
                                 >
                                     登録
                                 </button>
+                            </template>
+                            <template v-else>
+                                <button
+                                @click="update"
+                                class="c-btn c-btn--middle c-btn--update"
+                                >
+                                更新
+                            </button>
                             </template>
                         </div>
                         </div>

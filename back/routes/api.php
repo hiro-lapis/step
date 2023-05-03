@@ -28,6 +28,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // ステップ新規作成
     Route::post('/steps', [StepController::class, 'store'])->name('steps.store');
     Route::post('/steps/challenges', [StepController::class, 'challenge'])->name('steps.challenge');
+    // ステップ更新
+    Route::put('/steps/edit', [StepController::class, 'update'])->name('steps.update');
     // チャレンジ中のステップ情報
     Route::group(['prefix' => 'challenge-steps'], function() {
         Route::get('{step_id}', [ChallengeStepController::class, 'show'])->name('.show');
@@ -45,6 +47,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 });
 // ステップ一覧
 Route::get('/steps', [StepController::class, 'index'])->name('steps.index');
+// ステップ詳細(兼編集情報取得)
 Route::get('/steps/{id}', [StepController::class, 'show'])->name('steps.show');
 
 // ユーザーログイン状態確認
