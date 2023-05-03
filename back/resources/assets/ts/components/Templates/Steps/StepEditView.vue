@@ -166,13 +166,13 @@ onMounted(() => {
                             </template>
                             <!-- 子ステップ追加 -->
                             <div class="p-form__bottom">
-                            <template v-if="!isEdit">
                                 <button
                                     @click="addSubStep"
                                     class="c-btn c-btn--middle c-btn--add-sub-step"
                                 >
                                     子ステップ追加
                                 </button>
+                            <template v-if="!isEdit">
                                 <button
                                     @click="create"
                                     class="c-btn c-btn--middle c-btn--create"
