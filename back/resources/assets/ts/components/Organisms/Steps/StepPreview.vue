@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, PropType } from 'vue'
-import { useMessageInfoStore, useRequestStore } from '../../../store/globalStore'
+import { useMessageInfoStore, useUserStore, useRequestStore } from '../../../store/globalStore'
 import { useTypeGuards } from '../../../composables/typeGuards'
 import { ChallengeStatusJudgement } from '../../../composables/ChallengeStatus'
 import { Repositories } from '../../../apis/repositoryFactory'
@@ -17,6 +17,7 @@ const $repositories = inject<Repositories>('$repositories')!
 
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
+const userStore = useUserStore()
 
 // props
 // const props = defineProps<StepProps>()
@@ -64,6 +65,9 @@ const statusBgColor = (status: number): string => {
 const showClearBtn = (subStep: SubStep|ChallengeSubStep): boolean => {
     return isChallengeSubStep(subStep) && isInChallenge(subStep.status)
 }
+const isAuthor = computed(() => {
+    return userStore.isLogin && (props.step as Step).user_id! === userStore.user.id
+})
 // Twitterシェア,編集ボタンを表示領域を表示するか
 const showActionUi = computed(() => {
     return props.readOnly && !requestStore.isLoading
@@ -103,7 +107,7 @@ const clear = async (subStepId: number) => {
                 <div v-if="showActionUi" class="c-step-preview__action-ui">
                     <span class="c-step-card__edit-icon">
                         <TwitterShareIcon v-if="!requestStore.isLoading" :id="'step-preview'" :text="step.name" :hashtags="step.category_name!" />
-                        <span class="u-margin-l-2p">
+                        <span v-if="isAuthor" class="u-margin-l-2p">
                             <EditToolTip
                                 :menus="editToolTipMenus"
                             >
