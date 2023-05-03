@@ -37,6 +37,11 @@ const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 const initialSubStep = { name: '', detail: '', }
 const addSubStep = () => createData.sub_steps.push(Object.assign({}, initialSubStep))
 
+// 編集中のサブステップ情報を削除
+const popSubStep = (index: number) => {
+    if (createData.sub_steps.length === 1) return
+    createData.sub_steps.splice(index, 1)
+}
 const create = async () => {
     if (requestStore.isLoading) return
     categorySelect.value?.validate()
@@ -152,7 +157,11 @@ onMounted(() => {
                                         <TextInput
                                             v-model:value="subStep.name"
                                             :label="subStepLabel(index)"
-                                        />
+                                        >
+                                        <template v-slot:asideLabel>
+                                            <i v-if="index !== 0" @click="popSubStep(index)" class="c-icon--delete fas fa-times-circle"></i>
+                                        </template>
+                                        </TextInput>
                                     </div>
                                     <div class="p-form__element">
                                         <TextareaInput

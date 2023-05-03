@@ -53,6 +53,7 @@ const handleEnter = () => emit('keyupEnter')
             <template v-if="label">
                 <label :for="formId" class="c-label">
                     {{ label }}
+                    <slot name="asideLabel"></slot>
                     <template v-if="required">
                         <RequiredBadge />
                     </template>

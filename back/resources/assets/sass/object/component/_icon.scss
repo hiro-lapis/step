@@ -21,7 +21,8 @@
         width: 24px; // 並べて表示することが多いツイッターと幅・配置を合わせる
         text-align: left;
     }
-    &--elipsis {
+    &--elipsis,
+    &--delete {
         @extend %c-icon;
         color: #555;
         &:hover {

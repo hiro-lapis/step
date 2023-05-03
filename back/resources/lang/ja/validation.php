@@ -166,6 +166,7 @@ return [
         'category_id'           => 'カテゴリー',
         'achievement_time_type_id' => '達成目安時間',
         'description'           => '詳細',
+        'detail'                => '詳細',
         'email'                 => 'メールアドレス',
         'img'                   => 'アイコン画像',
         'img_url'               => '画像',
@@ -182,6 +183,7 @@ return [
         'password_confirmation' => '確認用パスワード',
         'price'                 => '価格',
         'summary'               => '概要',
+        'sub_steps'               => 'サブステップ',
         'title'                 => 'タイトル',
     ],
 

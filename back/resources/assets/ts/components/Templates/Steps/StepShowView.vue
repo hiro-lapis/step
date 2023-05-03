@@ -47,6 +47,22 @@ const fetchData = async () => {
     await $repositories.step.find(stepId)
         .then(response => {
             step.value = response.data
+
+            // 開発環境の場合console.log出力
+            if (['development', 'local'].includes(process.env.NODE_ENV ?? '')) {
+                const subData = response.data.sub_steps.map((subD) => {
+                    return { name: subD.name, detail: subD.detail, sort_number: subD.sort_number }
+                })
+                const data = {
+                    name: response.data.name,
+                    category_id: response.data.category_id,
+                    summary: '',
+                    achievement_time_type_id: response.data.achievement_time_type_id,
+                    sub_steps: subData,
+                }
+                console.log(JSON.stringify(data))
+            }
+
             isInitialized.value = true
         }).finally(() => {
             requestStore.setLoading(false)
