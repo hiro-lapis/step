@@ -7,6 +7,7 @@ use App\Models\Step;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -63,7 +64,9 @@ class TestDataSeeder extends Seeder
                     }
                     $steps->push($step);
             });
-            \Log::info('HIRO:resultの中身' . print_r($steps, true));
+            if (App::environment('local')) {
+                Log::info('登録したデータ >>>' . print_r($steps->toArray(), true));
+            }
             DB::commit();
         } catch (\Exception $e) {
             Log::error($e->getMessage());

@@ -19,8 +19,8 @@ const userImage = computed(() => userStore.user.image_url ?? '')
     <div>
         <header class="c-header c-header--user">
             <router-link :to="{ name: topPageName }">
-                <div class="c-logo__container">
-                    <span class="c-logo">Step</span>
+                <div class="c-logo--header">
+                    <img src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/logos/logo-full.png" class="c-logo"/>
                 </div>
             </router-link>
             <!-- PC用メニュー -->

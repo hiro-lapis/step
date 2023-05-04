@@ -19,7 +19,7 @@ const resetData = reactive({
     token: '',
     email: '',
     password: '',
-    passwordConfirmation: '',
+    password_confirmation: '',
 })
 
 // method
@@ -33,7 +33,7 @@ const update = () => {
                     email: resetData.email,
                     token: resetData.token,
                     password: resetData.password,
-                    password_confirmation: resetData.passwordConfirmation
+                    password_confirmation: resetData.password_confirmation
                 })
                 .then(() => {
                     messageStore.setMessage('パスワードを変更しました')
@@ -88,7 +88,7 @@ onMounted(() => {
                         </div>
                         <div class="p-form__element">
                             <TextInput
-                                v-model:value="resetData.passwordConfirmation"
+                                v-model:value="resetData.password_confirmation"
                                 @keyupEnter="update"
                                 errorKey="password_confirmation"
                                 type="password"

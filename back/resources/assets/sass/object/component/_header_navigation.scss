@@ -6,6 +6,9 @@
 .c-logo {
     font-family: 'Montserrat Subrayada', sans-serif;
     letter-spacing: normal;
+    &--header {
+        width: 60px;
+    }
     &__container {
         width: auto;
         // width: 210px;
