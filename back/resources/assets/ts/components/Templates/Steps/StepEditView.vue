@@ -209,7 +209,6 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-// TODO: アルファベット順に並べ替え
 @import "../../../../sass/foundation/_breakpoints.scss";
 @import "../../../../sass/layout/_container.scss";
 
