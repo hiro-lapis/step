@@ -62,7 +62,7 @@
     {
         "name": "渡辺大輔",
         "email": "watanabe@example.com",
-        "image_url": "https://example.com/icons/watanabe.png",
+        "image_url": "https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/test_icon/men6.jpeg",
         "profile": "英語の勉強を始めました。英会話をマスターしたいです！"
     },
     {
@@ -74,7 +74,7 @@
     {
         "name": "鈴木直人",
         "email": "suzuki@example.com",
-        "image_url": "https://example.com/icons/suzuki.png",
+        "image_url": "https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/test_icon/men7.png",
         "profile": "プログラムの基礎を身につけたいと思っています。C++を勉強中です！"
     },
     {
