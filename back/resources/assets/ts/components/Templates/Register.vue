@@ -107,7 +107,7 @@ const register = async () => {
                         <div class="p-register-form__element">
                             <TextInput
                                 type="password"
-                                v-model:value="registerData.passwordConfirmation"
+                                v-model:value="registerData.password_confirmation"
                                 @keyupEnter="register"
                                 errorKey="password_confirmation"
                                 placeHolder="パスワード(確認用)"
