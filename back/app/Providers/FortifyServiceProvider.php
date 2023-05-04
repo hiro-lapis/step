@@ -46,7 +46,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         // パスワードリセットメールのURLをカスタマイズ
         ResetPassword::createUrlUsing(function ($user, string $token) {
-            return config('app.url') . '/password/reset/token=' . $token . '&email=' . $user->email;
+            return config('app.url') . '/password/reset?token=' . $token . '&email=' . $user->email;
         });
 
         // ログイン認証レスポンス(HOMEへのリダイレクト)をカスタマイズのため差し替え
