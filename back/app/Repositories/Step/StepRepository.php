@@ -72,7 +72,7 @@ class StepRepository implements StepRepositoryInterface
             ->with('achievementTimeType:id,name')
             ->withCount('subSteps')
             ->addSelect('steps.*')
-            ->paginate();
+            ->paginate(10);
     }
 
     /**
