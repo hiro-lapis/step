@@ -17,21 +17,21 @@ const condition = reactive({
     key_word: '',
     category_id: null,
     achievement_time_type_id: null,
-    page: 1 , // TODO 動的にする
+    page: 1 ,
 })
 const paginationInfo = reactive({
     current_page: 1,
     last_page: 1,
     total: 1,
 })
-const changePage = (page: number) => {
+const changePage = async (page: number) => {
     condition.page = page
-    fetchData()
+    await fetchData()
 }
 // methods
-const fetchData = () => {
+const fetchData = async () => {
     requestStore.setLoading(true)
-    $repositories.step.get(condition)
+    await $repositories.step.get(condition)
         .then(response => {
             stepList.value = response.data.result.data
             paginationInfo.current_page = response.data.result.current_page
@@ -68,9 +68,15 @@ onMounted(() => init())
 </template>
 
 <style lang="scss" scoped>
+@import "../../../../sass/foundation/_breakpoints.scss";
+
 .p-steps-list {
     &__body {
         margin-bottom: 30px;
+        padding-bottom: 0px;
+        @include mq() {
+            padding-bottom: 45px;
+        }
     }
     &__pagination {
         width: 100%;
