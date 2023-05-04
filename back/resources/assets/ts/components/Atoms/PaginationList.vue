@@ -8,7 +8,7 @@ const props = defineProps({
     total: { required: true, type: Number, },
 })
 interface Emits {
-    (e: 'change:page', page: number): void
+    (e: 'update:currentPage', page: number): void
 }
 const emit = defineEmits<Emits>()
 
@@ -20,7 +20,7 @@ const emitPage = (page: number) => {
     if (props.currentPage === page) {
         return;
     }
-    emit('change:page', page);
+    emit('update:currentPage', page);
 }
 const isActive = (page: number) =>  {
     return page === props.currentPage
@@ -98,7 +98,7 @@ const halfOfRange = computed(() => {
                 class="c-pagenation__item c-pagenation__first"
                 @click="emitPage(currentPage - 1)"
             >
-                '&lt;'
+                &lt;
             </li>
         </template>
         <template :key="page" v-for="page in pagination">

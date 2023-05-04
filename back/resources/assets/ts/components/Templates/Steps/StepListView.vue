@@ -24,6 +24,10 @@ const paginationInfo = reactive({
     last_page: 1,
     total: 1,
 })
+const changePage = (page: number) => {
+    condition.page = page
+    fetchData()
+}
 // methods
 const fetchData = () => {
     requestStore.setLoading(true)
@@ -53,6 +57,7 @@ onMounted(() => init())
             </div>
             <div class="p-steps-list__pagination">
                 <PaginationList
+                    @update:current-page="changePage"
                     :currentPage="paginationInfo.current_page"
                     :lastPage="paginationInfo.last_page"
                     :total="paginationInfo.total"
