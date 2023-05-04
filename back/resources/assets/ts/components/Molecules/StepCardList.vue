@@ -6,11 +6,6 @@ import StepCard from '../Atoms/StepCard.vue'
 defineProps({
     stepList: { require: true, type: Array<Step>, }
 })
-// data
-// emits
-// computed
-// watch
-// methods
 </script>
 
 <template>
@@ -48,14 +43,16 @@ defineProps({
 		width: calc((100% - 70px) / 2);
 	}
 }
-@media screen and (min-width: 992px),print {
-	.c-step-card-list__item {
-		width: calc((100% - 105px) / 3);
-	}
-}
-@media screen and (min-width: 1200px),print {
-	.c-step-card-list__item {
-		width: calc((100% - 140px) / 4);
-	}
-}
+// 3列
+// @media screen and (min-width: 992px),print {
+// 	.c-step-card-list__item {
+// 		width: calc((100% - 105px) / 3);
+// 	}
+// }
+// 4列
+// @media screen and (min-width: 1200px),print {
+// 	.c-step-card-list__item {
+// 		width: calc((100% - 140px) / 4);
+// 	}
+// }
 </style>
