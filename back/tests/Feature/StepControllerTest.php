@@ -8,12 +8,16 @@ use App\Models\AchievementTimeType;
 use App\Models\Category;
 use App\Models\ChallengeInformation;
 use App\Models\ChallengeStep;
+use App\Models\ChatGptUsageInformation;
 use App\Models\Step;
 use App\Models\SubStep;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+// use OpenAI\Laravel\Facades\OpenAI;
+// use OpenAI\Responses\Completions\CreateResponse;
+// use OpenAI\Testing\ClientFake;
 
 class StepControllerTest extends TestCase
 {
@@ -287,5 +291,53 @@ class StepControllerTest extends TestCase
         $this->assertFalse(Step::where('id', $step->id)->exists());
         // 子ステップが削除されているか
         $this->assertFalse(SubStep::where('step_id', $step->id)->exists());
+    }
+
+    /**
+     * chat GPT API completionテスト
+     *
+     * TODO: テストでAPI実行しても課金されるので、API処理モック化
+     * @return void
+     */
+    public function test_completion(): void
+    {
+        // TODO: 詳細調べてmock化
+        // $client = new ClientFake([
+        //     CreateResponse::fake([
+        //         'choices' => [
+        //             [
+        //                 'text' => 'awesome!',
+        //             ],
+        //         ],
+        //     ]),
+        // ]);
+
+        $params = ['prompt' => '朝食をしっかりとる']; // 12 token
+        $response = $this->actingAs($this->user)->postJson('/api/steps/completion', $params);
+        // $response->dump();
+        $response->assertOk();
+        $this->assertArrayHasKey('message', $response);
+        // 実行回数が1回になっているか
+        $chat_gpt_usage_information = $this->user->chatGptUsageInformations()->where('date', now()->format('Y-m-d'))->first()->refresh();
+        \Log::info('HIRO:resultの中身' . print_r($chat_gpt_usage_information, true));
+        $this->assertSame(1, $chat_gpt_usage_information->usage_count);
+        // プロンプトが保存されているか
+
+        // 実行回数上限に設定
+        $this->user->chatGptUsageInformations()->updateOrCreate(
+            ['date' => now()->format('Y-m-d')],
+            ['usage_count' => ChatGptUsageInformation::LIMIT_PER_DAY]
+        );
+        $response = $this->actingAs($this->user)->postJson('/api/steps/completion', $params);
+        // 利用回数上限を警告するようになっているか
+        $response->assertForbidden();
+        $response->assertJson(['message' => __('messages.reached_prompt_limit')]);
+
+        // TODO: mock処理のアサーション
+        // OpenAI::assertSent(Completions::class, function (string $method, array $parameters): bool {
+        //     return $method === 'create' &&
+        //         $parameters['model'] === 'text-davinci-003' &&
+        //         $parameters['prompt'] === 'PHP is ';
+        // });
     }
 }

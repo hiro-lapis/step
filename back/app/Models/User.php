@@ -66,4 +66,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Step::class);
     }
+
+    /**
+     * @return HasMany
+     */
+    public function chatGptUsageInformations(): HasMany
+    {
+        return $this->hasMany(ChatGptUsageInformation::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function chatGptPrompts(): HasMany
+    {
+        return $this->hasMany(ChatGptPrompt::class);
+    }
 }

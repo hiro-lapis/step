@@ -39,7 +39,6 @@ axios.defaults.withCredentials = true
 
 // リクエスト実行前の前処理
 axios.interceptors.request.use((req): any => {
-    console.log('req', req)
     return req;
 })
 
@@ -54,10 +53,6 @@ axios.interceptors.response.use(
         const msg = useMessageInfoStore()
         let messages = ''
 
-        // reponse.data.messageがあればそれを表示メッセージに追加
-        if (error.response!.data && error.response!.data.message!) {
-            messages += error.response!.data.message + '\n'
-        }
         // errorsという配列があればメッセージに追加
         if (error.response!.data.errors && typeof error.response!.data.errors === 'object') {
             const keys = Object.keys(error.response!.data.errors)
@@ -67,7 +62,10 @@ axios.interceptors.response.use(
                         messages += e + '\n'
                     }) : ''
             })
+        } else if (error.response!.data && error.response!.data.message!) {
+            messages += error.response!.data.message + '\n'
         }
+        // reponse.data.messageがあればそれを表示メッセージに追加
         // サーバー側からメッセージがない場合は、エラーのステータスコードによってメッセージをセット
         if (messages === '') {
             const res = error.response!

@@ -17,7 +17,12 @@
 
 ## External service
 
-- メール配信サービス 開発環境でのテスト用に使用: [MailTrap](https://mailtrap.io/inboxes)
+- メール配信サービス
+  - [MailTrap](https://mailtrap.io/inboxes): 開発環境テスト用
+  - [Gmail SMTP](https://qiita.com/hiro5963/items/df062ab19e8ceba4573f): 本番送信用
+- 入力サポート機能
+  - [chat GPT API](https://platform.openai.com/docs/api-reference/introduction)
+
 
 ## Conduct
 

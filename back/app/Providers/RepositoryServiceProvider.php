@@ -24,6 +24,8 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\ChallengeSubStep\ChallengeSubStepRepositoryInterface::class => \App\Repositories\ChallengeSubStep\ChallengeSubStepRepository::class,
             \App\Repositories\Step\StepRepositoryInterface::class => \App\Repositories\Step\StepRepository::class,
             \App\Repositories\SubStep\SubStepRepositoryInterface::class => \App\Repositories\SubStep\SubStepRepository::class,
+            \App\Repositories\ChatGptUsageInformation\ChatGptUsageInformationRepositoryInterface::class => \App\Repositories\ChatGptUsageInformation\ChatGptUsageInformationRepository::class,
+            \App\Repositories\ChatGptPrompt\ChatGptPromptRepositoryInterface::class => \App\Repositories\ChatGptPrompt\ChatGptPromptRepository::class,
         ];
         foreach ($to_bind as $interface => $implementation) {
             $this->app->bind($interface, $implementation);

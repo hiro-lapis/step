@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Enums\ChallengeStatusEnum;
 use App\Models\ChallengeStep;
 use App\Models\ChallengeSubStep;
+use App\Models\ChatGptUsageInformation;
 use App\Models\Step;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -60,6 +61,11 @@ class AuthServiceProvider extends ServiceProvider
             // 自身が投稿したステップか
             if ($user->id !== $step->user_id) return false;
             return true;
+        });
+        // chatgptによる入力補完(completion)
+        Gate::define('chat-gpt-completion', function (User $user, ChatGptUsageInformation $chat_gpt_usage_information) {
+            // 1日のchatGPTAPI利用回数上限以下か
+            return ChatGptUsageInformation::LIMIT_PER_DAY > $chat_gpt_usage_information->usage_count;
         });
     }
 }
