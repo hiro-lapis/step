@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted, provide, ref, reactive, readonly } from 'vue'
+import { computed, inject, onMounted, provide, ref, reactive, readonly } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useMessageInfoStore, useRequestStore, useUserStore } from '../../../store/globalStore'
 import StepPreview from '../../Organisms/Steps/StepPreview.vue'
@@ -32,6 +32,7 @@ const createData = reactive<Step>({
 const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 
 // computed
+const pageTitle = computed(() => isEdit.value ? 'ステップ更新' : '新規作成')
 // watch
 // methods
 const initialSubStep = { name: '', detail: '', }
@@ -106,14 +107,14 @@ const completion = async (subStepIndex: number, title: string, text: string) => 
         messageStore.setErrorMessage('利用可能回数が残っていません')
         return
     }
-    if (!confirm("補完機能を利用しますか？") && !userStore.skipApiConfirm) return
+    if (!confirm("サジェスト機能を利用しますか？") && !userStore.skipApiConfirm) return
 
     if (requestStore.isLoading) return
     requestStore.setLoading(true)
     await $repositories.chatGpt.completion(title, text).then(res => {
         // 補完文字列をサブステップの詳細に追加
         createData.sub_steps[subStepIndex].detail += res.data.message
-        messageStore.setMessage("補完が完了しました \n 本日の残り利用可能回数: " + res.data.remain_count + "回")
+        messageStore.setMessage("サジェスト分が入力欄に入力されました \n 本日の残り利用可能回数: " + res.data.remain_count + "回")
         if (res.data.remain_count !== -1) {
             userStore.setRemainCount(res.data.remain_count)
         }
@@ -122,7 +123,10 @@ const completion = async (subStepIndex: number, title: string, text: string) => 
     })
 }
 const subStepLabel = (index: number): string => {
-    return `サブステップ${(index + 1).toString()}`
+    return `サブステップ タイトル${(index + 1).toString()}`
+}
+const displayComplectionExplain = () => {
+    messageStore.setMessage('*chat GPTサジェストを利用したい方は、サブステップのタイトルと詳細の概要を書いてアイコンをクリック、またはshift + Enter を押してください')
 }
 const init = () => {
     // 編集画面か判定
@@ -149,7 +153,7 @@ onMounted(() => {
                     <!-- start:p-form__container -->
                     <div class="p-form__editor">
                         <div class="p-form__head">
-                            <h2 class="c-title">新規作成</h2>
+                            <h2 class="c-title--step-edit">{{ pageTitle }}</h2>
                         </div>
                         <div class="p-form__body">
                             <!-- ステップ名 -->
@@ -180,36 +184,51 @@ onMounted(() => {
                                     required
                                 />
                             </div>
+                            <!-- chat GPT入力補完について -->
+                            <div class="p-form__explain-text">
+                                <span class="c-title--explain-completion" @click="displayComplectionExplain">＊chat GPTサジェストについて</span>
+                            </div>
                             <template :key="index" v-for="(subStep, index) in createData.sub_steps">
                                 <div class="p-form__element">
-                                    <div class="p-form__element">
-                                        <TextInput
-                                            v-model:value="subStep.name"
-                                            :label="subStepLabel(index)"
+                                    <TextInput
+                                        @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
+                                        v-model:value="subStep.name"
+                                        :label="subStepLabel(index)"
+                                    >
+                                    <template v-slot:asideLabel>
+                                        <i v-if="index !== 0" @click="popSubStep(index)" class="c-icon--delete fas fa-times-circle"></i>
+                                    </template>
+                                    </TextInput>
+                                </div>
+                                <div class="p-form__element">
+                                    <TextareaInput
+                                        @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
+                                        v-model:value="subStep.detail"
+                                        height="200"
+                                        :label="'詳細' + (index as number +1).toString()"
+                                        :formId="'substep-' + index.toString()"
+                                    >
+                                    <template v-slot:labelAside>
+                                        <span
+                                            @click="completion(index, subStep.name, subStep.detail)"
                                         >
-                                        <template v-slot:asideLabel>
-                                            <i v-if="index !== 0" @click="popSubStep(index)" class="c-icon--delete fas fa-times-circle"></i>
-                                        </template>
-                                        </TextInput>
-                                    </div>
-                                    <div class="p-form__element">
-                                        <TextareaInput
-                                            @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
-                                            v-model:value="subStep.detail"
-                                            height="200"
-                                            :label="'詳細' + (index as number +1).toString()"
-                                            :formId="'substep-' + index.toString()"
-                                        />
-                                    </div>
+                                            <img
+                                                src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/logos/chat-GPT-logo.png"
+                                                alt="chat-GPTロゴ"
+                                                class="c-img--chat-gpt"
+                                            >
+                                        </span>
+                                    </template>
+                                    </TextareaInput>
                                 </div>
                             </template>
-                            <!-- 子ステップ追加 -->
+                            <!-- サブステップ追加 -->
                             <div class="p-form__bottom">
                                 <button
                                     @click="addSubStep"
                                     class="c-btn c-btn--middle c-btn--add-sub-step"
                                 >
-                                    子ステップ追加
+                                    サブステップ追加
                                 </button>
                             <template v-if="!isEdit">
                                 <button
@@ -245,6 +264,10 @@ onMounted(() => {
 .p-form { // 編集フォームとプレビューのラッパー
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    @include pc() {
+        flex-direction: row;
+    }
     &__editor { // 編集フォーム
         // margin: 0 auto;
         width: 100%;
@@ -276,18 +299,26 @@ onMounted(() => {
     }
     &__bottom { // 登録更新ボタンラッパー
         // 新規作成(ボタンが2つ存在しない)の時のため、2番目のボタンにマージンを設定
+        width: 100%;
         .c-btn:nth-child(2) {
             margin-top: 20px;
         }
+    }
+    &__explain-text {
+        text-align: left;
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 20px;
     }
 }
 
 .p-preview { // プレビュー
     width: 100%;
-    display: flex;
+    display: none;
     box-sizing: border-box;
     text-align: center;
     @include pc() {
+        display: flex;
         width: 600px;
         box-shadow: 0 0 8px #fff;
     }
