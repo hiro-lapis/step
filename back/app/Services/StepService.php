@@ -169,9 +169,7 @@ class StepService
             'category_id' => $original_step->category_id,
             'achievement_time_type_id' => $original_step->achievement_time_type_id,
             'name' => $original_step->name,
-            'image_url' => $original_step->image_url,
             'summary' => $original_step->summary,
-            'merit' => $original_step->merit,
         ];
 
         try {
@@ -186,7 +184,6 @@ class StepService
                     'status' => $sub_step->sort_number == 1 ? ChallengeStatusEnum::Challenging->value : ChallengeStatusEnum::NotChallenged->value, // 最初の子ステップのみチャレンジ状態にする
                     'name' => $sub_step->name,
                     'detail' => $sub_step->detail,
-                    'image_url' => $sub_step->image_url,
                     'sort_number' => $sub_step->sort_number,
                 ];
             })->toArray();

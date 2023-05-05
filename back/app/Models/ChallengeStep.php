@@ -25,9 +25,7 @@ class ChallengeStep extends Model
         'category_id',
         'achievement_time_type_id',
         'name',
-        'image_url',
         'summary',
-        'merit',
     ];
 
     protected $casts = [

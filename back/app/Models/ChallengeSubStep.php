@@ -22,7 +22,6 @@ class ChallengeSubStep extends Model
         'sub_step_id',
         'name',
         'detail',
-        'image_url',
         'sort_number',
     ];
 

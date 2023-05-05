@@ -89,7 +89,6 @@ class ChallengeStepControllerTest extends TestCase
 
         $response = $this->actingAs($this->user)->getJson('/api/challenge-steps/' . $challenge_step->id);
 
-        // $response->dump();
         $response->assertJson([
             'id' => $challenge_step->id,
             'post_user_id' => $step->user_id,
@@ -166,11 +165,11 @@ class ChallengeStepControllerTest extends TestCase
         $this->assertSame(1, $challenge->fail_count);
 
         // クリアAPI実行し、チャレンジ状況(サブステップ)が更新されているか
+        $challenge_step->update(['status' => ChallengeStatusEnum::Challenging]);
         $response = $this->actingAs($this->user)->putJson('/api/challenge-steps/clear', [
             'challenge_step_id' => $challenge_step->id,
             'challenge_sub_step_id' => $challenge_step->challengeSubSteps[0]->id,
         ]);
-        $response->dump();
         $response->assertOk();
 
         // 達成済に更新し、チャレンジ状況の情報が更新されているか
@@ -180,7 +179,5 @@ class ChallengeStepControllerTest extends TestCase
         $this->assertSame(0, $challenge->challenging_count);
         $this->assertSame(1, $challenge->clear_count);
         $this->assertSame(0, $challenge->fail_count);
-
-
     }
 }

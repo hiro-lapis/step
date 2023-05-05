@@ -8,7 +8,7 @@ export type Step = {
     category_id: number
     user_id?: number
     name: string
-    merit: string|null
+    summary: string
     sub_steps: SubStep[]
     achievement_time_type_id: number
     sub_steps_count?: number

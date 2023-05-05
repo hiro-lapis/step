@@ -20,7 +20,7 @@ const step = ref<Step>({
     category_id: 0,
     user_id: 0,
     name: '',
-    merit: '',
+    summary: '',
     sub_steps: [],
     achievement_time_type_id: 0,
     achievement_time_type: { id: 0, name: ''},

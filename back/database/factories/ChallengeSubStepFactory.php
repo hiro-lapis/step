@@ -27,7 +27,6 @@ class ChallengeSubStepFactory extends Factory
             'sub_step_id' => null,
             'name' => fake()->text(),
             'detail' => fake()->text(),
-            'image_url' => fake()->imageUrl(),
             'sort_number' => fake()->unique()->randomDigit(),
         ];
     }

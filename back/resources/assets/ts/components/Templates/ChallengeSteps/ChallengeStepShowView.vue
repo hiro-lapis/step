@@ -29,7 +29,7 @@ const step = ref<ChallengeStep>()
 //     post_user_id: 0,
 //     category_id: 0,
 //     name: '',
-//     merit: '',
+//     summary: '',
 //     challenge_sub_steps: [],
 //     challenge_sub_steps_count: 0,
 //     cleared_sub_steps_count: 0,
