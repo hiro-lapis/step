@@ -39,7 +39,6 @@ axios.defaults.withCredentials = true
 
 // リクエスト実行前の前処理
 axios.interceptors.request.use((req): any => {
-    console.log('req', req)
     return req;
 })
 
@@ -49,25 +48,25 @@ axios.interceptors.response.use(
     (res): any => {
         return res;
     },
-    (error: AxiosError<{ message?: string, errors?: Array<Record<string, string>>}>) => {
+    // 構造例: errors: [name: ['入力必須です', '文字数が多すぎます']]]
+    (error: AxiosError<{ message?: string, errors?: Array<Record<string, Record<string, string>>>}>) => {
         // pinia初期化後のinterceptor内でstore使用
         const msg = useMessageInfoStore()
         let messages = ''
 
-        // reponse.data.messageがあればそれを表示メッセージに追加
-        if (error.response!.data && error.response!.data.message!) {
-            messages += error.response!.data.message + '\n'
-        }
         // errorsという配列があればメッセージに追加
         if (error.response!.data.errors && typeof error.response!.data.errors === 'object') {
             const keys = Object.keys(error.response!.data.errors)
             // 各項目の配列形式で入っているバリデーションメッセージを改行区切りでセット
             keys.forEach((key) => {
-                    error.response!.data.errors?[key].forEach(e => {
+                    error.response!.data.errors![key].forEach(e => {
                         messages += e + '\n'
-                    }) : ''
+                    })
             })
+        } else if (error.response!.data && error.response!.data.message!) {
+            messages += error.response!.data.message + '\n'
         }
+        // reponse.data.messageがあればそれを表示メッセージに追加
         // サーバー側からメッセージがない場合は、エラーのステータスコードによってメッセージをセット
         if (messages === '') {
             const res = error.response!

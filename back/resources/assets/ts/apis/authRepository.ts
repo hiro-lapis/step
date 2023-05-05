@@ -36,8 +36,9 @@ export class AuthRepository {
 
 type IsLoginResponse = {
     is_login: boolean,
-    user?: User,
-    step_ids: number[]
+    user?: { id: number, name: string, email: string, profile: string, image_url: string, skip_api_confirm: boolean, },
+    step_ids: number[],
+    remain_count: number,
 }
 
 type LoginResponse = User

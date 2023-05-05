@@ -92,6 +92,35 @@ const getStep = () => {
                 }
             })
 }
+
+const completion = async (subStepIndex: number, title: string, text: string) => {
+    if (!title.trim() || !text.trim()) {
+        messageStore.setErrorMessage(subStepLabel(subStepIndex) + 'のタイトルとテキストを入力してください')
+        return
+    }
+    if (title.length > 255 || text.length > 255) {
+        messageStore.setErrorMessage('タイトル,本文それぞれ100文字以内で入力してください')
+        return
+    }
+    if (userStore.existsRemainCount) {
+        messageStore.setErrorMessage('利用可能回数が残っていません')
+        return
+    }
+    if (!confirm("補完機能を利用しますか？") && !userStore.skipApiConfirm) return
+
+    if (requestStore.isLoading) return
+    requestStore.setLoading(true)
+    await $repositories.chatGpt.completion(title, text).then(res => {
+        // 補完文字列をサブステップの詳細に追加
+        createData.sub_steps[subStepIndex].detail += res.data.message
+        messageStore.setMessage("補完が完了しました \n 本日の残り利用可能回数: " + res.data.remain_count + "回")
+        if (res.data.remain_count !== -1) {
+            userStore.setRemainCount(res.data.remain_count)
+        }
+    }).finally(() => {
+        requestStore.setLoading(false)
+    })
+}
 const subStepLabel = (index: number): string => {
     return `サブステップ${(index + 1).toString()}`
 }
@@ -165,6 +194,7 @@ onMounted(() => {
                                     </div>
                                     <div class="p-form__element">
                                         <TextareaInput
+                                            @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
                                             v-model:value="subStep.detail"
                                             height="200"
                                             :label="'詳細' + (index as number +1).toString()"

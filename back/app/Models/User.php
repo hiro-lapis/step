@@ -26,6 +26,7 @@ class User extends Authenticatable
         'profile',
         'image_url',
         'password',
+        'skip_api_confirm',
     ];
 
     /**
@@ -45,6 +46,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'skip_api_confirm' => 'boolean',
     ];
 
     /** accessor */
@@ -65,5 +67,21 @@ class User extends Authenticatable
     public function steps(): HasMany
     {
         return $this->hasMany(Step::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function chatGptUsageInformations(): HasMany
+    {
+        return $this->hasMany(ChatGptUsageInformation::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function chatGptPrompts(): HasMany
+    {
+        return $this->hasMany(ChatGptPrompt::class);
     }
 }

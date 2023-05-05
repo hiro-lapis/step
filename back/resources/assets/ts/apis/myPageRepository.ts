@@ -16,7 +16,7 @@ export class MyPageRepository {
     async user(): Promise<AxiosResponse<UserResponse>> {
         return await axios.get(`${this.userUrl}`)
     }
-    async update(data: { name: string, email: string, profile: string }, files: File|null): Promise<AxiosResponse<UpdateProfileResponse>> {
+    async update(data: { name: string, email: string, profile: string, skip_api_confirm: boolean }, files: File|null): Promise<AxiosResponse<UpdateProfileResponse>> {
         /**
          * パラメータを設定
          * 画像アップロードとフォームデータを同時送信する場合、下記に注意
@@ -26,6 +26,8 @@ export class MyPageRepository {
         params.append('name', data.name)
         params.append('email', data.email)
         params.append('profile', data.profile)
+        // FormData送信のため文字列で送信
+        params.append('skip_api_confirm', data.skip_api_confirm ? '1' : '0')
         if (!!files) {
             params.append('file', files)
         }

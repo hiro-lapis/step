@@ -5,23 +5,24 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Steps\ChallengeRequest;
+use App\Http\Requests\Steps\CompletionRequest;
 use App\Http\Requests\Steps\CreateRequest;
 use App\Http\Requests\Steps\DeleteRequest;
 use App\Http\Requests\Steps\UpdateRequest;
 use App\Http\Requests\Steps\IndexRequest;
 use App\Http\Requests\Steps\ShowRequest;
+use App\Services\ChatGptService;
 use App\Services\StepService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class StepController extends Controller
 {
-    private StepService $step_service;
-
-    public function __construct(StepService $step_service)
-    {
-        $this->step_service = $step_service;
-    }
+    public function __construct(
+        private StepService $step_service,
+        private ChatGptService $chat_gpt_service
+        )
+    {}
 
     /**
      * Display a listing of the resource.
@@ -91,5 +92,20 @@ class StepController extends Controller
     {
         $result = $this->step_service->delete($request->validated());
         return response()->json(['message' => $result['message']], $result['status']);
+    }
+
+    /**
+     * chat GPT API 実行による入力補完
+     *
+     * @param CompletionRequest $request
+     * @return JsonResponse
+     */
+    public function completion(CompletionRequest $request): JsonResponse
+    {
+        $result = $this->chat_gpt_service->completion($request->validated());
+        return response()->json(
+            ['message' => $result['message'], 'remain_count' => $result['remain_count']],
+            $result['status']
+        );
     }
 }

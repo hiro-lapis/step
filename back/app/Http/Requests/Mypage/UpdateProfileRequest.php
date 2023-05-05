@@ -31,6 +31,7 @@ class UpdateProfileRequest extends FormRequest
             // 画像ファイル(10mb迄)
             'file' => ['sometimes', 'max:10240', 'mimes:jpg,bmp,png'],
             'profile' => ['nullable', 'string'],
+            'skip_api_confirm' => ['required', 'boolean'],
         ];
     }
 }

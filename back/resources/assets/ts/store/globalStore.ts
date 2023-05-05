@@ -5,14 +5,22 @@ import { User } from '../types/User'
 
 export const useUserStore = defineStore('user', () => {
     // data
-    const user = useLocalStorage<User>('user', { id: -1, name: 'hoge', image_url: '', email: 'hoge@gmail.com', profile: ''})
+    const user = useLocalStorage<User>('user',
+        { id: -1, name: '', image_url: '', email: 'hoge@gmail.com', profile: '' }
+    )
     const challengingStepIds = useLocalStorage<number[]>('challengingStepIds', [])
+    const remainCount = useLocalStorage<number>('remainCount', 0)
+
     const login = useLocalStorage('login', false)
     // computed
     const isLogin = computed(() => login.value)
+    const existsRemainCount = computed(() => remainCount.value > 0)
+    const skipApiConfirm = computed(() => user.value.skip_api_confirm)
     // methods
     const initUser = () => user.value = { id: -1, name: '', image_url: '', email: '', profile: ''}
     const setUser = (newUser: User) => user.value = newUser
+    const setRemainCount = (newRemainCount: number) => remainCount.value = newRemainCount
+    const initRemainCount = () => remainCount.value = 0
     const setChallengingStepId = (newChallengingStepId: number) => {
         if (challengingStepIds.value.includes(newChallengingStepId)) {
             return
@@ -43,6 +51,10 @@ export const useUserStore = defineStore('user', () => {
         login,
         isLogin,
         challengingStepIds,
+        existsRemainCount,
+        skipApiConfirm,
+        setRemainCount,
+        initRemainCount,
         setLogin,
         setUser,
         initUser,

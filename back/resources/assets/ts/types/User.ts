@@ -4,4 +4,5 @@ export type User = {
     image_url: string | null,
     email: string,
     profile: string,
+    skip_api_confirm?: boolean,
 }

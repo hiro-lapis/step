@@ -191,4 +191,34 @@ class MyPageControllerTest extends TestCase
         $this->assertSame(5, count($response->json('steps')));
         $this->assertSame($response->json('steps')[0]['id'], $steps[0]->id);
     }
+
+    public function test_isLogin(): void
+    {
+        $response = $this->getJson('/api/is-login');
+        $response->assertOk();
+        // 未ログイン状態の情報が返っているか
+        $response->assertJson([
+            'user' => null,
+            'step_ids' => [],
+            'is_login' => false,
+            'remain_count' => 0,
+        ]);
+
+        $response = $this->actingAs($this->user)->getJson('/api/is-login');
+        $response->assertOk();
+        $response->dump();
+        // ログイン状態の情報が返っているか
+        $response->assertJson([
+            'user' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+                'image_url' => $this->user->image_url,
+                'profile' => $this->user->profile,
+            ],
+            'step_ids' => [],
+            'is_login' => true,
+            'remain_count' => 100,
+        ]);
+    }
 }
