@@ -15,7 +15,6 @@ class SubStep extends Model
         'step_id',
         'name',
         'detail',
-        'image_url',
         'sort_number',
     ];
 

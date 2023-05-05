@@ -185,6 +185,7 @@ return [
         'summary'               => '概要',
         'sub_steps'               => 'サブステップ',
         'title'                 => 'タイトル',
+        'skip_api_confirm'       => 'API利用確認スキップ設定',
     ],
 
 ];

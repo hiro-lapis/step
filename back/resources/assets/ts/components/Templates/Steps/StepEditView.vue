@@ -23,7 +23,7 @@ const isEdit = ref(false)
 const createData = reactive<Step>({
     id: 0,
     name: '',
-    merit: '',
+    summary: '',
     category_id: 0,
     achievement_time_type_id: 0,
     sub_steps: [{ name: '', detail: '', }],
@@ -79,7 +79,7 @@ const getStep = () => {
                 const step = res.data
                 createData.id = step.id!
                 createData.name = step.name
-                createData.merit = step.merit
+                createData.summary = step.summary
                 createData.category_id = step.category_id
                 createData.achievement_time_type_id = step.achievement_time_type_id
                 createData.sub_steps = step.sub_steps
@@ -182,6 +182,14 @@ onMounted(() => {
                                     v-model:value="createData.achievement_time_type_id"
                                     label="達成目安時間"
                                     required
+                                />
+                            </div>
+                            <!-- 概要 -->
+                            <div class="p-form__element">
+                                <TextareaInput
+                                    v-model:value="createData.summary"
+                                    height="100"
+                                    label="概要"
                                 />
                             </div>
                             <!-- chat GPT入力補完について -->

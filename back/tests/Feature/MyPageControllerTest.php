@@ -82,12 +82,15 @@ class MyPageControllerTest extends TestCase
         $params = [
             'name' => 'foo',
             'email' => 'foo@bar.com',
+            'skip_api_confirm' => 'hoge',
         ];
         $response = $this->actingAs($this->user)->postJson('/api/mypage/profile', $params);
         // メールアドレス重複の422エラーを確認
         $response->assertJson([
             'errors' => [
                 'email' => ['メールアドレスは既に存在します'],
+                'skip_api_confirm' => ['API利用確認スキップ設定の値は true もしくは false のみ有効です'],
+
             ],
         ]);
         $response->assertUnprocessable();
@@ -95,6 +98,7 @@ class MyPageControllerTest extends TestCase
             'name' => 'foo',
             'email' => 'hoge@bar.com',
             'profile' => 'テストプロフィール',
+            'skip_api_confirm' => '1',
         ];
         $response = $this->actingAs($this->user)->postJson('/api/mypage/profile', $params);
         $response->assertOk();
@@ -104,6 +108,7 @@ class MyPageControllerTest extends TestCase
         $this->assertSame($params['name'], $this->user->name);
         $this->assertSame($params['email'], $this->user->email);
         $this->assertSame($params['profile'], $this->user->profile);
+        $this->assertSame(true, $this->user->skip_api_confirm);
     }
 
     public function test_updateProfileImage(): void
@@ -111,10 +116,13 @@ class MyPageControllerTest extends TestCase
         // アップロード処理をスタブ
         Storage::fake('s3');
         $file = UploadedFile::fake()->image('test_user_account.png');
+        $update_profile = fake()->text();
         $params = [
             'name' => $this->user->name,
             'email' => $this->user->email,
             'file' => $file,
+            'prifile' => $update_profile = fake()->text(),
+            'skip_api_confirm' => '1' // フロントの実装に合わせて文字列で送信
         ];
         // アカウント画像ファイルのアップロード
         $response = $this->actingAs($this->user)->postJson('/api/mypage/profile', $params);
@@ -187,7 +195,6 @@ class MyPageControllerTest extends TestCase
             ]);
         $response = $this->actingAs($this->user)->getJson('/api/mypage/challenging-step');
         $response->assertOk();
-        $response->dump();
         $this->assertSame(5, count($response->json('steps')));
         $this->assertSame($response->json('steps')[0]['id'], $steps[0]->id);
     }
@@ -206,7 +213,6 @@ class MyPageControllerTest extends TestCase
 
         $response = $this->actingAs($this->user)->getJson('/api/is-login');
         $response->assertOk();
-        $response->dump();
         // ログイン状態の情報が返っているか
         $response->assertJson([
             'user' => [

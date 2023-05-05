@@ -35,7 +35,6 @@ const getShowRoute = computed(() => {
 })
 
 // methods
-const stepMerit = (merit: string|null) => merit === null ? '　' : merit
 const { isChallengeStep } = useTypeGuards()
 const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step.status_name : ''
 </script>
@@ -44,7 +43,6 @@ const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step
     <router-link :to="getShowRoute" class="c-step-card">
         <h2 class="c-step-card__title u-spread">{{ step!.name }}</h2>
         <p class="c-step-card__txt u-spread">
-            <p>{{ stepMerit(step!.merit!) }}</p>
             <div class="u-margin-b-05p">
                 <CategoryBadge :id="step!.category_id" />
                 <!-- チャレンジ進捗 -->

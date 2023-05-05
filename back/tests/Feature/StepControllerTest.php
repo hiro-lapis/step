@@ -71,7 +71,7 @@ class StepControllerTest extends TestCase
         $response->assertUnprocessable();
     }
 
-    public function test_storeCoorectStepData(): void
+    public function test_storeCorrectStepData(): void
     {
         // 登録前のデータ状況を確認
         $this->assertDatabaseCount('steps', 0);
@@ -88,6 +88,7 @@ class StepControllerTest extends TestCase
             'name' => 'テストだよ',
             'category_id' => $this->category->id,
             'achievement_time_type_id' => $this->achievement_time_type->id,
+            'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
         ];
         $this->actingAs($this->user)->postJson('/api/steps', $params);
@@ -96,6 +97,7 @@ class StepControllerTest extends TestCase
         $this->assertDatabaseCount('steps', 1);
         $result = Step::first();
         $this->assertSame($params['name'], $result->name);
+        $this->assertSame($params['summary'], $result->summary);
         $this->assertSame($this->user->id, $result->user_id);
         $this->assertSame($this->category->id, $result->category_id);
         $this->assertSame($params['achievement_time_type_id'], $result->achievement_time_type_id);
@@ -140,7 +142,6 @@ class StepControllerTest extends TestCase
         $response = $this->getJson('/api/steps/' . $step->id);
 
         // \Log::info('HIRO:responseの中身' . print_r(($response), true));
-        // $response->dump();
         $step = Step::find($step->id);
         $response->assertJson([
             'id' => $step->id,
@@ -255,7 +256,6 @@ class StepControllerTest extends TestCase
             'sub_steps' => $sub_steps,
         ];
         $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
-        $response->dump();
         $response->assertOk();
         // 更新後の情報と比較
         $step->refresh();
@@ -285,7 +285,6 @@ class StepControllerTest extends TestCase
             ]);
         // ステップ削除
         $response = $this->actingAs($this->user)->deleteJson('/api/steps/delete', ['id' => $step->id]);
-        $response->dump();
         $response->assertOk();
         // ステップが削除されているか
         $this->assertFalse(Step::where('id', $step->id)->exists());
@@ -313,15 +312,15 @@ class StepControllerTest extends TestCase
         // ]);
 
         $params = ['title' => '健康的にダイエット', 'prompt' => '朝食をしっかりとる']; // 12 token
-        $response = $this->actingAs($this->user)->postJson('/api/chat-gpt/completion', $params);
-        $response->dump();
-        $response->assertOk();
-        $this->assertArrayHasKey('message', $response);
-        $this->assertArrayHasKey('remain_count', $response);
+
+        // NOTE: API mock 化できてないので、必要時のみコメントアウト解除
+        // $response = $this->actingAs($this->user)->postJson('/api/chat-gpt/completion', $params);
+        // $response->assertOk();
+        // $this->assertArrayHasKey('message', $response);
+        // $this->assertArrayHasKey('remain_count', $response);
         // 実行回数が1回になっているか
-        $chat_gpt_usage_information = $this->user->chatGptUsageInformations()->where('date', now()->format('Y-m-d'))->first()->refresh();
-        $this->assertSame(1, $chat_gpt_usage_information->usage_count);
-        // プロンプトが保存されているか
+        // $chat_gpt_usage_information = $this->user->chatGptUsageInformations()->where('date', now()->format('Y-m-d'))->first()->refresh();
+        // $this->assertSame(1, $chat_gpt_usage_information->usage_count);
 
         // 実行回数上限に設定
         $this->user->chatGptUsageInformations()->updateOrCreate(
@@ -331,6 +330,7 @@ class StepControllerTest extends TestCase
         $response = $this->actingAs($this->user)->postJson('/api/chat-gpt/completion', $params);
         // 利用回数上限を警告するようになっているか
         $response->assertForbidden();
+        // プロンプトが保存されているか
         $response->assertJson(['message' => __('messages.reached_prompt_limit')]);
 
         // TODO: mock処理のアサーション

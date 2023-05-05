@@ -17,10 +17,8 @@ class Step extends Model
         'user_id',
         'category_id',
         'name',
-        'achievement_time_type_id',
-        'image_url',
         'summary',
-        'merit',
+        'achievement_time_type_id',
     ];
 
     protected $casts = [

@@ -28,9 +28,7 @@ class ChallengeStepFactory extends Factory
             'category_id' => null,
             'achievement_time_type_id' => null,
             'name' => fake()->text(),
-            'image_url' => fake()->imageUrl(),
             'summary' => fake()->text(),
-            'merit' => fake()->text(),
         ];
     }
 }

@@ -24,7 +24,6 @@ return new class extends Migration
             $table->unsignedBigInteger('sub_step_id')->comment('元となるサブステップのID');
             $table->string('name')->comment('サブステップ名');
             $table->string('detail')->comment('詳細');
-            $table->string('image_url')->nullable()->comment('サブステップのサムネイル画像URL');
             $table->unsignedTinyInteger('sort_number')->comment('並び順');
             $table->timestamps();
             $table->softDeletes();

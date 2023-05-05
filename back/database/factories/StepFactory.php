@@ -21,9 +21,7 @@ class StepFactory extends Factory
             'user_id' => null,
             'category_id' => null,
             'achievement_time_type_id' => null,
-            'image_url' => fake()->imageUrl(),
             'summary' => fake()->text(),
-            'merit' => fake()->text(),
         ];
     }
 }
