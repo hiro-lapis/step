@@ -51,6 +51,7 @@ const emitKeyPressShiftEnter = () => {
                 <template v-if="required">
                     <RequiredBadge />
                 </template>
+                <slot name="labelAside"></slot>
                 <template v-if="counter">
                     <span class="c-textare__counter">({{ count }} 文字)</span>
                 </template>

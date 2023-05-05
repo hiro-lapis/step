@@ -21,8 +21,9 @@ const props = defineProps({
 
 // emits
 interface Emits {
-    (e: 'update:value', value: string): void;
-    (e: 'keyupEnter'): void;
+    (e: 'update:value', value: string): void
+    (e: 'keyupEnter'): void
+    (e: 'keyDown:shiftEnter'): void
 }
 const emit = defineEmits<Emits>()
 
@@ -44,6 +45,9 @@ const input = (event: Event) => {
 }
 // enter押下後にイベント発行 処理実行するかどうかは親側の実装に任せる
 const handleEnter = () => emit('keyupEnter')
+const emitKeyPressShiftEnter = () => {
+    emit('keyDown:shiftEnter')
+}
 </script>
 
 <template>
@@ -69,6 +73,7 @@ const handleEnter = () => emit('keyupEnter')
             :type="type"
             @input="$event => input($event)"
             @keyup.enter="handleEnter()"
+            @keydown.shift.enter="emitKeyPressShiftEnter"
             class="c-input"
             :id="formId"
             :class="[{noErrorMessage: inline}, className ]"
