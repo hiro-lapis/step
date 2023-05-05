@@ -25,6 +25,7 @@ class CreateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
+            'summary' => ['nullable', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
             'achievement_time_type_id' => ['required', 'exists:achievement_time_types,id'],
             'sub_steps' => ['array', 'min:1'],

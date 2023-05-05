@@ -26,6 +26,7 @@ class UpdateRequest extends FormRequest
         return [
             'id' => ['required', 'exists:steps,id'],
             'name' => ['required', 'max:255'],
+            'summary' => ['nullable', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
             'achievement_time_type_id' => ['required', 'exists:achievement_time_types,id'],
             'sub_steps' => ['array', 'min:1'],

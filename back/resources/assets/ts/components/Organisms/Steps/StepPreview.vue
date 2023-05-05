@@ -49,7 +49,9 @@ const { isChallengeStep, isChallengeSubStep } = useTypeGuards()
 //         return props.step.challenge_sub_steps!
 //     }
 // })
-
+const settedSummary = computed(() => {
+    return props.step.summary !== null && props.step.summary !== ''
+})
 // methods
 const { isInChallenge, isCleard } = ChallengeStatusJudgement()
 // サブステップのインデックスを文字列で返す
@@ -138,6 +140,10 @@ const clear = async (subStepId: number) => {
                         <span class="u-margin-l-1p">投稿日:{{ step.created_at }}</span>
                     </template>
                 </div>
+                <div v-if="settedSummary" class="c-step-preview__summary">
+                    <h2 class="c-title--step-summary u-margin-b-1p">概要</h2>
+                    <p>{{ step.summary }}</p>
+                </div>
             </div>
             <!-- ステップ詳細 -->
             <div class="c-step-preview__body">
@@ -148,7 +154,7 @@ const clear = async (subStepId: number) => {
                             <div class="c-sub-step">
                                 <!-- サブステップ見出し -->
                                 <div class="c-sub-step__header">
-                                    <div class="c-title--sub-step">
+                                    <h3 class="c-title--sub-step">
                                         <span class="c-sub-step__header--prefix">ステップ{{ indexString(i) + ' ' }}</span>
                                         <span class="c-sub-step__header--name">{{ subStep.name }}</span>
                                         <template v-if="isChallengeSubStep(subStep)">
@@ -156,7 +162,7 @@ const clear = async (subStepId: number) => {
                                                 {{ subStep.status_name! }}
                                             </span>
                                         </template>
-                                    </div>
+                                    </h3>
                                 </div>
                                 <!-- サブステップ詳細 -->
                                 <div class="c-sub-step__content">{{ subStep.detail }}</div>
