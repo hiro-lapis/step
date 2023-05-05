@@ -3,22 +3,37 @@
 defineProps({
     label : { required: true, type: String, },
     side : { required: true, type: String, validator: (v: string) => ['left', 'right'].includes(v), default: 'right' },
-    value: { required: false, type:String, default: '', }, // 親と連携するvalue
+    value: { required: false, type: Boolean, default: false, }, // 親と連携するvalue
     className: { required: false, type: String, default: '', },
 })
+
+interface Emits {
+    (e: 'update:value', checked: boolean): void;
+}
+const emit = defineEmits<Emits>()
+
 // data
 // computed
 // methods
+const input = (event: Event) => {
+    const val = (event.target as HTMLInputElement).checked
+    emit('update:value', val)
+}
 </script>
 <template>
     <label class="c-single-checkbox">
-        <input class="c-single-checkbox__input" type="checkbox">
+        <input
+            class="c-single-checkbox__input"
+            type="checkbox"
+            :value="value"
+            @change="input"
+        >
         <span class="c-single-checkbox__cover"></span>
         <span class="c-single-checkbox__label-text">{{ label }}</span>
     </label>
 </template>
 <style scoped lang="scss">
-$box-size: 20px;
+$box-size: 18px;
 .c-single-checkbox {
     &__input {
         margin: 0;
@@ -28,8 +43,8 @@ $box-size: 20px;
     &__cover { // チェックボックスの見た目
         transition: all .3s;
         position: relative;
-        top: 0;
-        left: 0;
+        top: 2px;
+        left: 2px;
         display: inline-block;
         width: $box-size;
         height: $box-size;
@@ -38,10 +53,8 @@ $box-size: 20px;
     }
     &__label-text {
         margin-left: 5px;
-        display: inline-block;
+        // display: inline-block;
         vertical-align: text-top;
-        font-size: 10px;
-        font-weight: bold;
     }
     &:hover > .c-single-checkbox__cover {
         background: #ccc;
@@ -57,7 +70,7 @@ $box-size: 20px;
 .c-single-checkbox__input:checked + .c-single-checkbox__cover {  // チェック時の背景
     background: #1da1f2;
 }
-.c-single-checkbox__input:checked + .c-single-checkbox__cover::before { // チェック左側
+.c-single-checkbox__input:checked + .c-single-checkbox__cover::before { // チェックマーク左側
     content: "";
     display: block;
     position: absolute;
@@ -69,7 +82,7 @@ $box-size: 20px;
     transform-origin: 1px 1px;
     background: #fff;
 }
-.c-single-checkbox__input:checked + .c-single-checkbox__cover::after {// チェック右側
+.c-single-checkbox__input:checked + .c-single-checkbox__cover::after {// チェックマーク右側
     content: "";
     display: block;
     position: absolute;

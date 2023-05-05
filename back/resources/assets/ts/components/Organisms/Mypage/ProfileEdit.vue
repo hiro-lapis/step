@@ -7,6 +7,7 @@ import PasswordModal from '../../Molecules/PasswordModal.vue'
 import TextInput from '../../Atoms/TextInput.vue'
 import TextareaInput from '../../Atoms/TextareaInput.vue'
 import UploadUserImage from '../../Atoms/UploadUserImage.vue'
+import SingleCheckbox from '../../Atoms/SingleCheckbox.vue'
 
 // utilities
 const messageStore = useMessageInfoStore()
@@ -21,6 +22,7 @@ const user = reactive<User>({
     image_url:'',
     email: '',
     profile: '',
+    skip_api_confirm: false,
 })
 const passwordUpdateMode = ref(false)
 // const uploadImage = ref<InstanceType<typeof UploadUserImage>>()
@@ -38,6 +40,7 @@ const fetchData = () => {
             user.email = response.data.user.email
             user.image_url = response.data.user.image_url
             user.profile = response.data.user.profile
+            user.skip_api_confirm = response.data.user.skip_api_confirm
         })
 }
 
@@ -47,6 +50,7 @@ const update = () => {
         name: user.name,
         email: user.email,
         profile: user.profile,
+        skip_api_confirm: user.skip_api_confirm!,
     }
 
     let file: File|null = null
@@ -126,6 +130,13 @@ onMounted(() => {
                 placeHoler="自己紹介文"
                 counter
                 height="200"
+            />
+        </div>
+        <div class="c-multi-page--profile__element">
+            <SingleCheckbox
+                label="API利用確認スキップ"
+                v-model:value="user.skip_api_confirm"
+                formId="skip_api_confirm"
             />
         </div>
         <div class="c-multi-page--profile__btn-container">
