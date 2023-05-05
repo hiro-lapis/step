@@ -28,7 +28,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // ステップ新規作成
     Route::post('/steps', [StepController::class, 'store'])->name('steps.store');
     Route::post('/steps/challenges', [StepController::class, 'challenge'])->name('steps.challenge');
-    Route::post('/steps/completion', [StepController::class, 'completion'])->name('steps.completion');
+    Route::post('/chat-gpt/completion', [StepController::class, 'completion'])->name('steps.completion');
     // ステップ更新
     Route::put('/steps/edit', [StepController::class, 'update'])->name('steps.update');
     Route::delete('/steps/delete', [StepController::class, 'destroy'])->name('steps.destroy');

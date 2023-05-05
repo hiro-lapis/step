@@ -27,6 +27,7 @@ onMounted(() => {
             userStore.setLogin(true)
             userStore.setUser(response.data.user!)
             userStore.setChallengingStepIds(response.data.step_ids)
+            userStore.setRemainCount(response.data.remain_count)
             // ログイン中で未ログイン限定ページを表示中ならログイン後のTOP画面へ
             if (isGuestOnlyPage) {
                 router.push({ name: 'steps-list' })
@@ -34,6 +35,7 @@ onMounted(() => {
         } else {
             userStore.setLogin(false)
             userStore.initUser()
+            userStore.initRemainCount()
             // ログイン状態のページを表示中 state更新しログイン画面へ
             if (!isGuestPage) {
                 router.push({ name:'login' })

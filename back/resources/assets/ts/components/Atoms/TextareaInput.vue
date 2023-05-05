@@ -18,6 +18,8 @@ const props = defineProps({
 })
 interface Emit {
     (e: 'update:value', value: string)
+    (e: 'keyDown:shiftEnter')
+
 }
 const emit = defineEmits<Emit>()
 
@@ -35,6 +37,9 @@ const input = (event: Event) => {
         errorMessage.value = typeof result === 'string' ? result : ''
     })
     emit('update:value', val)
+}
+const emitKeyPressShiftEnter = () => {
+    emit('keyDown:shiftEnter')
 }
 </script>
 
@@ -58,6 +63,7 @@ const input = (event: Event) => {
         <!-- cols/rowsは指定せず、スタイリングで調整 -->
         <textarea
             :value="value"
+            @keydown.shift.enter="emitKeyPressShiftEnter"
             @input="$event => input($event)"
             :id="formId"
             :class="className"

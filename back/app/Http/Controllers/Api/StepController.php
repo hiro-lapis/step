@@ -103,6 +103,9 @@ class StepController extends Controller
     public function completion(CompletionRequest $request): JsonResponse
     {
         $result = $this->chat_gpt_service->completion($request->validated());
-        return response()->json(['message' => $result['message']], $result['status']);
+        return response()->json(
+            ['message' => $result['message'], 'remain_count' => $result['remain_count']],
+            $result['status']
+        );
     }
 }

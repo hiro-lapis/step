@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Mypage\UpdateProfileRequest;
 use App\Models\User;
 use App\Services\ChallengeStepService;
+use App\Services\ChatGptService;
 use App\Services\StepService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,8 @@ class MypageController extends Controller
 {
     public function __construct(
         private StepService $step_service,
-        private ChallengeStepService $challenge_step_service
+        private ChallengeStepService $challenge_step_service,
+        private ChatGptService $chat_gpt_service
     )
     {}
 
@@ -84,9 +86,11 @@ class MypageController extends Controller
         $is_login = $user ? true : false;
 
         $step_ids = [];
+        $remain_count = 0;
         if ($is_login) {
             $step_ids = $this->challenge_step_service->getUserChallengeStepIds($user->id);
+            $remain_count = $this->chat_gpt_service->getRemainCount($user->id);
         }
-        return response()->json(compact('user', 'is_login', 'step_ids'));
+        return response()->json(compact('user', 'is_login', 'step_ids', 'remain_count'));
     }
 }

@@ -312,14 +312,14 @@ class StepControllerTest extends TestCase
         //     ]),
         // ]);
 
-        $params = ['prompt' => '朝食をしっかりとる']; // 12 token
-        $response = $this->actingAs($this->user)->postJson('/api/steps/completion', $params);
-        // $response->dump();
+        $params = ['title' => '健康的にダイエット', 'prompt' => '朝食をしっかりとる']; // 12 token
+        $response = $this->actingAs($this->user)->postJson('/api/chat-gpt/completion', $params);
+        $response->dump();
         $response->assertOk();
         $this->assertArrayHasKey('message', $response);
+        $this->assertArrayHasKey('remain_count', $response);
         // 実行回数が1回になっているか
         $chat_gpt_usage_information = $this->user->chatGptUsageInformations()->where('date', now()->format('Y-m-d'))->first()->refresh();
-        \Log::info('HIRO:resultの中身' . print_r($chat_gpt_usage_information, true));
         $this->assertSame(1, $chat_gpt_usage_information->usage_count);
         // プロンプトが保存されているか
 
@@ -328,7 +328,7 @@ class StepControllerTest extends TestCase
             ['date' => now()->format('Y-m-d')],
             ['usage_count' => ChatGptUsageInformation::LIMIT_PER_DAY]
         );
-        $response = $this->actingAs($this->user)->postJson('/api/steps/completion', $params);
+        $response = $this->actingAs($this->user)->postJson('/api/chat-gpt/completion', $params);
         // 利用回数上限を警告するようになっているか
         $response->assertForbidden();
         $response->assertJson(['message' => __('messages.reached_prompt_limit')]);

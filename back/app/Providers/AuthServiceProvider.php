@@ -64,8 +64,8 @@ class AuthServiceProvider extends ServiceProvider
         });
         // chatgptによる入力補完(completion)
         Gate::define('chat-gpt-completion', function (User $user, ChatGptUsageInformation $chat_gpt_usage_information) {
-            // 1日のchatGPTAPI利用回数上限以下か
-            return ChatGptUsageInformation::LIMIT_PER_DAY > $chat_gpt_usage_information->usage_count;
+            // 1日のchatGPTAPI利用回数が残っているか
+            return $chat_gpt_usage_information->remain_count > 0;
         });
     }
 }

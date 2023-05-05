@@ -24,7 +24,16 @@ class CompletionRequest extends FormRequest
     public function rules()
     {
         return [
+            'title' => ['required', 'string', 'max:255'],
             'prompt' => ['required', 'string', 'max:255'],
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'title' => 'ステップのタイトル',
+            'prompt' => 'プロンプト',
         ];
     }
 }

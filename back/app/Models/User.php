@@ -26,6 +26,7 @@ class User extends Authenticatable
         'profile',
         'image_url',
         'password',
+        'skip_api_confirm',
     ];
 
     /**
@@ -45,6 +46,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'skip_api_confirm' => 'boolean',
     ];
 
     /** accessor */
