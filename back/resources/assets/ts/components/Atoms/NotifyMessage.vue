@@ -19,12 +19,12 @@ onActivated(() => setTimeout(() => store.setMessage(''), 5000))
 <template>
     <slide-down>
         <template v-if="showFlag">
+            <!--  メッセージ内の改行も反映するためHTMLとして出力 -->
             <div
                 class="c-slide-down-message__container"
                 :class="{ 'c-slide-down-message__container--error': isError }"
+                v-html="message"
             >
-                <!--  メッセージ内の改行も反映するためHTMLとして出力 -->
-                <span class="c-slide-down-message" v-html="message"></span>
             </div>
         </template>
     </slide-down>
@@ -45,7 +45,7 @@ onActivated(() => setTimeout(() => store.setMessage(''), 5000))
         font-size: 14px;
         line-height: 1.5;
         text-align: center;
-        white-space: pre;
+        white-space: pre-wrap; // 改行の反映と溢れるテキストの折り返し
         color: #fff;
         &--error {
         // variable.scss dizzy

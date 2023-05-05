@@ -76,9 +76,14 @@
         }
     }
     &--login,
-    &--register {
+    &--register,
+    &--step-edit {
         @extend %c-title;
         @extend %c-title--font-size--page;
+    }
+    &--step-edit-preview {
+        @extend %c-title;
+        @extend %c-title--font-size;
     }
 }
 
@@ -125,4 +130,15 @@
         font-size: clamp(14px, 2.7vw, 27px);
     }
     font-weight: bold;
+}
+
+.c-title--explain-completion {
+    cursor: pointer;
+    color: $color_black7;
+    transition: all .3s;
+    &:hover {
+        text-decoration: underline;
+        color: $color_black8;
+        text-decoration: none;
+    }
 }

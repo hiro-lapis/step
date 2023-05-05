@@ -13,19 +13,6 @@
         border-radius: 50%;
         object-fit: cover;
     }
-    &--product-card {
-        display: block;
-        margin: 0 auto;
-        width: unset;
-        max-width: 200px; //横長の画像もリサイズする
-        max-height: 180px;
-    }
-    &--review-user {
-        padding: 0;
-        width: 60px;
-        border-radius: 50%;
-        overflow: hidden;
-    }
     &--user-icon {
         display: inline-flex;
         border-radius: 50%;
@@ -70,5 +57,14 @@
     }
     &--icon--sns {
         width: 40px;
+    }
+    &--chat-gpt {
+        width: 25px;
+        vertical-align: middle;
+        cursor: pointer;
+        transition: all 0.3s;
+        &:hover {
+            opacity: 0.8;
+        }
     }
 }
