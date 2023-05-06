@@ -141,7 +141,6 @@ class StepControllerTest extends TestCase
         ]);
         $response = $this->getJson('/api/steps/' . $step->id);
 
-        // \Log::info('HIRO:responseの中身' . print_r(($response), true));
         $step = Step::find($step->id);
         $response->assertJson([
             'id' => $step->id,

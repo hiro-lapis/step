@@ -59,7 +59,6 @@ const createImage = (file: File) => {
     let reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = (e: ProgressEvent) => {
-        console.log(e)
         confirmedImage.value = reader.result
     }
     emit('update:upload-image', file)

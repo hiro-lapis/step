@@ -93,7 +93,7 @@ class ChallengeStepControllerTest extends TestCase
             'id' => $challenge_step->id,
             'post_user_id' => $step->user_id,
             'challenge_user_id' => $this->user->id,
-            'cleared_sub_steps_count' => 0,
+            'cleared_sub_step_count' => 0,
         ]);
 
         // 1つでもクリア済みに更新しクリア数をチェック
@@ -103,7 +103,7 @@ class ChallengeStepControllerTest extends TestCase
             'id' => $challenge_step->id,
             'post_user_id' => $step->user_id,
             'challenge_user_id' => $this->user->id,
-            'cleared_sub_steps_count' => 1,
+            'cleared_sub_step_count' => 1,
         ]);
     }
 
