@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, ref, Ref } from 'vue'
-import { useUserStore } from '../../../ts/store/globalStore'
+import { useUserStore, useRequestStore } from '../../../ts/store/globalStore'
+import { useStepListStore } from '../../../ts/store/stepListStore'
 import { useAuthFunc } from '../../composables/auth'
 import KeyWordInput from './KeyWordInput.vue'
 import { conditionKey } from '../../types/common/Injection'
@@ -8,9 +9,26 @@ import { Condition } from '../../types/components/Condition'
 
 // utilities
 const userStore = useUserStore()
+const requestStore = useRequestStore()
+const { fetchData } = useStepListStore()
 // data
 const condition = inject<Ref<Condition>>(conditionKey)!
 const search = inject<() => Promise<void>>('search')!
+const spSearch: () => Promise<void> = async () => {
+  await search()
+  // メニューを閉じる
+  isActive.value = false
+}
+// const search: () => Promise<void> = async () => {
+//   // ページ番号を初期化
+//   condition.value.page = 1
+//   if (requestStore.isLoading) return
+//   requestStore.setLoading(true)
+//   await fetchData(condition.value)
+//   requestStore.setLoading(false)
+//   // メニューを閉じる
+//   isActive.value = false
+// }
 const isActive = ref(false)
 const isLogin = computed(() => userStore.isLogin)
 // methods
@@ -24,7 +42,8 @@ const { logout } = useAuthFunc()
       <li class="c-sp-nav__list-item">
         <KeyWordInput
             :placeHolder="''"
-            @keyupEnter="search()"
+            @keyupEnter="spSearch()"
+            @clickIcon="spSearch()"
             v-model:value="condition.key_word"
         />
       </li>

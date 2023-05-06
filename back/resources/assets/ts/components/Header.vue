@@ -39,7 +39,7 @@ const search: () => Promise<void> = async () => {
     await fetchData(condition.value)
     requestStore.setLoading(false)
 }
-provide('search', search)
+provide<() => Promise<void>>('search', search)
 </script>
 
 <template>

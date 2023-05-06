@@ -1,35 +1,32 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
 const props = defineProps({
-    placeHolder: { type: String, default: 'Search...',  },
+    placeHolder: { type: String, default: '',  },
     value: { required: false, type:String, default: '', }, // 編集画面などの初期値
 })
 
 // emits
 interface Emits {
-    (e: 'input', value: string): void
-    (e: 'keyupEnter'): void
+    (e: 'update:value', value: string): void
+    (e: 'clickIcon', value: string): void
+    (e: 'keyupEnter', value: string): void
 }
 const emit = defineEmits<Emits>()
-const searchValue = ref('');
 
-const handleInput = (event) => {
-    searchValue.value = event.target.value;
-    emit('input', searchValue.value)
+const input = (event: Event) => {
+  const val = (event.target as HTMLInputElement).value
+    emit('update:value', val)
 }
 const handleClick = () => {
-    emit('input', searchValue.value)
+    emit('clickIcon', props.value)
 }
-const handleEnter = () => emit('keyupEnter')
+const handleEnter = () => emit('keyupEnter', props.value)
 </script>
 
 <template>
     <div class="c-search-box">
       <input
         type="text"
-        v-model="searchValue"
-        @input="handleInput"
+        @input="$event => input($event)"
         :placeholder="placeHolder"
         @keyup.enter="handleEnter"
         class="c-input--search"
