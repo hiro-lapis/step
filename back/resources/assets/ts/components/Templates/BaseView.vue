@@ -14,14 +14,10 @@ import { repositoryKey } from '../../types/common/Injection'
 const router = useRouter()
 const userStore = useUserStore()
 const $repositories = inject<Repositories>(repositoryKey)!
-// const $repositories = inject<Repositories>(repositoryKey)!
-
 // props
 defineProps({
     className: { required: false, type: String, default: 'p-container', },
 })
-// data
-
 // methods
 onMounted(() => {
     // ログイン状態チェック
