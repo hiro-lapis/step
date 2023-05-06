@@ -15,3 +15,5 @@ export const conditionKey: InjectionKey<Ref<Condition>> = Symbol('condition')
  * コンポーネントをまたいで使用するAPIメソッド
  */
 export const repositoryKey: InjectionKey<Repositories> = Symbol('$repositories')
+
+export const searchFuncKey: InjectionKey<() => Promise<void>> = Symbol('search')

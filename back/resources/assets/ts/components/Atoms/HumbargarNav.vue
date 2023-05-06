@@ -1,34 +1,21 @@
 <script setup lang="ts">
 import { computed, inject, ref, Ref } from 'vue'
-import { useUserStore, useRequestStore } from '../../../ts/store/globalStore'
-import { useStepListStore } from '../../../ts/store/stepListStore'
+import { useUserStore } from '../../../ts/store/globalStore'
 import { useAuthFunc } from '../../composables/auth'
 import KeyWordInput from './KeyWordInput.vue'
-import { conditionKey } from '../../types/common/Injection'
+import { conditionKey, searchFuncKey } from '../../types/common/Injection'
 import { Condition } from '../../types/components/Condition'
 
 // utilities
 const userStore = useUserStore()
-const requestStore = useRequestStore()
-const { fetchData } = useStepListStore()
 // data
 const condition = inject<Ref<Condition>>(conditionKey)!
-const search = inject<() => Promise<void>>('search')!
+const search = inject<() => Promise<void>>(searchFuncKey)!
 const spSearch: () => Promise<void> = async () => {
   await search()
-  // メニューを閉じる
+  // SPメニューを閉じる
   isActive.value = false
 }
-// const search: () => Promise<void> = async () => {
-//   // ページ番号を初期化
-//   condition.value.page = 1
-//   if (requestStore.isLoading) return
-//   requestStore.setLoading(true)
-//   await fetchData(condition.value)
-//   requestStore.setLoading(false)
-//   // メニューを閉じる
-//   isActive.value = false
-// }
 const isActive = ref(false)
 const isLogin = computed(() => userStore.isLogin)
 // methods
@@ -180,8 +167,5 @@ const { logout } = useAuthFunc()
   & .c-sp-menu-icon__body:before {
   transform: rotate(90deg);
   }
-  // & .c-sp-nav {
-
-  // }
 }
 </style>

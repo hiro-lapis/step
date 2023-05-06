@@ -6,7 +6,7 @@ import { useAuthFunc } from '../composables/auth'
 import { useRoute } from 'vue-router'
 import KeyWordInput from './Atoms/KeyWordInput.vue'
 import { Condition } from '../types/components/Condition'
-import { conditionKey } from '../types/common/Injection'
+import { conditionKey, searchFuncKey } from '../types/common/Injection'
 import { useStepListStore } from '../store/stepListStore'
 
 // utility
@@ -39,7 +39,7 @@ const search: () => Promise<void> = async () => {
     await fetchData(condition.value)
     requestStore.setLoading(false)
 }
-provide<() => Promise<void>>('search', search)
+provide<() => Promise<void>>(searchFuncKey, search)
 </script>
 
 <template>
