@@ -48,8 +48,8 @@ enum ChallengeStatusEnum: int
     public static function getClearedStatuses(): array
     {
         return [
-            self::Cleared,
-            self::Lated,
+            self::Cleared->value,
+            self::Lated->value,
         ];
     }
 
