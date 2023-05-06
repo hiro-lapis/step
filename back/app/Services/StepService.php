@@ -210,7 +210,7 @@ class StepService
     public function getChallenging(): array
     {
         $steps = $this->challenge_step_respository->getByChallengeUserId(auth()->user()->id);
-        $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time_type_name', 'status_name']));
+        $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time_type_name', 'status_name', 'cleared_sub_step_count']));
         return compact('steps');
     }
 }
