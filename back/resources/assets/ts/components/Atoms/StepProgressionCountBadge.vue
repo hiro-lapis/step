@@ -13,7 +13,7 @@ const props = defineProps({
 const label = computed(() => {
     let message = 'サブステップ:'
     if ('challenge_sub_steps_count' in props.step) {
-        message += props.step.cleared_sub_steps_count + '/' + props.step.challenge_sub_steps_count
+        message += props.step.cleared_sub_step_count + '/' + props.step.challenge_sub_steps_count
     } else {
         message += props.step.sub_steps_count!
     }

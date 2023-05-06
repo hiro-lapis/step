@@ -29,7 +29,7 @@ const showEditBtn = computed(() => {
 // カードクリック時の遷移先を返す
 const getShowRoute = computed(() => {
     if (props.challengeMode && isChallengeStep(props.step!)) {
-        return { name: 'challenge-steps-show', params: { id: props.step.step_id } }
+        return { name: 'challenge-steps-show', params: { id: props.step.id } }
     }
     return { name: 'steps-show', params: { id: props.step!.id } }
 })
@@ -64,14 +64,6 @@ const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step
             <span>
                 達成目安時間: {{ step!.achievement_time_type!.name }}
             </span>
-            <!-- <span v-if="showEditBtn"> -->
-                <!-- <router-link :to="{ name: 'steps-edit', params: { id: step!.id}}"> -->
-                    <!-- <i class="c-icon--edit u-float-shadow fa fa-pen"></i> -->
-                    <!-- <span class="c-step-card__edit-icon">
-                        <i class="fa fa-ellipsis-h"></i>
-                    </span> -->
-                <!-- </router-link> -->
-            <!-- </span> -->
         </p>
     </router-link>
 </template>

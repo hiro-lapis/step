@@ -14,7 +14,7 @@ defineProps({
     <ul class="c-step-card-column">
         <template :key="i" v-for="(step, i) in stepList">
             <li class="c-step-card-column__item">
-                <StepCard :step="step" />
+                <StepCard challengeMode :step="step" />
             </li>
         </template>
     </ul>

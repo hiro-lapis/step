@@ -19,7 +19,7 @@ export type ChallengeStep = {
     achievement_time_type_id: number
     challenge_sub_steps: ChallengeSubStep[]
     challenge_sub_steps_count: number
-    cleared_sub_steps_count: number
+    cleared_sub_step_count: number
     achievement_time_type: AchievementTimeType
     category: Category
     created_at?: string

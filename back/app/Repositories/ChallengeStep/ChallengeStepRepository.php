@@ -50,7 +50,7 @@ class ChallengeStepRepository implements ChallengeStepRepositoryInterface
         return $this->challenge_step->challengeUserId($user_id)
             ->with(['challengeSubSteps', 'category', 'achievementTimeType'])
             ->withCount('challengeSubSteps')
-            ->withCount('clearedSubSteps')
+            // ->withCount('clearedSubSteps')
             ->get();
     }
 
@@ -72,19 +72,19 @@ class ChallengeStepRepository implements ChallengeStepRepositoryInterface
     /**
      * チャレンジ詳細画面に表示するデータを取得
      *
-     * @param integer $step_id
+     * @param integer $challenge_step_id
      * @param integer $challenge_user_id
      * @return ChallengeStep
      */
-    public function findShowData(int $step_id, int $challenge_user_id): ChallengeStep
+    public function findShowData(int $challenge_step_id, int $challenge_user_id): ChallengeStep
     {
         return $this->challenge_step
             ->with('category')
             ->with('postUser')
             ->with('challengeSubSteps')
-            ->withCount('clearedSubSteps')
+            // ->withCount('clearedSubSteps')
             ->challengeUserId($challenge_user_id)
-            ->firstOrFail($step_id);
+            ->findOrFail($challenge_step_id);
     }
 
     /**
