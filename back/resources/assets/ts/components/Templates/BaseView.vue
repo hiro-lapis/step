@@ -8,16 +8,17 @@ import Footer from '../Footer.vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../store/globalStore'
 import { Repositories } from '../../apis/repositoryFactory'
+import { repositoryKey } from '../../types/common/Injection'
 
 // utilities
 const router = useRouter()
 const userStore = useUserStore()
-const $repositories = inject<Repositories>('$repositories')!
-
+const $repositories = inject<Repositories>(repositoryKey)!
 // props
 defineProps({
     className: { required: false, type: String, default: 'p-container', },
 })
+// methods
 onMounted(() => {
     // ログイン状態チェック
     const isGuestOnlyPage = router.currentRoute.value.meta.guestOnly

@@ -87,8 +87,10 @@ requireComponent.keys().forEach(fileName => {
 });
 
 import repository from '../apis/repositoryFactory'
+import { conditionKey, repositoryKey } from '../types/common/Injection'
+import { Condition } from '../types/components/Condition'
+import { ref } from 'vue'
 
-app.config.globalProperties.$repositories = repository()
-app.provide('$repositories', app.config.globalProperties.$repositories);
-
+app.provide(repositoryKey, repository())
+app.provide(conditionKey, ref<Condition>({ key_word: '', page: 1, }))
 app.mount("#app")

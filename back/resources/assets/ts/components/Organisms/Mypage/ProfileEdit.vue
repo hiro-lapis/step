@@ -8,12 +8,13 @@ import TextInput from '../../Atoms/TextInput.vue'
 import TextareaInput from '../../Atoms/TextareaInput.vue'
 import UploadUserImage from '../../Atoms/UploadUserImage.vue'
 import SingleCheckbox from '../../Atoms/SingleCheckbox.vue'
+import { repositoryKey } from '../../../types/common/Injection'
 
 // utilities
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
 const userStore = useUserStore()
-const $repositories = inject<Repositories>('$repositories')!
+const $repositories = inject<Repositories>(repositoryKey)!
 
 // data
 const user = reactive<User>({

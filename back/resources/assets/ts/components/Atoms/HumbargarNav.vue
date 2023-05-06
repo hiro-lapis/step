@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, inject, ref, Ref } from 'vue'
 import { useUserStore } from '../../../ts/store/globalStore'
 import { useAuthFunc } from '../../composables/auth'
+import KeyWordInput from './KeyWordInput.vue'
+import { conditionKey, searchFuncKey } from '../../types/common/Injection'
+import { Condition } from '../../types/components/Condition'
 
 // utilities
 const userStore = useUserStore()
 // data
+const condition = inject<Ref<Condition>>(conditionKey)!
+const search = inject<() => Promise<void>>(searchFuncKey)!
+const spSearch: () => Promise<void> = async () => {
+  await search()
+  // SPメニューを閉じる
+  isActive.value = false
+}
 const isActive = ref(false)
-
 const isLogin = computed(() => userStore.isLogin)
 // methods
 const { logout } = useAuthFunc()
@@ -17,6 +26,14 @@ const { logout } = useAuthFunc()
 	<!-- SPメニュー -->
 	<nav class="c-sp-nav" :class="{ active: isActive }">
 		<ul class="c-sp-nav__list">
+      <li class="c-sp-nav__list-item">
+        <KeyWordInput
+            :placeHolder="''"
+            @keyupEnter="spSearch()"
+            @clickIcon="spSearch()"
+            v-model:value="condition.key_word"
+        />
+      </li>
 			<router-link :to="{ name: 'steps-list' }">
 				<li class="c-sp-nav__list-item">
 					<a href="#" class="c-sp-nav__list-link">ステップ一覧</a>
@@ -150,8 +167,5 @@ const { logout } = useAuthFunc()
   & .c-sp-menu-icon__body:before {
   transform: rotate(90deg);
   }
-  // & .c-sp-nav {
-
-  // }
 }
 </style>

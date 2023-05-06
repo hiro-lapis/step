@@ -4,10 +4,11 @@ import { Step } from '../../../types/Step'
 import { useRequestStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
 import StepCardColumn from '../../Molecules/StepCardColumn.vue'
+import { repositoryKey } from '../../../types/common/Injection'
 
 // utilities
 const requestStore = useRequestStore()
-const $repositories = inject<Repositories>('$repositories')!
+const $repositories = inject<Repositories>(repositoryKey)!
 
 // data
 const steps = ref<Step[]>([])

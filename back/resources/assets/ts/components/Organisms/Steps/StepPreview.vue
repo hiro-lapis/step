@@ -12,8 +12,10 @@ import CategoryBadge from '../../Atoms/CategoryBadge.vue'
 import EditToolTip from '../../Atoms/EditToolTip.vue'
 import TwitterShareIcon from '../../Atoms/TwitterShareIcon.vue'
 import { RouterLocation } from '../../../types/common/Router'
+import { repositoryKey } from '../../../types/common/Injection'
 
-const $repositories = inject<Repositories>('$repositories')!
+
+const $repositories = inject<Repositories>(repositoryKey)!
 
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()

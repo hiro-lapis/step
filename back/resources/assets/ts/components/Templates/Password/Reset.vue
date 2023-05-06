@@ -4,11 +4,12 @@ import { useRoute, useRouter } from 'vue-router'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { useRequestStore, useMessageInfoStore } from '../../../store/globalStore'
 import TextInput from '../../Atoms/TextInput.vue'
+import { repositoryKey } from '../../../types/common/Injection'
 
 // utility
 const route = useRoute()
 const router = useRouter()
-const $repositories = inject<Repositories>('$repositories')!
+const $repositories = inject<Repositories>(repositoryKey)!
 const requestStore = useRequestStore()
 const messageStore = useMessageInfoStore()
 

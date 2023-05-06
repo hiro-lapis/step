@@ -1,49 +1,32 @@
 <script setup lang="ts">
-import { inject, onMounted, ref, reactive } from 'vue'
+import { computed, inject, onMounted, Ref } from 'vue'
 import { useRequestStore } from '../../../store/globalStore'
+import { useStepListStore } from '../../../store/stepListStore'
 import StepCardList from '../../Molecules/StepCardList.vue'
 import PaginationList from '../../Atoms/PaginationList.vue'
-import { Repositories } from '../../../apis/repositoryFactory'
-import { Step } from '../../../types/Step'
+import { conditionKey } from '../../../types/common/Injection'
+import { Condition } from '../../../types/components/Condition'
 
 // utilities
 const requestStore = useRequestStore()
-const $repositories = inject<Repositories>('$repositories')!
-
-// props
+const stepListStore = useStepListStore()
 // data
-const stepList = ref<Step[]>([])
-const condition = reactive({
-    key_word: '',
-    category_id: null,
-    achievement_time_type_id: null,
-    page: 1 ,
-})
-const paginationInfo = reactive({
-    current_page: 1,
-    last_page: 1,
-    total: 1,
-})
-const changePage = async (page: number) => {
-    condition.page = page
-    await fetchData()
-}
+// headerと共有する検索条件
+const condition = inject<Ref<Condition>>(conditionKey)!
+const getStepList = computed(() => stepListStore.stepList)
+
 // methods
-const fetchData = async () => {
+const search = async () => {
+    if (requestStore.isLoading) return
     requestStore.setLoading(true)
-    await $repositories.step.get(condition)
-        .then(response => {
-            stepList.value = response.data.result.data
-            paginationInfo.current_page = response.data.result.current_page
-            paginationInfo.last_page = response.data.result.last_page
-            paginationInfo.total = response.data.result.total
-        }).finally(() =>
-            requestStore.setLoading(false)
-        )
+    await stepListStore.fetchData(condition.value)
+    requestStore.setLoading(false)
 }
-const init = () => {
-    fetchData()
+const changePage = async (page: number) => {
+    condition.value.page = page
+    await search()
 }
+const init = () => search()
 onMounted(() => init())
 </script>
 
@@ -52,15 +35,15 @@ onMounted(() => init())
         <template v-slot:content>
             <div class="p-steps-list__body">
                 <StepCardList
-                    :stepList="stepList"
+                    :stepList="getStepList"
                 />
             </div>
             <div class="p-steps-list__pagination">
                 <PaginationList
                     @update:current-page="changePage"
-                    :currentPage="paginationInfo.current_page"
-                    :lastPage="paginationInfo.last_page"
-                    :total="paginationInfo.total"
+                    :currentPage="stepListStore.pageInfo.current_page"
+                    :lastPage="stepListStore.pageInfo.last_page"
+                    :total="stepListStore.pageInfo.total"
                 />
             </div>
         </template>
@@ -73,7 +56,7 @@ onMounted(() => init())
 .p-steps-list {
     &__body {
         margin-bottom: 30px;
-        padding-bottom: 0px;
+        padding-bottom: 50px;
         @include mq() {
             padding-bottom: 45px;
         }

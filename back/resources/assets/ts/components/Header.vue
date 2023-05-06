@@ -1,18 +1,45 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useUserStore } from '../store/globalStore'
+import { computed, inject, provide, Ref } from 'vue'
+import { useRequestStore, useUserStore } from '../store/globalStore'
 import HumbargarNav from '../components/Atoms/HumbargarNav.vue'
 import { useAuthFunc } from '../composables/auth'
+import { useRoute } from 'vue-router'
+import KeyWordInput from './Atoms/KeyWordInput.vue'
+import { Condition } from '../types/components/Condition'
+import { conditionKey, searchFuncKey } from '../types/common/Injection'
+import { useStepListStore } from '../store/stepListStore'
 
 // utility
 const userStore = useUserStore()
+const route = useRoute()
+const requestStore = useRequestStore()
+const { fetchData } = useStepListStore()
+// data
+
+// StepList.vueと共有する検索条件
+const condition = inject<Ref<Condition>>(conditionKey)!
+
+// provide
+
 // methods
 const { logout } = useAuthFunc()
 // computed
+const showSearchUi = computed(() => {
+    return route.name === 'steps-list'
+})
 // ログイン状態で遷移先変更
 const topPageName = computed(() => userStore.isLogin ? 'steps-list' : 'home')
 const isLogin = computed(() => userStore.isLogin)
 const userImage = computed(() => userStore.user.image_url ?? '')
+const search: () => Promise<void> = async () => {
+    // ページ番号を初期化
+    condition.value.page = 1
+    if (requestStore.isLoading) return
+    requestStore.setLoading(true)
+    await fetchData(condition.value)
+    requestStore.setLoading(false)
+}
+provide<() => Promise<void>>(searchFuncKey, search)
 </script>
 
 <template>
@@ -26,6 +53,13 @@ const userImage = computed(() => userStore.user.image_url ?? '')
             <!-- PC用メニュー -->
             <nav class="c-nav">
                 <ul class="c-nav__list">
+                    <div v-if="showSearchUi" class="c-nav__list__keyword-input">
+                        <KeyWordInput
+                            :placeHolder="''"
+                            @keyupEnter="search()"
+                            v-model:value="condition.key_word"
+                        />
+                    </div>
                     <!-- ログイン済メニュー -->
                     <template v-if="isLogin">
                         <!-- ユーザーメニュー -->
@@ -75,6 +109,7 @@ const userImage = computed(() => userStore.user.image_url ?? '')
                     </template>
                 </ul>
             </nav>
+            <!-- スマホ用メニュー -->
             <div class="c-sp-menu">
                 <HumbargarNav />
             </div>
