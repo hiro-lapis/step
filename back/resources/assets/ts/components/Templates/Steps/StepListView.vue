@@ -56,7 +56,7 @@ onMounted(() => init())
 .p-steps-list {
     &__body {
         margin-bottom: 30px;
-        padding-bottom: 0px;
+        padding-bottom: 50px;
         @include mq() {
             padding-bottom: 45px;
         }
