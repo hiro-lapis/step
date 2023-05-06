@@ -34,7 +34,7 @@ export class MyPageRepository {
         return await axios.post(`${this.updateProfileUrl}`, params)
     }
     async passwordUpdate(params: { current_password: string, password: string, password_confirmation: string }): Promise<AxiosResponse<UpdatePasssowrdResponse>> {
-        return await axios.post(`${this.updatePasswordUrl}`, params)
+        return await axios.put(`${this.updatePasswordUrl}`, params)
     }
     async getPostedStep(): Promise<AxiosResponse<GetPostedStepResponse>> {
         return await axios.get(`${this.getPostedStepUrl}`)
