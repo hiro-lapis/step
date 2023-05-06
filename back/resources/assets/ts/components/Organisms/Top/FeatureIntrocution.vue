@@ -39,9 +39,10 @@
                 <div class="c-feature-card__head">
                     <img src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/feature3.png" alt="" class="">
                 </div>
-                <h2 class="c-feature-card__title u-spread">仲間を作って楽しく挑戦</h2>
+                <h2 class="c-feature-card__title u-spread">AIによる投稿サポート</h2>
                 <p class="c-feature-card__body">
-                    同じSTEPに挑戦している人同士でチャットをすることで仲間を見つけましょう。モチベーションの向上やよりあなたに合った取り組み方、学習者同士のコラボレーションなどに役立ちます。
+                    書きたいけど文章の書き方がわからない…<br>
+                    そんな方も、いま話題のchat GPTと連携したサジェスト機能により、充実した文章をサクサク書くことができます!
                 </p>
             </div>
         </li>
