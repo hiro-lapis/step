@@ -116,7 +116,7 @@ const completion = async (subStepIndex: number, title: string, text: string) => 
     await $repositories.chatGpt.completion(title, text).then(res => {
         // 補完文字列をサブステップの詳細に追加
         createData.sub_steps[subStepIndex].detail += res.data.message
-        messageStore.setMessage("サジェスト分が入力欄に入力されました \n 本日の残り利用可能回数: " + res.data.remain_count + "回")
+        messageStore.setMessage("サジェスト文が入力欄に入力されました \n 本日の残り利用可能回数: " + res.data.remain_count + "回")
         if (res.data.remain_count !== -1) {
             userStore.setRemainCount(res.data.remain_count)
         }

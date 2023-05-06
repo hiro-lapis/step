@@ -53,6 +53,7 @@ export const useUserStore = defineStore('user', () => {
         challengingStepIds,
         existsRemainCount,
         skipApiConfirm,
+        remainCount,
         setRemainCount,
         initRemainCount,
         setLogin,

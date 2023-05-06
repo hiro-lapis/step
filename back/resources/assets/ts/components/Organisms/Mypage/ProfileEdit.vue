@@ -134,6 +134,10 @@ onMounted(() => {
             />
         </div>
         <div class="c-multi-page--profile__element">
+            <p class="u-margin-b-1p">残りAI利用可能回数:{{ userStore.remainCount }}</p>
+            <p>1日100回まで利用できます</p>
+        </div>
+        <div class="c-multi-page--profile__element">
             <SingleCheckbox
                 label="API利用確認スキップ"
                 v-model:value="user.skip_api_confirm"
