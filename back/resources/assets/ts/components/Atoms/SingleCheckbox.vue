@@ -26,6 +26,7 @@ const input = (event: Event) => {
             class="c-single-checkbox__input"
             type="checkbox"
             :value="value"
+            :checked="value"
             @change="input"
         >
         <span class="c-single-checkbox__cover"></span>

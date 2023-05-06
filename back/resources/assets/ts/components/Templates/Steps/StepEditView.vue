@@ -105,7 +105,7 @@ const completion = async (subStepIndex: number, title: string, text: string) => 
         messageStore.setErrorMessage('タイトル,本文それぞれ100文字以内で入力してください')
         return
     }
-    if (userStore.existsRemainCount) {
+    if (!userStore.existsRemainCount) {
         messageStore.setErrorMessage('利用可能回数が残っていません')
         return
     }

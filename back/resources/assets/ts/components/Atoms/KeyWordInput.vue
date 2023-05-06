@@ -26,6 +26,7 @@ const handleEnter = () => emit('keyupEnter', props.value)
     <div class="c-search-box">
       <input
         type="text"
+        name="key-word"
         @input="$event => input($event)"
         :placeholder="placeHolder"
         @keyup.enter="handleEnter"
