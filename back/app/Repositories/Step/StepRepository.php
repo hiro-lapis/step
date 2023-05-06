@@ -58,16 +58,7 @@ class StepRepository implements StepRepositoryInterface
                 $query->orWhere('users.name', 'like', '%' . $condition['key_word'] . '%');
             });
         }
-        // カテゴリー選択
-        if (array_key_exists('category_id', $condition)) {
-            if (count($condition['category_id']) > 0) {
-                $query->where('steps.category_id', $condition['category_ids']);
-            }
-        }
-        // 達成目安時間
-        if (array_key_exists('achievement_time_type_id', $condition)) {
-            $query->where('shops.achievement_time_type_id', $condition['achievement_time_type_id']);
-        }
+
         return $query->with('category:id,name')
             ->with('achievementTimeType:id,name')
             ->withCount('subSteps')

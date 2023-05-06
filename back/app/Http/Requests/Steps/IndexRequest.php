@@ -25,8 +25,7 @@ class IndexRequest extends FormRequest
     {
         return [
             'key_word' => ['nullable'],
-            'category_id' => ['nullable', 'exists:categories,id'],
-            'achievement_time_type_id' => ['nullable', 'exists:achievement_time_types,id'],
+            'page' => ['nullable', 'integer'],
         ];
     }
 }

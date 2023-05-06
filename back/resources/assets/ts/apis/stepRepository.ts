@@ -23,7 +23,7 @@ export class StepRepository {
     async delete (step_id: number): Promise<any> {
         return await axios.delete(`${this.deleteUrl}`, { data: { id: step_id } })
     }
-    async get(data: { key_word: string, category_id: number|null, achievement_time_type_id: number|null, page: number }): Promise<any> {
+    async get(data: { key_word: string, page: number }): Promise<any> {
         // クエリパラメータで送信
         return await axios.get(`${this.baseUrl}`, { params: data })
     }
