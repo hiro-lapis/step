@@ -1,4 +1,5 @@
 <?php
 return [
-    'failed' => '認証に失敗しました。'
+    'failed' => '認証に失敗しました。',
+    'unauthenticated' => 'ログインしてください。',
 ];
