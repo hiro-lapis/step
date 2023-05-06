@@ -1,5 +1,5 @@
 // コンポーネントをまたいで教諭する検索条件
 export type Condition = {
-    keyword: string,
+    key_word: string,
     page: number,
 }

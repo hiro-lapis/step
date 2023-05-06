@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { computed, inject, InjectionKey, Ref } from 'vue'
-import { useUserStore } from '../store/globalStore'
+import { computed, inject, provide, Ref } from 'vue'
+import { useRequestStore, useUserStore } from '../store/globalStore'
 import HumbargarNav from '../components/Atoms/HumbargarNav.vue'
 import { useAuthFunc } from '../composables/auth'
-import { useRoute, useRouter } from 'vue-router'
-import TextInput from './Atoms/TextInput.vue'
+import { useRoute } from 'vue-router'
+import KeyWordInput from './Atoms/KeyWordInput.vue'
 import { Condition } from '../types/components/Condition'
 import { conditionKey } from '../types/common/Injection'
+import { useStepListStore } from '../store/stepListStore'
 
 // utility
 const userStore = useUserStore()
 const route = useRoute()
+const requestStore = useRequestStore()
+const { fetchData } = useStepListStore()
 // data
 
-// BaseViewからinject
+// StepList.vueと共有する検索条件
 const condition = inject<Ref<Condition>>(conditionKey)!
 
 // provide
@@ -28,9 +31,15 @@ const showSearchUi = computed(() => {
 const topPageName = computed(() => userStore.isLogin ? 'steps-list' : 'home')
 const isLogin = computed(() => userStore.isLogin)
 const userImage = computed(() => userStore.user.image_url ?? '')
-const test = () => {
-    console.log(condition.value.keyword)
+const search: () => Promise<void> = async () => {
+    // ページ番号を初期化
+    condition.value.page = 1
+    if (requestStore.isLoading) return
+    requestStore.setLoading(true)
+    await fetchData(condition.value)
+    requestStore.setLoading(false)
 }
+provide('search', search)
 </script>
 
 <template>
@@ -45,11 +54,10 @@ const test = () => {
             <nav class="c-nav">
                 <ul class="c-nav__list">
                     <div v-if="showSearchUi" class="c-nav__list__keyword-input">
-                        <TextInput
-                            v-model:value="condition.keyword"
-                            @input="test"
-                            placeholder="キーワードで検索"
-                            class="c-nav__list-item"
+                        <KeyWordInput
+                            :placeHolder="''"
+                            @keyupEnter="search()"
+                            v-model:value="condition.key_word"
                         />
                     </div>
                     <!-- ログイン済メニュー -->
@@ -101,6 +109,7 @@ const test = () => {
                     </template>
                 </ul>
             </nav>
+            <!-- スマホ用メニュー -->
             <div class="c-sp-menu">
                 <HumbargarNav />
             </div>

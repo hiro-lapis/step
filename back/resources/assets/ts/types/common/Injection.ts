@@ -8,6 +8,7 @@ import { Repositories } from '../../apis/repositoryFactory'
  * コンポーネントをまたいで共有する検索条件
  * condition というkeyにCondition型のrefを注入するよう型定義
  */
+// export const conditionKey: InjectionKey<Condition> = Symbol('condition')
 export const conditionKey: InjectionKey<Ref<Condition>> = Symbol('condition')
 
 /**

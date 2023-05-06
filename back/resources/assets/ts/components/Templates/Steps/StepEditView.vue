@@ -279,7 +279,6 @@ onMounted(() => {
         flex-direction: row;
     }
     &__editor { // 編集フォーム
-        // margin: 0 auto;
         width: 100%;
         padding: 20px 40px;
         box-sizing: border-box;

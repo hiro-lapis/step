@@ -4,7 +4,6 @@ import { computed, ref } from 'vue'
 import ErrorMessage from './ErrorMessage.vue'
 import RequiredBadge from './RequiredBadge.vue'
 
-
 // props
 const props = defineProps({
     className: { required: false, type: String, default: 'c-input--large', }, // クラス名(default: 横幅いっぱい表示のクラス)

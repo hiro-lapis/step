@@ -52,10 +52,11 @@ class StepRepository implements StepRepositoryInterface
             ->joinUsers();
         // キーワード(ステップ名,カテゴリー,ユーザー名)
         if (isset($condition['key_word'])) {
-            $query->where(function ($query) use ($condition) {
-                $query->orWhere('steps.name', 'like', '%' . $condition['key_word'] . '%');
-                $query->orWhere('categories.name', 'like', '%' . $condition['key_word'] . '%');
-                $query->orWhere('users.name', 'like', '%' . $condition['key_word'] . '%');
+            $key_word = $condition['key_word'];
+            $query->where(function ($query) use ($key_word) {
+                $query->orWhere('steps.name', 'like', '%' . $key_word . '%');
+                $query->orWhere('categories.name', 'like', '%' . $key_word . '%');
+                $query->orWhere('users.name', 'like', '%' . $key_word . '%');
             });
         }
 
