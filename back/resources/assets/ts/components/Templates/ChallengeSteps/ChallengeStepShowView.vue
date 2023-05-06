@@ -8,8 +8,9 @@ import { useRoute } from 'vue-router'
 import StepPreview from '../../Organisms/Steps/StepPreview.vue'
 import { ChallengeStep } from '../../../types/ChallengeStep'
 import ImageClip from '../../Atoms/ImageClip.vue'
+import { repositoryKey } from '../../../types/common/Injection'
 
-const $repositories = inject<Repositories>('$repositories')!
+const $repositories = inject<Repositories>(repositoryKey)!
 // const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
 // const userStore = useUserStore()

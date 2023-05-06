@@ -9,38 +9,24 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '../../store/globalStore'
 import { Repositories } from '../../apis/repositoryFactory'
 import { Condition }  from '../../types/components/Condition'
+import { conditionKey, repositoryKey } from '../../types/common/Injection'
 
 /**
  * SPA ページのベースとなるコンポーネント
- * axios,store,router設定を除いた共通処理はここに書く
+ * axios,store,router設定を除いた共通処理(provide,inject)はここに書く
  */
 // utilities
 const router = useRouter()
 const userStore = useUserStore()
-const $repositories = inject<Repositories>('$repositories')!
+const $repositories = inject<Repositories>(repositoryKey)!
+// const $repositories = inject<Repositories>(repositoryKey)!
 
 // props
 defineProps({
     className: { required: false, type: String, default: 'p-container', },
 })
 // data
-// コンポーネントをまたいで教諭する検索条件
-// type Condition = {
-//     keyword: string,
-//     page: number,
-// }
-
-const message = ref('')
-provide(/* key */ 'message', /* value */ message)
-
-// const key: InjectionKey<Ref<Condition>> = Symbol('condition')
-// const keywordKey = Symbol() as InjectionKey<Ref<string>>
-
-// const condition = ref<Condition>({ keyword: '', page: 1, })
-// const keyword = ref<string>('')
-// provide(key, condition)
-// provide(keywordKey, keyword)
-// provide('keyword', keyword)
+provide(conditionKey, ref<Condition>({ keyword: '', page: 1, }))
 
 // methods
 onMounted(() => {

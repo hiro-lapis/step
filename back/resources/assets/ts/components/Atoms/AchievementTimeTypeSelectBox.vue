@@ -2,9 +2,9 @@
 import { computed, inject, onMounted, ref } from 'vue'
 import { Repositories } from '../../apis/repositoryFactory'
 import RequiredBadge from './RequiredBadge.vue'
-
+import { repositoryKey } from '../../types/common/Injection'
 // utilities
-const $repositories = inject<Repositories>('$repositories')!
+const $repositories = inject<Repositories>(repositoryKey)!
 
 // props
 const props = defineProps({

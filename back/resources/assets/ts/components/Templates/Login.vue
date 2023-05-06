@@ -6,12 +6,13 @@ import { useUserStore, useMessageInfoStore, useRequestStore } from '../../store/
 import TextInput from '../Atoms/TextInput.vue'
 import BorderLine from '../Atoms/BorderLine.vue'
 import { Repositories } from '../../apis/repositoryFactory'
+import { repositoryKey } from '../../types/common/Injection'
 
 // utilities
 const userStore = useUserStore()
 const requestStore = useRequestStore()
 const messageStore = useMessageInfoStore()
-const $repositories = inject<Repositories>('$repositories')!
+const $repositories = inject<Repositories>(repositoryKey)!
 const router = useRouter()
 
 // data

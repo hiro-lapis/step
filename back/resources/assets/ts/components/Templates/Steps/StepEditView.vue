@@ -9,12 +9,14 @@ import TextInput from '../../Atoms/TextInput.vue'
 import TextareaInput from '../../Atoms/TextareaInput.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { Step } from '../../../types/Step'
+import { repositoryKey } from '../../../types/common/Injection'
+
 
 // utilities
 const requestStore = useRequestStore()
 const userStore = useUserStore()
 const messageStore = useMessageInfoStore()
-const $repositories = inject<Repositories>('$repositories')!
+const $repositories = inject<Repositories>(repositoryKey)!
 const router = useRouter()
 const route = useRoute()
 

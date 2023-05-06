@@ -3,9 +3,10 @@ import { inject, reactive } from 'vue'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { useRequestStore, useMessageInfoStore } from '../../../store/globalStore'
 import TextInput from '../../Atoms/TextInput.vue'
+import { repositoryKey } from '../../../types/common/Injection'
 
 // utility
-const $repositories = inject<Repositories>('$repositories')!
+const $repositories = inject<Repositories>(repositoryKey)!
 const requestStore = useRequestStore()
 const messageStore = useMessageInfoStore()
 

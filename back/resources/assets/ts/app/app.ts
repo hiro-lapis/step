@@ -87,8 +87,8 @@ requireComponent.keys().forEach(fileName => {
 });
 
 import repository from '../apis/repositoryFactory'
+import { repositoryKey } from '../types/common/Injection'
 
-app.config.globalProperties.$repositories = repository()
-app.provide('$repositories', app.config.globalProperties.$repositories);
+app.provide(repositoryKey, repository())
 
 app.mount("#app")

@@ -5,11 +5,12 @@ import StepCardList from '../../Molecules/StepCardList.vue'
 import PaginationList from '../../Atoms/PaginationList.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { Step } from '../../../types/Step'
+import { repositoryKey } from '../../../types/common/Injection'
 
 // utilities
 const requestStore = useRequestStore()
-const $repositories = inject<Repositories>('$repositories')!
-
+// const $repositories = inject<Repositories>(repositoryKey)!
+    const $repositories = inject<Repositories>(repositoryKey)!
 // props
 // data
 const stepList = ref<Step[]>([])
