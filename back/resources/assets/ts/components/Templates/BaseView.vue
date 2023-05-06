@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import { inject, onMounted } from 'vue'
+import { inject, InjectionKey, onMounted, provide, ref, Ref } from 'vue'
 import LoadingIcon from '../Atoms/LoadingIcon.vue'
 import NotifyMessage from '../Atoms/NotifyMessage.vue'
 import Header from '../Header.vue'
@@ -8,7 +8,12 @@ import Footer from '../Footer.vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../store/globalStore'
 import { Repositories } from '../../apis/repositoryFactory'
+import { Condition }  from '../../types/components/Condition'
 
+/**
+ * SPA ページのベースとなるコンポーネント
+ * axios,store,router設定を除いた共通処理はここに書く
+ */
 // utilities
 const router = useRouter()
 const userStore = useUserStore()
@@ -18,6 +23,26 @@ const $repositories = inject<Repositories>('$repositories')!
 defineProps({
     className: { required: false, type: String, default: 'p-container', },
 })
+// data
+// コンポーネントをまたいで教諭する検索条件
+// type Condition = {
+//     keyword: string,
+//     page: number,
+// }
+
+const message = ref('')
+provide(/* key */ 'message', /* value */ message)
+
+// const key: InjectionKey<Ref<Condition>> = Symbol('condition')
+// const keywordKey = Symbol() as InjectionKey<Ref<string>>
+
+// const condition = ref<Condition>({ keyword: '', page: 1, })
+// const keyword = ref<string>('')
+// provide(key, condition)
+// provide(keywordKey, keyword)
+// provide('keyword', keyword)
+
+// methods
 onMounted(() => {
     // ログイン状態チェック
     const isGuestOnlyPage = router.currentRoute.value.meta.guestOnly

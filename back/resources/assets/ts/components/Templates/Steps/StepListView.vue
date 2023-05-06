@@ -15,8 +15,6 @@ const $repositories = inject<Repositories>('$repositories')!
 const stepList = ref<Step[]>([])
 const condition = reactive({
     key_word: '',
-    category_id: null,
-    achievement_time_type_id: null,
     page: 1 ,
 })
 const paginationInfo = reactive({
