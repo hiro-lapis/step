@@ -11,33 +11,11 @@ import ImageClip from '../../Atoms/ImageClip.vue'
 import { repositoryKey } from '../../../types/common/Injection'
 
 const $repositories = inject<Repositories>(repositoryKey)!
-// const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
-// const userStore = useUserStore()
 const route = useRoute()
-// const router = useRouter()
 
 // data
 const step = ref<ChallengeStep>()
-// const step = ref<ChallengeStep>({
-//     id: 0,
-//     challenge_user_id: 0,
-//     challenged_at: '',
-//     cleared_at: '',
-//     status: 0,
-//     status_name: '',
-//     step_id: 0,
-//     post_user_id: 0,
-//     category_id: 0,
-//     name: '',
-//     summary: '',
-//     challenge_sub_steps: [],
-//     challenge_sub_steps_count: 0,
-//     cleared_sub_steps_count: 0,
-//     achievement_time_type_id: 0,
-//     achievement_time_type: { id: 0, name: ''},
-//     category: { id: 0, name: ''},
-// })
 const isInitialized = ref(false)
 // computed
 

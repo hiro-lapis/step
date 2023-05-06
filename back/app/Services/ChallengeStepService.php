@@ -25,12 +25,12 @@ class ChallengeStepService
     /**
      * 詳細情報を取得
      *
-     * @param integer $step_id
+     * @param integer $challenge_step_id
      * @return ChallengeStep
      */
-    public function show(int $step_id): ChallengeStep
+    public function show(int $challenge_step_id): ChallengeStep
     {
-        $step = $this->challenge_step_repository->findShowData($step_id, auth()->id());
+        $step = $this->challenge_step_repository->findShowData($challenge_step_id, auth()->id());
         // アクセサの設定
         return $step->setAppends([
             'category_name',
@@ -38,6 +38,7 @@ class ChallengeStepService
             'post_user_name',
             'post_user_image_url',
             'post_user_profile',
+            'cleared_sub_step_count',
         ]);
     }
 
@@ -96,13 +97,11 @@ class ChallengeStepService
             $next_challenge_sub_step_id = $has_next_sub_step ?
                     $next_sub_steps->first()->id : null;
             if ($has_next_sub_step) {
-                \Log::info('HIRO:サブステップ更新');
                 $next_sub_steps->first()->update([
                     'challenged_at' => now(),
                     'status' => ChallengeStatusEnum::Challenging->value,
                 ]);
             } else {
-                \Log::info('HIRO:親ステップ完了へ更新');
                 // 親情報のステップ自体をクリア状態へ更新
                 $challenge_step->update([
                     'cleared_at' => now(),
@@ -111,8 +110,6 @@ class ChallengeStepService
             }
 
             DB::commit();
-            // $challenge_step->refresh();
-            // \Log::info('HIRO:resultの中身' . print_r($challenge_step->challengeSubSteps, true));
         } catch (\Exception $e) {
             report($e);
             throw new HttpException(HttpResponse::HTTP_BAD_REQUEST, '更新に失敗しました');
@@ -120,7 +117,6 @@ class ChallengeStepService
         }
 
         $message = $has_next_sub_step ? 'クリア情報を更新しました。次のステップに進みましょう！' : 'おめでとうございます、全てのステップを完了しました！';
-        \Log::info('HIRO:messageの中身' . print_r($message, true));
         return $message;
     }
 

@@ -49,7 +49,7 @@ class ChallengeSubStepRepository implements ChallengeSubStepRepositoryInterface
         })
             ->challenging()
             ->with('challengeStep', function($query) {
-                $query->withCount('clearedSubSteps');
+                $query->withCount('challengeSubSteps');
             })
             ->firstOrFail();
     }

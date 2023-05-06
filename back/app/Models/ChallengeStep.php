@@ -118,16 +118,9 @@ class ChallengeStep extends Model
         return $this->hasMany(ChallengeSubStep::class)->orderBy('sort_number');
     }
 
-    /**
-     * 並び順を指定して、達成済orチャレンジ中のサブステップを取得
-     *
-     * @return HasMany
-     */
-    public function clearedSubSteps(): HasMany
+    public function getClearedSubStepCountAttribute(): int
     {
-        return $this->hasMany(ChallengeSubStep::class)
-            ->whereIn('status', ChallengeStatusEnum::getClearedStatuses())
-            ->orderBy('sort_number');
+        return $this->challengeSubSteps->whereIn('status', ChallengeStatusEnum::getClearedStatuses())->count();
     }
 
     /**

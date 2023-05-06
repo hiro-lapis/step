@@ -51,8 +51,13 @@ class Handler extends ExceptionHandler
 
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        $errorMessage = $exception->getMessage();
+        // 日本語のエラーメッセージを設定
         $errorMessage = [
             'message' => __('auth.unauthenticated')
         ];
+        return $this->shouldReturnJson($request, $exception)
+            ? response()->json(['message' => $errorMessage], 401)
+            : redirect()->guest($exception->redirectTo() ?? route('login'));
     }
 }

@@ -35,10 +35,8 @@ export const router = createRouter({
 
 // 画面遷移、ブラウザリロード時共通処理
 router.beforeEach(async (to: RouteLocationNormalized, from, next) => {
-    console.log(to)
     // name 未定義のルートへのアクセスは一律homeへ
     if (to.name === null || to.name === undefined) {
-        console.log('undefined route accessed')
         next({ name: 'home' })
     } else {
         const user = useUserStore()

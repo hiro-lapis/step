@@ -25,9 +25,9 @@ class ChallengeStepController extends Controller
      * @param  integer  $step_id
      * @return JsonResponse
      */
-    public function show(ShowRequest $request, int $step_id): JsonResponse
+    public function show(ShowRequest $request): JsonResponse
     {
-        $result = $this->challenge_step_service->show($step_id);
+        $result = $this->challenge_step_service->show($request->validated()['id']);
         return response()->json($result);
     }
 
