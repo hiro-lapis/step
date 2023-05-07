@@ -29,10 +29,4 @@ defineProps({
 .v-leave-active {
     transition: opacity 100ms;
 }
-
-// エラーメッセージがない時はラベルとインプットのスペースをなくす
-.noErrorMessage {
-    position: relative;
-    top: 0;
-}
 </style>

@@ -58,42 +58,4 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import "../../../sass/foundation/_breakpoints.scss";
-
-// 各ページでコンテンツを表示するwidthスタイルを設定
-// 適宜propsで変更する
-.p-container {
-    max-width: 1440px;
-    &--top {
-        max-width: 100%;
-        margin-top: 50px;
-    }
-    &__steps-list {
-        max-width: 1000px;
-        position: relative;
-    }
-    &--steps-form {
-        max-width: 1440px;
-        margin-bottom: 50px;
-        @include pc() {
-            margin-bottom: 250px;
-        }
-    }
-    &--steps-show {
-        display: flex; // メインコンテンツとサイドバーの横並び
-        justify-content: space-between;
-        max-width: 1000px;
-        margin-bottom: 50px;
-        @include pc() {
-            margin-bottom: 300px;
-        }
-    }
-    &__mypage {
-        max-width: 600px;
-        margin-bottom: 50px;
-        @include pc() {
-            margin-bottom: 300px;
-        }
-    }
-}
 </style>

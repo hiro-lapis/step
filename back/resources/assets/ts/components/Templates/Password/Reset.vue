@@ -61,15 +61,15 @@ onMounted(() => {
 <template>
     <BaseView>
         <template v-slot:content>
-            <div class="p-form">
-                <div class="p-form__container">
-                    <div class="p-form__head">
+            <div class="p-reset-form">
+                <div class="p-reset-form__container">
+                    <div class="p-reset-form__head">
                         <h2>パスワードリセット</h2>
                     </div>
 
-                    <div class="p-form__body">
+                    <div class="p-reset-form__body">
                         <!-- Eメール -->
-                        <div class="p-form__element">
+                        <div class="p-reset-form__element">
                             <TextInput
                                 v-model:value="resetData.email"
                                 errorKey="email"
@@ -78,7 +78,7 @@ onMounted(() => {
                                 placeHolder="Eメールアドレス"
                             />
                         </div>
-                        <div class="p-form__element">
+                        <div class="p-reset-form__element">
                             <TextInput
                                 v-model:value="resetData.password"
                                 errorKey="password"
@@ -87,7 +87,7 @@ onMounted(() => {
                                 placeHolder="新パスワード(8~16文字)"
                             />
                         </div>
-                        <div class="p-form__element">
+                        <div class="p-reset-form__element">
                             <TextInput
                                 v-model:value="resetData.password_confirmation"
                                 @keyupEnter="update"
@@ -111,47 +111,4 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import "../../../../sass/foundation/breakpoints";
-@import "../../../../sass/layout/_container.scss";
-
-.p-container {
-    margin-top: 130px;
-    margin-bottom: 50px;
-    @include pc() {
-        margin-bottom: 65px;
-    }
-}
-
-.p-form {
-    &__container {
-        margin: 0 auto;
-        padding: 25px 40px;
-        width: 100%;
-        box-sizing: border-box;
-        text-align: center;
-        overflow: hidden;
-        @include pc() {
-            width: 500px;
-            box-shadow: 0 0 8px #ccc;
-            // border: 1px solid #d6d6d6; // くっきりラインタイプ
-        }
-    }
-    &__head {
-        margin-bottom: 15px;
-        text-align: center;
-        font-size: 16px;
-    }
-    &__body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    &__element {
-        width: 100%;
-        margin-bottom: 10px;
-        &:last-of-type {
-            margin-bottom: 15px;
-        }
-    }
-}
 </style>

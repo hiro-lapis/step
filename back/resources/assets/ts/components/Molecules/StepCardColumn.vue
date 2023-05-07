@@ -21,12 +21,4 @@ defineProps({
 </template>
 
 <style scoped lang="scss">
-.c-step-card-column { // 縦１列カラム
-	display: flex;
-	flex-direction: column;
-	margin-top: -20px; /*1行目の上マージンを相殺*/
-    &__item {
-        margin-top: 20px;
-    }
-}
 </style>

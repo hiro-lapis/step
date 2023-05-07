@@ -51,23 +51,4 @@ onMounted(() => init())
 </template>
 
 <style lang="scss" scoped>
-@import "../../../../sass/foundation/_breakpoints.scss";
-
-.p-steps-list {
-    &__body {
-        margin-bottom: 30px;
-        padding-bottom: 50px;
-        @include mq() {
-            padding-bottom: 45px;
-        }
-    }
-    &__pagination {
-        width: 100%;
-        height: 30px;
-        justify-content: center;
-        display: flex;
-        position: absolute; // コンテンツ最下部に固定
-        bottom: 0;
-    }
-}
 </style>

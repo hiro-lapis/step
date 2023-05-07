@@ -1,0 +1,71 @@
+@charset "utf-8";
+/* ==========================================================================
+ Step Edit
+========================================================================== */
+.p-step-edit-form { // 編集フォームとプレビューのラッパー
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    @include pc() {
+        flex-direction: row;
+    }
+    &__editor { // 編集フォーム
+        width: 100%;
+        padding: 20px 40px;
+        box-sizing: border-box;
+        text-align: center;
+        @include pc() {
+            width: 600px;
+            box-shadow: 0 0 8px #ccc;
+        }
+    }
+    &__head { // 入力フォームヘッダ
+        margin-bottom: 15px;
+        @include pc() {
+            margin-bottom: 30px;
+        }
+        text-align: center;
+        font-size: 16px;
+    }
+    &__body { // 入力フォーム入力UIパート
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    &__element { // 各種入力UIラッパー
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    &__bottom { // 登録更新ボタンラッパー
+        // 新規作成(ボタンが2つ存在しない)の時のため、2番目のボタンにマージンを設定
+        width: 100%;
+        .c-btn:nth-child(2) {
+            margin-top: 20px;
+        }
+    }
+    &__explain-text {
+        text-align: left;
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+.p-preview { // プレビュー
+    width: 100%;
+    display: none;
+    box-sizing: border-box;
+    text-align: center;
+    @include pc() {
+        display: flex;
+        width: 600px;
+        box-shadow: 0 0 8px #fff;
+    }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400&family=Montserrat+Subrayada&display=swap');
+.step-detail {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-weight: 400;
+}

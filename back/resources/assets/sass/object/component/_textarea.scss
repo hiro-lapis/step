@@ -23,18 +23,24 @@
     white-space: pre-wrap; // 改行の表示
     appearance: none;
     font-size: 16px;
-}
-
-.c-textarea--profile {
-    @extend %c-textarea;
-    height: 200px;
-    &:focus {
-        background: #fff;
+    &__container {
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
     }
-}
-
-// ショップ 商品名
-.c-textarea--product-name-edit {
-    @extend %c-textarea;
-    height: 100px;
+    &__counter {
+        color: #999;
+    }
+    &__label {
+        text-align: left;
+        display: block;
+        padding-left: 5px;
+        margin-bottom: 5px;
+    }
+    &__loading-icon {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+    }
 }

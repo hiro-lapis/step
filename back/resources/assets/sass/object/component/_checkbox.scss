@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* ==========================================================================
+ Check Box
+========================================================================== */
+$box-size: 18px;
+
+.c-checkbox--single {
+    &__input {
+        margin: 0;
+        width: 0;
+        opacity: 0;
+    }
+    &__cover { // チェックボックスの見た目
+        transition: all .3s;
+        position: relative;
+        top: 2px;
+        left: 2px;
+        display: inline-block;
+        width: $box-size;
+        height: $box-size;
+        background: #F5F5F5;
+        box-shadow: 0 1px 4px rgba(0,0,0, .4) inset;
+    }
+    &__label-text {
+        margin-left: 5px;
+        vertical-align: text-top;
+    }
+    &:hover > .c-checkbox--single__cover {
+        background: #ccc;
+    }
+    &:checked + .c-checkbox--single__cover { // チェック時の背景色
+        background: #1da1f2;
+    }
+}
+
+.c-checkbox--single__input:focus + .c-checkbox--single__cover{ // フォーカス時の背景
+    background: #ccc;
+}
+.c-checkbox--single__input:checked + .c-checkbox--single__cover {  // チェック時の背景
+    background: #1da1f2;
+}
+.c-checkbox--single__input:checked + .c-checkbox--single__cover::before { // チェックマーク左側
+    content: "";
+    display: block;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    width: 35%;
+    height: 2px;
+    transform: translate(-5px, 6px) rotateZ(-135deg);
+    transform-origin: 1px 1px;
+    background: #fff;
+}
+.c-checkbox--single__input:checked + .c-checkbox--single__cover::after {// チェックマーク右側
+    content: "";
+    display: block;
+    position: absolute;
+    top: 36%;
+    left: 50%;
+    width: 70%;
+    height: 2px;
+    transform: translate(-5px, 6px) rotateZ(-45deg);
+    transform-origin: 1px 1px;
+    background: #fff;
+}

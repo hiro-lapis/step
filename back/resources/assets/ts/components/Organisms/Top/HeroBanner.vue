@@ -24,37 +24,4 @@ defineProps({
 </template>
 
 <style scoped lang="scss">
-@import "../../../../sass/foundation/_breakpoints.scss";
-@import "../../../../sass/object/component/_title.scss";
-@import "../../../../sass/object/component/_input.scss";
-
-.p-hero-banner {
-    position: relative;
-    margin-top: 110px;
-    margin-bottom: 80px;
-    width: 100%;
-    height: 400px;
-    overflow: hidden;
-    &__container {
-        max-width: 1000px;
-        display: flex;
-        margin: 0 auto; // コンテンツ全体は中央寄せ、中身はflex
-    }
-    &__title {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 35%; // 常にcontainerの幅に対し一定の割合
-        margin-left: 5%;
-        margin-right: -5%;
-        @include mq() {
-            margin-left: 0; // 画像との余白調整
-            margin-right: 0;
-        }
-    }
-    &__img {
-        width: 65%;// 常にcontainerの幅に対し一定の割合
-    }
-
-}
 </style>

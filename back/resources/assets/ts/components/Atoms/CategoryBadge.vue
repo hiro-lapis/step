@@ -57,15 +57,3 @@ const CategoryType = {
         </template>
     </span>
 </template>
-
-<style lang="scss" scoped>
-// カテゴリーバッジ
-.c-badge--category {
-    color: #fff;
-    padding: 7px 10px;
-    // background-color: red; // 切り出し
-    border-radius: 2px;
-    font-size: 10px;
-    display: inline-block;
-}
-</style>

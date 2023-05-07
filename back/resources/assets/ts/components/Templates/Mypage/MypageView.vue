@@ -34,7 +34,7 @@ onMounted(() => {})
 <template>
     <BaseView className="p-container__mypage">
         <template v-slot:content>
-            <div class="c-multi-page__container">
+            <div class="p-mypage__container">
                 <OutInFadeIn>
                     <MultiTab
                         :tabs="tabGroups"
@@ -53,22 +53,4 @@ onMounted(() => {})
 </template>
 
 <style lang="scss" scoped>
-@import "../../../../sass/foundation/_breakpoints.scss";
-.c-multi-page {
-    &__container {
-        width: 100%;
-        min-height: 300px;
-        transition: all 0.8s ease;
-        // @include pc() {
-        //     box-shadow: 0 0 2px #ccc;
-        // }
-    }
-    &__head {
-        font-size: 24px;
-        // 字が詰まって見えるので間隔を調整
-        letter-spacing: 2px;
-        margin-top: 20px;
-        margin-left: 20px;
-    }
-}
 </style>

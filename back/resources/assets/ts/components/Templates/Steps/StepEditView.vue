@@ -151,15 +151,15 @@ onMounted(() => {
 <template>
     <BaseView className="p-container--steps-form">
         <template v-slot:content>
-                <div class="p-form">
-                    <!-- start:p-form__container -->
-                    <div class="p-form__editor">
-                        <div class="p-form__head">
+                <div class="p-step-edit-form">
+                    <!-- start:p-step-edit-form__container -->
+                    <div class="p-step-edit-form__editor">
+                        <div class="p-step-edit-form__head">
                             <h2 class="c-title--step-edit">{{ pageTitle }}</h2>
                         </div>
-                        <div class="p-form__body">
+                        <div class="p-step-edit-form__body">
                             <!-- ステップ名 -->
-                            <div class="p-form__element">
+                            <div class="p-step-edit-form__element">
                                 <TextInput
                                     v-model:value="createData.name"
                                     errorKey="name"
@@ -170,7 +170,7 @@ onMounted(() => {
                                 />
                             </div>
                             <!-- カテゴリー -->
-                            <div class="p-form__element">
+                            <div class="p-step-edit-form__element">
                                 <CategorySelectBox
                                     ref="categorySelect"
                                     v-model:value="createData.category_id"
@@ -179,7 +179,7 @@ onMounted(() => {
                                 />
                             </div>
                             <!-- 達成目安時間 -->
-                            <div class="p-form__element">
+                            <div class="p-step-edit-form__element">
                                 <AchievementTimeTypeSelectBox
                                     v-model:value="createData.achievement_time_type_id"
                                     label="達成目安時間"
@@ -187,7 +187,7 @@ onMounted(() => {
                                 />
                             </div>
                             <!-- 概要 -->
-                            <div class="p-form__element">
+                            <div class="p-step-edit-form__element">
                                 <TextareaInput
                                     v-model:value="createData.summary"
                                     height="100"
@@ -195,11 +195,11 @@ onMounted(() => {
                                 />
                             </div>
                             <!-- chat GPT入力補完について -->
-                            <div class="p-form__explain-text">
+                            <div class="p-step-edit-form__explain-text">
                                 <span class="c-title--explain-completion" @click="displayComplectionExplain">＊chat GPTサジェストについて</span>
                             </div>
                             <template :key="index" v-for="(subStep, index) in createData.sub_steps">
-                                <div class="p-form__element">
+                                <div class="p-step-edit-form__element">
                                     <TextInput
                                         @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
                                         v-model:value="subStep.name"
@@ -210,7 +210,7 @@ onMounted(() => {
                                     </template>
                                     </TextInput>
                                 </div>
-                                <div class="p-form__element">
+                                <div class="p-step-edit-form__element">
                                     <TextareaInput
                                         @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
                                         v-model:value="subStep.detail"
@@ -233,7 +233,7 @@ onMounted(() => {
                                 </div>
                             </template>
                             <!-- サブステップ追加 -->
-                            <div class="p-form__bottom">
+                            <div class="p-step-edit-form__bottom">
                                 <button
                                     @click="addSubStep"
                                     class="c-btn c-btn--middle c-btn--add-sub-step"
@@ -268,74 +268,4 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import "../../../../sass/foundation/_breakpoints.scss";
-@import "../../../../sass/layout/_container.scss";
-
-.p-form { // 編集フォームとプレビューのラッパー
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    @include pc() {
-        flex-direction: row;
-    }
-    &__editor { // 編集フォーム
-        width: 100%;
-        padding: 20px 40px;
-        box-sizing: border-box;
-        text-align: center;
-        @include pc() {
-            width: 600px;
-            box-shadow: 0 0 8px #ccc;
-        }
-    }
-    &__head { // 入力フォームヘッダ
-        margin-bottom: 15px;
-        @include pc() {
-            margin-bottom: 30px;
-        }
-        text-align: center;
-        font-size: 16px;
-    }
-    &__body { // 入力フォーム入力UIパート
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 30px;
-    }
-    &__element { // 各種入力UIラッパー
-        width: 100%;
-        margin-bottom: 15px;
-    }
-    &__bottom { // 登録更新ボタンラッパー
-        // 新規作成(ボタンが2つ存在しない)の時のため、2番目のボタンにマージンを設定
-        width: 100%;
-        .c-btn:nth-child(2) {
-            margin-top: 20px;
-        }
-    }
-    &__explain-text {
-        text-align: left;
-        display: inline-block;
-        width: 100%;
-        margin-bottom: 20px;
-    }
-}
-
-.p-preview { // プレビュー
-    width: 100%;
-    display: none;
-    box-sizing: border-box;
-    text-align: center;
-    @include pc() {
-        display: flex;
-        width: 600px;
-        box-shadow: 0 0 8px #fff;
-    }
-}
-
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400&family=Montserrat+Subrayada&display=swap');
-.step-detail {
-    font-family: 'M PLUS 1p', sans-serif;
-    font-weight: 400;
-}
 </style>

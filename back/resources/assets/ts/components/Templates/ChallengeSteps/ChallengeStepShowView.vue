@@ -39,7 +39,7 @@ onMounted(() => {
 <template>
     <BaseView className="p-container--steps-show">
         <template v-slot:content>
-            <div class="p-step-show__main">
+            <div class="p-challenge-step-show__main">
                     <template v-if="step">
                         <StepPreview
                             @clear="fetchData"
@@ -48,13 +48,13 @@ onMounted(() => {
                         ></StepPreview>
                 </template>
             </div>
-            <div v-if="isInitialized && step" class="p-step-show__aside">
-                <div class="c-step-supplement">
-                    <div class="c-step-supplement__head">
+            <div v-if="isInitialized && step" class="p-challenge-step-show__aside">
+                <div class="p-challenge-step-show__supplement">
+                    <div class="p-challenge-step-show__supplement__head">
                         <ImageClip :path="step.post_user_image_url!"></ImageClip>
                         <div class="u-margin-l-05p">{{ step!.post_user_name! }}</div>
                     </div>
-                    <div class="c-step-supplement__user-information">
+                    <div class="p-challenge-step-show__supplement__user-information">
                         {{ step.post_user_profile! }}
                     </div>
                 </div>
@@ -64,37 +64,4 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import '../../../../sass/foundation/breakpoints';
-
-.p-step-show {
-    &__container {
-        overflow: hidden; // 見出し線など溢れるデザインを非表示
-    }
-    &__main {
-        width: 100%;
-        @include pc() {
-            width: 70%;
-        }
-    }
-    &__aside { // sp非表示
-        display: none;
-        @include pc() {
-            width: 25%;
-            display: block;
-        }
-    }
-}
-.c-step-supplement {
-    background-color: #fff;
-    padding: 20px;
-    &__head {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    &__user-information {
-        line-height: 1.5;
-        font-size: 12px;
-    }
-}
 </style>

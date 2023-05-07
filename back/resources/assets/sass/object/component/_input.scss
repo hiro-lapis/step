@@ -7,7 +7,6 @@
 %c-input {
     padding: 5px 10px;
     box-sizing: border-box;
-    // height: 48px;
     border: 1px solid #e8e8e8;
     border-radius: 5px;
     font-size: 16px;
@@ -16,7 +15,6 @@
 .c-input {
     padding: 5px 10px;
     box-sizing: border-box;
-    // height: 48px;
     border: 1px solid #e8e8e8;
     border-radius: 5px;
     font-size: 16px;
@@ -29,35 +27,30 @@
         height: 40px;
     }
     &--middle {
-        // width: 80%;
         height: 36px;
     }
     &--small {
-        // width: 50%;
         height: 30px;
-        // @include pc() {
-        //     width: 400px;
-        // }
     }
     &--x-small {
         width: 40%;
         height: 30px;
-        // @include pc() {
-        //     width: 400px;
-        // }
     }
-    &--search {
+    &--keyword {
         flex: 1;
         padding: 5px 30px 5px 5px;
         border: none;
         outline: none;
-    }
-    &--level,
-    &--hidden {
-        display: none;
+        &__container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin: 10px;
+            padding: 5px;
+            border-radius: 5px;
+        }
     }
 }
-
 .c-input {
     // inputを囲むタグ
     &__container {
@@ -72,43 +65,5 @@
         vertical-align: sub;
         padding-left: 5px;
         height: 20px;
-    }
-}
-
-// プロフィール編集で使うローディング付きinput
-.c-input--loading {
-    @extend .c-input;
-    transition: all 0.1s;
-    height: 48px;
-    &:focus {
-        background: #fff;
-    }
-}
-
-// サイドバーの検索input
-.c-input-side-search-bar {
-    @extend %c-input;
-    padding: 7px 10px;
-    font-size: 14px;
-}
-
-// 販売価格・定価の価格帯input
-.c-input--range {
-    &__container {
-        display: flex;
-        align-items: center;
-        padding-left: 2px;
-    }
-    &__min,
-    &__max {
-        @extend %c-input;
-        height: 32px;
-        font-size: 14px;
-    }
-    &__min {
-        margin-right: 3px;
-    }
-    &__max {
-        margin-left: 3px;
     }
 }

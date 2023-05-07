@@ -32,3 +32,9 @@
     @extend %base;
     color: $color_black8;
 }
+
+// エラーメッセージがない時はラベルとインプットのスペースをなくす
+.c-message--no-error {
+    position: relative;
+    top: 0;
+}

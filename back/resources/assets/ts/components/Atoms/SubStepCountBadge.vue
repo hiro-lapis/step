@@ -17,4 +17,5 @@ const label = computed(() => 'ステップ数:' + (props.step as Step).sub_steps
     <span class="c-badge--step-count">{{ label }}</span>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>

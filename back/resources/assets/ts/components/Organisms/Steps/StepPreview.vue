@@ -149,27 +149,27 @@ const clear = async (subStepId: number) => {
             </div>
             <!-- ステップ詳細 -->
             <div class="c-step-preview__body">
-                <div class="c-sub-step__container">
+                <div class="c-step-preview__sub-step__container">
                     <!-- チャレンジ中の表示 (prodビルドエラー解消のためcomputed(subStepList)は使わない)-->
                     <template v-if="isChallengeStep(step)">
                         <template :key="i" v-for="(subStep, i) in step.challenge_sub_steps!">
-                            <div class="c-sub-step">
+                            <div class="c-step-preview__sub-step">
                                 <!-- サブステップ見出し -->
-                                <div class="c-sub-step__header">
+                                <div class="c-step-preview__sub-step__header">
                                     <h3 class="c-title--sub-step">
-                                        <span class="c-sub-step__header--prefix">ステップ{{ indexString(i) + ' ' }}</span>
-                                        <span class="c-sub-step__header--name">{{ subStep.name }}</span>
+                                        <span class="c-step-preview__sub-step__header--prefix">ステップ{{ indexString(i) + ' ' }}</span>
+                                        <span class="c-step-preview__sub-step__header--name">{{ subStep.name }}</span>
                                         <template v-if="isChallengeSubStep(subStep)">
-                                            <span class="c-sub-step__header--status-name" :style="{ 'background-color': statusBgColor(subStep.status) }">
+                                            <span class="c-step-preview__sub-step__header--status-name" :style="{ 'background-color': statusBgColor(subStep.status) }">
                                                 {{ subStep.status_name! }}
                                             </span>
                                         </template>
                                     </h3>
                                 </div>
                                 <!-- サブステップ詳細 -->
-                                <div class="c-sub-step__content">{{ subStep.detail }}</div>
+                                <div class="c-step-preview__sub-step__content">{{ subStep.detail }}</div>
                                 <!-- クリアボタン -->
-                                <div v-if="showClearBtn(subStep)" class="c-sub-step__clear-btn">
+                                <div v-if="showClearBtn(subStep)" class="c-step-preview__sub-step__clear-btn">
                                     <button @click="clear(subStep.id!)" class="c-btn--clear">クリア</button>
                                 </div>
                             </div>
@@ -177,16 +177,16 @@ const clear = async (subStepId: number) => {
                     </template>
                     <template v-else>
                         <template :key="j" v-for="(subStep, j) in step.sub_steps">
-                            <div class="c-sub-step">
+                            <div class="c-step-preview__sub-step">
                                 <!-- サブステップ見出し -->
-                                <div class="c-sub-step__header">
+                                <div class="c-step-preview__sub-step__header">
                                     <div class="c-title--sub-step">
-                                        <span class="c-sub-step__header--prefix">ステップ{{ indexString(j) + ' ' }}</span>
-                                        <span class="c-sub-step__header--name">{{ subStep.name }}</span>
+                                        <span class="c-step-preview__sub-step__header--prefix">ステップ{{ indexString(j) + ' ' }}</span>
+                                        <span class="c-step-preview__sub-step__header--name">{{ subStep.name }}</span>
                                     </div>
                                 </div>
                                 <!-- サブステップ詳細 -->
-                                <div class="c-sub-step__content">{{ (subStep as SubStep).detail }}</div>
+                                <div class="c-step-preview__sub-step__content">{{ (subStep as SubStep).detail }}</div>
                             </div>
                         </template>
                     </template>
@@ -201,64 +201,11 @@ const clear = async (subStepId: number) => {
 </template>
 
 <style scoped lang="scss">
-
-.c-step-preview {
-    background-color: #fff;
-    padding: 20px;
-    width: 100%; // 親要素の幅いっぱいに広げる
-    overflow-wrap: break-word;
-    word-wrap: break-word; // 溢れる文字を折り返す
-    box-sizing: border-box;
-    &__head {
-        margin-bottom: 30px;
-    }
-    &__action-ui {
-        margin-bottom: 5px;
-        display: flex;
-        justify-content: right;
-    }
-    &__information {
-        display: flex;
-        align-items: center;
-    }
-    &__challenge-information {
-        font-size: 12px;
-    }
-    &__bottom {
-        display: flex;
-        justify-content: center;
-    }
-}
 .c-edit-tool-tip__txt {
     font-size: 12px;
     cursor: pointer;
     &:hover {
         text-decoration: underline;
-    }
-}
-
-.c-sub-step {
-    margin-bottom: 25px;
-    overflow: hidden; // 見出し線など溢れるデザインを非表示
-    &__header {
-        margin-bottom: 20px;
-        &--status-name {
-            display: inline-block;
-            margin-left: 5px;
-            padding: 2px 5px;
-            font-size: 10px;
-            vertical-align: text-bottom;
-            color: #fff;
-            border-radius: 5px;
-        }
-    }
-    &__content { // 左寄せ、改行反映する
-        font-size: 13px;
-        text-align: left;
-        white-space: pre-wrap;
-    }
-    &__clear-btn {
-        margin-top: 20px;
     }
 }
 

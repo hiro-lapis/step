@@ -75,7 +75,7 @@ const emitKeyPressShiftEnter = () => {
             @keydown.shift.enter="emitKeyPressShiftEnter"
             class="c-input"
             :id="formId"
-            :class="[{noErrorMessage: inline}, className ]"
+            :class="[{'c-message--no-error': inline}, className ]"
             :placeholder="placeHolder"
         />
     </div>

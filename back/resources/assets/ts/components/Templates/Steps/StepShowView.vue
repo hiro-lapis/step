@@ -125,37 +125,4 @@ const gotoStepList = () => {
 </template>
 
 <style scoped lang="scss">
-@import '../../../../sass/foundation/breakpoints';
-
-.p-step-show {
-    &__container {
-        overflow: hidden; // 見出し線など溢れるデザインを非表示
-    }
-    &__main {
-        width: 100%;
-        @include pc() {
-            width: 70%;
-        }
-    }
-    &__aside { // sp非表示
-        display: none;
-        @include pc() {
-            width: 25%;
-            display: block;
-        }
-    }
-}
-.c-step-supplement {
-    background-color: #fff;
-    padding: 20px;
-    &__head {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    &__user-information {
-        line-height: 1.5;
-        font-size: 12px;
-    }
-}
 </style>

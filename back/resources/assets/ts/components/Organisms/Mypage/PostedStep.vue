@@ -40,7 +40,4 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.c-posted-step {
-    // margin-top: 20px;
-}
 </style>
