@@ -7,13 +7,11 @@ defineProps({
     className: { required: false, type: String, default: '', },
 })
 
+// emits
 interface Emits {
     (e: 'update:value', checked: boolean): void;
 }
 const emit = defineEmits<Emits>()
-
-// data
-// computed
 // methods
 const input = (event: Event) => {
     const val = (event.target as HTMLInputElement).checked

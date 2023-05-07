@@ -1,14 +1,10 @@
 <script setup lang="ts">
-
 // props
 defineProps({
     catchCopyText: { required: false, type: String, default: 'あなたのSTEPを共有しよう\n経験シェアサービス', },
     serviceTitle: { required: false, type: String, default: 'STEP', },
     bannerImageUrl: { required: false, type: String, default: 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/hero-banner.png', },
 })
-// data
-// methods
-// computed
 </script>
 
 <template>

@@ -12,7 +12,7 @@ const $repositories = inject<Repositories>(repositoryKey)!
 
 // data
 const steps = ref<Step[]>([])
-
+// computed
 const existsSteps = computed(() => steps.value.length > 0)
 // methods
 const fetchData = () => {
@@ -25,7 +25,6 @@ const fetchData = () => {
             requestStore.setLoading(false)
         })
 }
-
 onMounted(() => {
     fetchData()
 })

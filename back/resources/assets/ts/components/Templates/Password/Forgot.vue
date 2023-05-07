@@ -14,7 +14,7 @@ const messageStore = useMessageInfoStore()
 const forgotData = reactive({
     email: '',
 })
-
+// methods
 const send = () => {
     if (requestStore.isLoading) return
     requestStore.setLoading(true)

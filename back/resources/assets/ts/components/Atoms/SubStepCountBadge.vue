@@ -8,7 +8,6 @@ const props = defineProps({
     step: { required: true, type: Object as PropType<Step|ChallengeStep>, },
     showProgress: { required: false, type: Boolean, default: false },
 })
-
 // computed
 const label = computed(() => 'ステップ数:' + (props.step as Step).sub_steps_count!)
 </script>

@@ -116,18 +116,6 @@ const halfOfRange = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.c-pagenation {
-    display: flex;
-    &__item {
-        border: 1px solid #ddd;
-        padding: 6px 12px;
-        text-align: center;
-        cursor: pointer;
-        & + .c-pagenation__item {
-            border-left: none;
-        }
-    }
-}
 .active {
     font-weight: bold;
     cursor: default;

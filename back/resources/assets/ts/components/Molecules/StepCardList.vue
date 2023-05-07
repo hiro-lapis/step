@@ -10,7 +10,7 @@ const requestStore = useRequestStore()
 const props = defineProps({
     stepList: { require: true, type: Array<Step>, }
 })
-
+// computed
 const isEmpty = computed(() => props.stepList!.length === 0)
 const showNoDataMessage = computed(() => isEmpty.value && !requestStore.isLoading)
 </script>

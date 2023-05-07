@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 // props
 defineProps({
     message: { required: true, type: String, }, // クラス名(default: 横幅いっぱい表示のクラス)

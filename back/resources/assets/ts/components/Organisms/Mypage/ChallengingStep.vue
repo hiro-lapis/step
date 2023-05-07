@@ -9,7 +9,6 @@ import { repositoryKey } from '../../../types/common/Injection'
 // utilities
 const requestStore = useRequestStore()
 const $repositories = inject<Repositories>(repositoryKey)!
-
 // data
 const steps = ref<Step[]>([])
 

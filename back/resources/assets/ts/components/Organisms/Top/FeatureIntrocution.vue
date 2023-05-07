@@ -1,13 +1,4 @@
 <script setup lang="ts">
-
-// props
-
-// https://placehold.jp/150x150.png
-
-// data
-// methods
-// computed
-
 </script>
 
 <template>

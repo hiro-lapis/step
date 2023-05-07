@@ -26,7 +26,6 @@ const user = reactive<User>({
     skip_api_confirm: false,
 })
 const passwordUpdateMode = ref(false)
-// const uploadImage = ref<InstanceType<typeof UploadUserImage>>()
 const uploadImage = ref<File|null>(null)
 const fileFlg = ref(false)
 

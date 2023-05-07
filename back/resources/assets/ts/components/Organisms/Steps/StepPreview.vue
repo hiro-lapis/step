@@ -22,13 +22,11 @@ const requestStore = useRequestStore()
 const userStore = useUserStore()
 
 // props
-// const props = defineProps<StepProps>()
-
 const props = defineProps({
     step: { required: true, type: Object as PropType<Step|ChallengeStep>, }, // プレビュー表示するステップ情報
     readOnly: { required: false, type: Boolean, default: false, }, // 閲覧モード(twitter,編集ボタン表示)
 })
-
+// etmis
 interface Emits {
     (e: 'clear'): void;
     (e: 'delete'): void;
@@ -43,14 +41,6 @@ const editToolTipMenus = [
 ]
 // computed
 const { isChallengeStep, isChallengeSubStep } = useTypeGuards()
-// ステップ・チャレンジステップの型が異なるため、型に応じたサブステップを表示
-// const subStepList = computed(() => {
-//     if ('sub_steps' in props.step ) {
-//         return props.step.sub_steps!
-//     } else {
-//         return props.step.challenge_sub_steps!
-//     }
-// })
 const settedSummary = computed(() => {
     return props.step.summary !== null && props.step.summary !== ''
 })
@@ -117,8 +107,6 @@ const clear = async (subStepId: number) => {
                             >
                             <template v-slot:bottom>
                                 <p class="c-edit-tool-tip__txt" @click="deleteStep">削除</p>
-                                <!-- <ConfirmDialog :open-txt="'削除'">
-                                </ConfirmDialog> -->
                             </template>
                             </EditToolTip>
                         </span>
