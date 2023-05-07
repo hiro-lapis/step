@@ -102,10 +102,4 @@ const emitKeyPressShiftEnter = () => {
         left: 50%;
     }
 }
-
-// エラーメッセージがない時はラベルとインプットのスペースをなくす
-.noErrorMessage {
-    position: relative;
-    top: 0;
-}
 </style>

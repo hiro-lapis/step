@@ -146,12 +146,6 @@ onMounted(() => {
 .v-leave-active {
     transition: opacity 100ms;
 }
-
-// エラーメッセージがない時はラベルとインプットのスペースをなくす
-.noErrorMessage {
-    position: relative;
-    top: 0;
-}
 // 未選択時に文字色をつける
 .notSelected {
     color: #999;
