@@ -40,6 +40,10 @@ const isChallengeable = computed(() => {
 const inNotInChallenge = computed(() => {
     return userStore.isInChallenge(Number(route.params.id)) === false
 })
+// 未ログインで初期ロード後
+const showLoginBtn = computed(() => {
+    return isInitialized.value && userStore.isLogin === false
+})
 
 // methods
 const fetchData = async () => {
@@ -60,6 +64,8 @@ const challenge = async () => {
     requestStore.setLoading(true)
     await $repositories.step.challenge(step.value.id!)
         .then(response => {
+            // ステップを挑戦中のステップに加えボタンを非表示
+            userStore.setChallengingStepId(step.value.id!)
             messageStore.setMessage(response.data.message)
         }).finally(() => {
             requestStore.setLoading(false)
@@ -95,7 +101,7 @@ const gotoStepList = () => {
                             挑戦する!
                         </button>
                         <button
-                            v-if="!userStore.isLogin"
+                            v-if="showLoginBtn"
                             @click="gotoLogin"
                             class="c-btn--challenge">
                             ログインして挑戦する!
