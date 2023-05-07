@@ -3,7 +3,7 @@ import { computed, inject, ref, Ref } from 'vue'
 import { useUserStore } from '../../../ts/store/globalStore'
 import { useAuthFunc } from '../../composables/auth'
 import KeyWordInput from './KeyWordInput.vue'
-import { conditionKey, searchFuncKey } from '../../types/common/Injection'
+import { conditionKey, searchFuncKey, showSearchUiKey } from '../../types/common/Injection'
 import { Condition } from '../../types/components/Condition'
 
 // utilities
@@ -11,6 +11,7 @@ const userStore = useUserStore()
 // data
 const condition = inject<Ref<Condition>>(conditionKey)!
 const search = inject<() => Promise<void>>(searchFuncKey)!
+const showSearchUi = inject<() => Promise<void>>(showSearchUiKey)!
 const spSearch: () => Promise<void> = async () => {
   await search()
   // SPメニューを閉じる
@@ -26,7 +27,7 @@ const { logout } = useAuthFunc()
 	<!-- SPメニュー -->
 	<nav class="c-sp-nav" :class="{ active: isActive }">
         <ul class="c-sp-nav__list">
-            <li class="c-sp-nav__list-item">
+            <li v-if="showSearchUi" class="c-sp-nav__list-item">
                 <KeyWordInput
                     :placeHolder="''"
                     @keyupEnter="spSearch()"

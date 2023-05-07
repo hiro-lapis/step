@@ -6,7 +6,7 @@ import { useAuthFunc } from '../composables/auth'
 import { useRoute } from 'vue-router'
 import KeyWordInput from './Atoms/KeyWordInput.vue'
 import { Condition } from '../types/components/Condition'
-import { conditionKey, searchFuncKey } from '../types/common/Injection'
+import { conditionKey, searchFuncKey, showSearchUiKey } from '../types/common/Injection'
 import { useStepListStore } from '../store/stepListStore'
 
 // utility
@@ -23,6 +23,7 @@ const { logout } = useAuthFunc()
 const showSearchUi = computed(() => {
     return route.name === 'steps-list'
 })
+provide(showSearchUiKey, showSearchUi)
 // ログイン状態で遷移先変更
 const topPageName = computed(() => userStore.isLogin ? 'steps-list' : 'home')
 const isLogin = computed(() => userStore.isLogin)
