@@ -15,17 +15,12 @@ import { useUserStore } from '../../store/globalStore'
 
 // utilities
 const userStore = useUserStore()
-
 // props
 const props = defineProps({
     step : { require: true, type: Object as PropType<Step|ChallengeStep>, },
     challengeMode: { require: false, type: Boolean, default: false,}
 })
 // computed
-const showEditBtn = computed(() => {
-    if (props.challengeMode || isChallengeStep(props.step!)) return false
-    return userStore.user.id === props.step!.user_id
-})
 // カードクリック時の遷移先を返す
 const getShowRoute = computed(() => {
     if (props.challengeMode && isChallengeStep(props.step!)) {
@@ -33,7 +28,6 @@ const getShowRoute = computed(() => {
     }
     return { name: 'steps-show', params: { id: props.step!.id } }
 })
-
 // methods
 const { isChallengeStep } = useTypeGuards()
 const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step.status_name : ''

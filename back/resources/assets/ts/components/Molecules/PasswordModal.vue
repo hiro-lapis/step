@@ -5,28 +5,26 @@ import { useMessageInfoStore, useRequestStore } from '../../store/globalStore'
 import TextInput from '../Atoms/TextInput.vue'
 import { repositoryKey } from '../../types/common/Injection'
 
+// utilities
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
 const $repositories = inject<Repositories>(repositoryKey)!
-
 // props
 defineProps({
     title: { required: true, type: String, },
     passwordExists: { required: false, type: Boolean, default: true }, // パスワード設定済ユーザーか
 })
-
+// emits
 interface Emits {
     (e: 'close'): void
 }
 const emit = defineEmits<Emits>()
-
 // data
 const passwordData = reactive({
     current_password: '',
     password: '',
     password_confirmation: '',
 })
-
 // methods
 const updatePassword = async () => {
     if (requestStore.isLoading) return

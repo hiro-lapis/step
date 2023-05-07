@@ -25,12 +25,11 @@ interface Emits {
     (e: 'keyDown:shiftEnter'): void
 }
 const emit = defineEmits<Emits>()
-
+// data
+const errorMessage = ref('')
 // computed
 const existsError = computed(() => errorMessage.value !== '')
 
-// data
-const errorMessage = ref('')
 
 // methods
 const input = (event: Event) => {

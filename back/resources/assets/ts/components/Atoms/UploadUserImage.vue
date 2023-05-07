@@ -9,8 +9,7 @@ const props = defineProps({
     type: { required: true, type: String, },
     imageUrl: { required: true, type: [String, null] as PropType<string | null>, },
 })
-
-
+// emits
 interface Emits {
     (e: 'update:upload-image', file: File): void
 }

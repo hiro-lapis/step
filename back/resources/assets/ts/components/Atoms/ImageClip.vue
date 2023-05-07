@@ -7,7 +7,6 @@ const props = defineProps({
     alt: { required: false, type: String, default: '画像' }, // alt名
     size: { required: false, type: String, default: 'small' },
 })
-
 // computed
 const sizes =  ['small', 'medium', 'large']
 const sizeClass = computed(() => {

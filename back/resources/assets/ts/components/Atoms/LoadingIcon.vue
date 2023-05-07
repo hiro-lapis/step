@@ -9,7 +9,6 @@ const isLoading = computed(() => requestStore.isLoading)
 <template>
 	<transition>
 		<div v-if="isLoading" class="c-icon--loading__bg-layer">
-		<!-- <div v-if="isLoading" class="c-back-ground-layer"> -->
 			<div class="c-icon--loading">
 				<span></span>
 				<span></span>

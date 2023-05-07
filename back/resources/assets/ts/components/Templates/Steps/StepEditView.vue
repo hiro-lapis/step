@@ -30,12 +30,10 @@ const createData = reactive<Step>({
     achievement_time_type_id: 0,
     sub_steps: [{ name: '', detail: '', }],
 })
-
 const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 
 // computed
 const pageTitle = computed(() => isEdit.value ? 'ステップ更新' : '新規作成')
-// watch
 // methods
 const initialSubStep = { name: '', detail: '', }
 const addSubStep = () => createData.sub_steps.push(Object.assign({}, initialSubStep))
@@ -45,6 +43,7 @@ const popSubStep = (index: number) => {
     if (createData.sub_steps.length === 1) return
     createData.sub_steps.splice(index, 1)
 }
+// ステップ新規作成
 const create = async () => {
     if (requestStore.isLoading) return
     categorySelect.value?.validate()
@@ -59,6 +58,7 @@ const create = async () => {
         requestStore.setLoading(false)
     })
 }
+// ステップ更新
 const update = async () => {
     if (requestStore.isLoading) return
     categorySelect.value?.validate()
@@ -73,6 +73,7 @@ const update = async () => {
         requestStore.setLoading(false)
     })
 }
+// ステップ編集情報取得
 const getStep = () => {
     requestStore.setLoading(true)
         // 編集画面の場合、ステップ情報を取得
@@ -95,7 +96,7 @@ const getStep = () => {
                 }
             })
 }
-
+// ステップ編集入力補完
 const completion = async (subStepIndex: number, title: string, text: string) => {
     if (!title.trim() || !text.trim()) {
         messageStore.setErrorMessage(subStepLabel(subStepIndex) + 'のタイトルとテキストを入力してください')
@@ -124,12 +125,15 @@ const completion = async (subStepIndex: number, title: string, text: string) => 
         requestStore.setLoading(false)
     })
 }
+// サブステップのタイトルを返す
 const subStepLabel = (index: number): string => {
     return `サブステップ タイトル${(index + 1).toString()}`
 }
+// 入力補完の説明を表示
 const displayComplectionExplain = () => {
     messageStore.setMessage('*chat GPTサジェストを利用したい方は、サブステップのタイトルと詳細の概要を書いてアイコンをクリック、またはshift + Enter を押してください')
 }
+// 初期化
 const init = () => {
     // 編集画面か判定
     isEdit.value = route.name === 'steps-edit'

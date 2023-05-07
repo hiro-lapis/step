@@ -15,12 +15,8 @@ const route = useRoute()
 const requestStore = useRequestStore()
 const { fetchData } = useStepListStore()
 // data
-
 // StepList.vueと共有する検索条件
 const condition = inject<Ref<Condition>>(conditionKey)!
-
-// provide
-
 // methods
 const { logout } = useAuthFunc()
 // computed

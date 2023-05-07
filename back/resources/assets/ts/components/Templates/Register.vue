@@ -51,21 +51,6 @@ const register = async () => {
             requestStore.setLoading(false)
         })
 }
-
-// const toSnakeCase = (str: string) => {
-//     return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-// }
-
-// const convertKeysToSnakeCase = (obj: Object) => {
-//     const snakeCaseObj = {}
-//     for (let key in obj) {
-//         if (obj.hasOwnProperty(key)) {
-//             const snakeCaseKey = toSnakeCase(key)
-//             snakeCaseObj[snakeCaseKey] = obj[key]
-//         }
-//     }
-//     return snakeCaseObj
-// }
 </script>
 
 <template>

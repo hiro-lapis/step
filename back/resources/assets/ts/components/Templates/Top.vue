@@ -1,21 +1,9 @@
 <script setup lang="ts">
-// import { inject } from 'vue'
-// import { useRouter } from 'vue-router'
-// import { useUserStore } from '../../store/globalStore'
-// import { Repositories } from '../../apis/repositoryFactory'
 import HeroBanner from '../Organisms/Top/HeroBanner.vue'
 import CategoryIntroduction from '../Organisms/Top/CategoryIntroduction.vue'
 import FeatureIntrocution from '../Organisms/Top/FeatureIntrocution.vue'
 import MainPageLink from '../Organisms/Top/MainPageLink.vue'
 
-// utilities
-
-// props
-// data
-// emits
-// computed
-// watch
-// methods
 </script>
 
 <template>

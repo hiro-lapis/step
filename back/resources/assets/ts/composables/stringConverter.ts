@@ -12,12 +12,12 @@ export const useStringConverter = () => {
     const convertKeysToSnakeCase = (obj: Object) => {
         const snakeCaseObj = {};
         for (let key in obj) {
-          if (obj.hasOwnProperty(key)) {
+            if (obj.hasOwnProperty(key)) {
             const snakeCaseKey = toSnakeCase(key);
             snakeCaseObj[snakeCaseKey] = obj[key];
-          }
+            }
         }
         return snakeCaseObj;
-      }
+        }
     return { convertKeysToSnakeCase }
 }

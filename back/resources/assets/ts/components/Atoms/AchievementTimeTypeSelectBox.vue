@@ -3,9 +3,9 @@ import { computed, inject, onMounted, ref } from 'vue'
 import { Repositories } from '../../apis/repositoryFactory'
 import RequiredBadge from './RequiredBadge.vue'
 import { repositoryKey } from '../../types/common/Injection'
+
 // utilities
 const $repositories = inject<Repositories>(repositoryKey)!
-
 // props
 const props = defineProps({
     errorKey: { required: false, type: String, default: 'achievement_time_type_id' },
@@ -15,7 +15,6 @@ const props = defineProps({
     selectClass: { required: false, type: String, default: 'c-input--large' },
     value: { required: true, type: Number, },
 })
-
 // data
 type AchievementTimeType = {
     id: number
@@ -25,11 +24,7 @@ const achievementTimeTypeList = ref<AchievementTimeType[]>([])
 const errorMessage = ref('')
 const initialState = ref(true)
 
-// computed
 // methods
-// const isSeleted = (achievementTimeType_id: number) => {
-//     return props.value === achievementTimeType_id
-// }
 const fetchData = async () => {
     await $repositories.common.achievementTimeType()
         .then(response => {
@@ -69,7 +64,6 @@ const validate = (): boolean => {
     errorMessage.value = ''
     return true
 }
-
 // 親コンポーネントから呼び出せるようメソッドを公開
 defineExpose({
     validate,

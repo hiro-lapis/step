@@ -4,7 +4,6 @@ import { computed } from 'vue'
 // props
 const props = defineProps({
     id: { required: true, type: Number, },
-    // name: { required: true, type: String, }
 })
 interface Emits {
     (e: 'click:badgeIcon', value: Number): void;
@@ -12,7 +11,6 @@ interface Emits {
 const emit = defineEmits<Emits>()
 // data
 // computed
-// type colors = 'pink'|'lightGreen'|'yellow'|'green'|'blue'
 const color = computed(() => {
     return ColorTypes[props.id] ?? '#999'
 })

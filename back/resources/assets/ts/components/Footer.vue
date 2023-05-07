@@ -4,14 +4,12 @@ import { useUserStore } from '../store/globalStore'
 
 // utility
 const userStore = useUserStore()
-
 // props
 defineProps({
     isFix: { required: false, type: Boolean, default: false}, // 下部固定フラグ
 })
 // data
 const windowSize = ref(0)
-
 // methods
 const onResize = () => {
     windowSize.value = window.innerWidth

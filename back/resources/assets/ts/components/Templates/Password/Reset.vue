@@ -13,8 +13,6 @@ const $repositories = inject<Repositories>(repositoryKey)!
 const requestStore = useRequestStore()
 const messageStore = useMessageInfoStore()
 
-// props
-
 // data
 const resetData = reactive({
     token: '',

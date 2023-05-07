@@ -14,13 +14,11 @@ const requestStore = useRequestStore()
 const messageStore = useMessageInfoStore()
 const $repositories = inject<Repositories>(repositoryKey)!
 const router = useRouter()
-
 // data
 const loginData = reactive({
     email: '',
     password: '',
 })
-
 // computed
 const loading = computed(() => {
     return requestStore.isLoading

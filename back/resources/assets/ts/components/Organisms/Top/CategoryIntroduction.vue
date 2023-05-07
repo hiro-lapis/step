@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { CategoryColorList } from '../../../types/components/CategoryColor'
 
-// props
-
-// https://placehold.jp/150x150.png
-
 // data
 const catetoryList = [
     { name: 'プログラミング', color: CategoryColorList[0].rgba,image_url: 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/category-icon/1.png' },
@@ -12,9 +8,6 @@ const catetoryList = [
     { name: 'ダイエット', color: CategoryColorList[2].rgba, image_url: 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/category-icon/3.png' },
     { name: '朝活', color: CategoryColorList[3].rgba, image_url: 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/category-icon/4.png' },
 ]
-// methods
-// computed
-
 </script>
 
 <template>

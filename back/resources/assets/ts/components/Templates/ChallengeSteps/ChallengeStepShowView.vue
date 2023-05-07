@@ -10,6 +10,7 @@ import { ChallengeStep } from '../../../types/ChallengeStep'
 import ImageClip from '../../Atoms/ImageClip.vue'
 import { repositoryKey } from '../../../types/common/Injection'
 
+// utilities
 const $repositories = inject<Repositories>(repositoryKey)!
 const requestStore = useRequestStore()
 const route = useRoute()
@@ -17,8 +18,6 @@ const route = useRoute()
 // data
 const step = ref<ChallengeStep>()
 const isInitialized = ref(false)
-// computed
-
 // methods
 const fetchData = async () => {
     const stepId = Number(route.params.id)
