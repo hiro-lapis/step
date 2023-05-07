@@ -1,0 +1,24 @@
+@charset "utf-8";
+/* ==========================================================================
+ Slide Down Message
+========================================================================== */
+.c-slide-down-message {
+    white-space: pre;
+    &__container {
+        z-index: 5;
+        position: fixed;
+        top: 50px;
+        width: 100%;
+        padding: 10px 20px;
+        background: #65c99b;
+        box-sizing: border-box;
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: center;
+        white-space: pre-wrap; // 改行の反映と溢れるテキストの折り返し
+        color: #fff;
+        &--error {
+        background-color: rgba(251, 100, 66, 1);
+        }
+    }
+}

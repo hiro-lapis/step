@@ -1,0 +1,41 @@
+@charset "utf-8";
+/* ==========================================================================
+ Feature Card
+========================================================================== */
+.c-feature-card { // カード本体
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px; // スマホでも表示できるサイズ
+    margin-bottom: 50px;
+    @include pc() {
+        margin-bottom: 0px;
+    }
+    &__container { // listのコンテナ
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        @include pc() { // PC では横並び,高さもコンテンツに合わせる
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+    }
+    &__list {
+        margin: 0 auto;
+
+    }
+    &__head {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    &__title {
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    &__body {
+        font-size: 13px;
+        letter-spacing: 1.5px;
+        line-height: 1.3;
+    }
+}

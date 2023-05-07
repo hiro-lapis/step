@@ -44,26 +44,4 @@ import MainPageLink from '../Organisms/Top/MainPageLink.vue'
 </template>
 
 <style scoped lang="scss">
-@import "../../../sass/foundation/_breakpoints.scss";
-@import "../../../sass/object/component/_title.scss";
-@import "../../../sass/object/component/_input.scss";
-
-.p-top {
-    &__hero-banner {
-        background-color: #faebd7;
-    }
-    &__feature-list {
-        background-color: #fff;
-    }
-    &__feature-list,
-    &__category-list {
-        padding-top: 50px;
-        padding-bottom: 50px;
-        // background-color: #fff;
-        @include pc() {
-            padding-top: 100px;
-            padding-bottom: 100px;
-        }
-    }
-}
 </style>

@@ -88,21 +88,4 @@ const createImage = (file: File) => {
 </template>
 
 <style lang="scss" scoped>
-.c-upload-image { // アップロード画像外枠
-    width: 200px;
-    &--user {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        box-sizing: border-box;
-        overflow: hidden;
-        background-position: center center;
-    }
-    &--sample {
-        background-size: contain; // 縦横比を崩さない範囲で最大
-        background-position: center; // 画像の配置
-        background-repeat: no-repeat; // 画像を繰り返さない
-        // background-image: url("/images/no-image.png");
-    }
-}
 </style>

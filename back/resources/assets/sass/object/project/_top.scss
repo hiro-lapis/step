@@ -1,0 +1,128 @@
+@charset "utf-8";
+/* ==========================================================================
+ Top Page
+========================================================================== */
+.p-top {
+    &__hero-banner {
+        background-color: #faebd7;
+    }
+    &__feature-list {
+        background-color: #fff;
+    }
+    &__feature-list,
+    &__category-list {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        // background-color: #fff;
+        @include pc() {
+            padding-top: 100px;
+            padding-bottom: 100px;
+        }
+    }
+}
+
+.p-hero-banner {
+    position: relative;
+    margin-top: 110px;
+    margin-bottom: 80px;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    &__container {
+        max-width: 1000px;
+        display: flex;
+        margin: 0 auto; // コンテンツ全体は中央寄せ、中身はflex
+    }
+    &__title {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 35%; // 常にcontainerの幅に対し一定の割合
+        margin-left: 5%;
+        margin-right: -5%;
+        @include mq() {
+            margin-left: 0; // 画像との余白調整
+            margin-right: 0;
+        }
+    }
+    &__img {
+        width: 65%;// 常にcontainerの幅に対し一定の割合
+    }
+}
+
+.p-category-card { // カード本体
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+    width: 100px;
+    @include mq() {
+        width: 150px;
+    }
+    @include pc() {
+        margin-bottom: 0px;
+    }
+    &__container { // listのコンテナ
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        @include mq() {
+            flex-direction: row;
+        }
+        @include pc() { // PC では横並び,高さもコンテンツに合わせる
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+    }
+    &__head { // カテゴリーアイコン(丸クリップ)
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 20%;
+        border-radius: 50%;
+        @include pc() {
+            padding: 25px;
+        }
+
+    }
+    &__title {
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    &__body {
+        font-size: 12px;
+        letter-spacing: 1.5px;
+        line-height: 1.3;
+    }
+}
+
+.p-main-page-link {
+    width: 90%;
+    margin-bottom: 30px;
+    @include mq() {
+        width: 40%;
+        margin-bottom: 0px;
+    }
+    &__container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        @include mq() {
+            flex-direction: row;
+            justify-content: space-around;
+            width: 100%;
+        }
+    }
+    &__title {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+        @include pc() {
+            margin-bottom: 0px;
+        }
+    }
+    &__text {
+        display: flex;
+        justify-content: center;
+    }
+}

@@ -23,41 +23,21 @@ const handleEnter = () => emit('keyupEnter', props.value)
 </script>
 
 <template>
-    <div class="c-search-box">
+    <!-- <div class="c-search-box"> -->
+    <div class="c-input--keyword__container">
       <input
         type="text"
         name="key-word"
         @input="$event => input($event)"
         :placeholder="placeHolder"
         @keyup.enter="handleEnter"
-        class="c-input--search"
+        class="c-input--keyword"
       />
-      <div class="c-search-icon" @click="handleClick">
+      <div class="c-icon--search" @click="handleClick">
         <i class="fas fa-search"></i>
       </div>
     </div>
   </template>
 
   <style scoped lang="scss">
-  .c-search-box {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin: 10px;
-    padding: 5px;
-    border-radius: 5px;
-  }
-
-  .c-search-icon {
-    position: absolute;
-    top: 50%;
-    right: 5px;
-    color: #333;
-    transform: translateY(-50%);
-    height: 20px;
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    cursor: pointer;
-  }
   </style>

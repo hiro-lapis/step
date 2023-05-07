@@ -75,31 +75,5 @@ const emitKeyPressShiftEnter = () => {
     </div>
 </template>
 
-
 <style lang="scss" scoped>
-
-// scssに移すの禁止
-// InputComponentでのみ付与したいスタイリングのため
-.c-textarea {
-    &__container {
-        position: relative;
-        margin-left: auto;
-        margin-right: auto;
-        width: 100%;
-    }
-    &__counter {
-        color: #999;
-    }
-    &__label {
-        text-align: left;
-        display: block;
-        padding-left: 5px;
-        margin-bottom: 5px;
-    }
-    &__loading-icon {
-        position: absolute;
-        top: 40%;
-        left: 50%;
-    }
-}
 </style>

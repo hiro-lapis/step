@@ -108,7 +108,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @import "../../../sass/foundation/_breakpoints.scss";
-
+// scssに移すの禁止
+// InputComponentでのみ付与したいスタイリングのため
 .c-input {
     &__container {
         position: relative;
@@ -126,27 +127,5 @@ onMounted(() => {
         top: 44px;
         left: 50%;
     }
-    // scssに移すの禁止
-    // InputComponentでのみ付与したいスタイリングのため
-}
-
-// エラーメッセージエフェクト
-.v-enter,
-.v-leave-to {
-    opacity: 0;
-}
-.v-enter-to,
-.v-leave {
-    opacity: 1;
-}
-.v-enter-active {
-    transition: opacity 100ms;
-}
-.v-leave-active {
-    transition: opacity 100ms;
-}
-// 未選択時に文字色をつける
-.notSelected {
-    color: #999;
 }
 </style>

@@ -1,0 +1,16 @@
+@charset "utf-8";
+/* ==========================================================================
+ Pagination
+========================================================================== */
+.c-pagenation {
+    display: flex;
+    &__item {
+        border: 1px solid #ddd;
+        padding: 6px 12px;
+        text-align: center;
+        cursor: pointer;
+        & + .c-pagenation__item {
+            border-left: none;
+        }
+    }
+}

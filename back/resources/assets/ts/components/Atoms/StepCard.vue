@@ -69,40 +69,4 @@ const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step
 </template>
 
 <style scoped lang="scss">
-.c-step-card {
-    position: relative;
-	display: block;
-	border: 1px solid #e7e7e7;
-	border-radius: 5px;
-	color: inherit;
-	text-decoration: none;
-	transition: all .3s;
-    padding: 10px 20px;
-    &__title {
-        margin-bottom: 10px;
-        background-repeat: no-repeat;
-        background-size: 100% 10%;
-        background-position: bottom;
-        font-weight: bold;
-        padding: 5px;
-        background-image: linear-gradient(135deg, #FFE985 10%, #FA742B 100%);
-    }
-    &__txt {
-        font-size: 12px;
-    }
-    &:hover .c-step-card__title {
-        opacity: 0.7;
-    }
-    &__edit-icon {
-        cursor: pointer;
-        color: #f6f5f4;
-        background-color: #666;
-        // カードの右上に配置する
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        padding: 5px;
-        border-radius: 50%;
-    }
-}
 </style>

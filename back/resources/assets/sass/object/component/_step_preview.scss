@@ -1,0 +1,57 @@
+@charset "utf-8";
+/* ==========================================================================
+ Step Preview
+========================================================================== */
+.c-step-preview {
+    background-color: #fff;
+    padding: 20px;
+    width: 100%; // 親要素の幅いっぱいに広げる
+    overflow-wrap: break-word;
+    word-wrap: break-word; // 溢れる文字を折り返す
+    box-sizing: border-box;
+    &__head {
+        margin-bottom: 30px;
+    }
+    &__action-ui {
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: right;
+    }
+    &__information {
+        display: flex;
+        align-items: center;
+    }
+    &__challenge-information {
+        font-size: 12px;
+    }
+    &__bottom {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+// サブステップスタイリング
+.c-step-preview__sub-step {
+    margin-bottom: 25px;
+    overflow: hidden; // 見出し線など溢れるデザインを非表示
+    &__header {
+        margin-bottom: 20px;
+        &--status-name {
+            display: inline-block;
+            margin-left: 5px;
+            padding: 2px 5px;
+            font-size: 10px;
+            vertical-align: text-bottom;
+            color: #fff;
+            border-radius: 5px;
+        }
+    }
+    &__content { // 左寄せ、改行反映する
+        font-size: 13px;
+        text-align: left;
+        white-space: pre-wrap;
+    }
+    &__clear-btn {
+        margin-top: 20px;
+    }
+}

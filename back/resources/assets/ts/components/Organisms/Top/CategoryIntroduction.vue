@@ -18,13 +18,13 @@ const catetoryList = [
 </script>
 
 <template>
-    <ul class="c-category-card__container">
+    <ul class="p-category-card__container">
         <template :key="category.name" v-for="category in catetoryList">
-            <li class="c-category-card">
-                <div class="c-category-card__head" :style="{ backgroundColor: category.color }">
+            <li class="p-category-card">
+                <div class="p-category-card__head" :style="{ backgroundColor: category.color }">
                     <img :src="category.image_url" alt="" class="">
                 </div>
-                <p class="c-category-card__body">
+                <p class="p-category-card__body">
                     {{ category.name }}
                 </p>
             </li>
@@ -33,53 +33,4 @@ const catetoryList = [
 </template>
 
 <style scoped lang="scss">
-@import "../../../../sass/foundation/_breakpoints.scss";
-@import "../../../../sass/object/component/_title.scss";
-@import "../../../../sass/object/component/_input.scss";
-
-.c-category-card { // カード本体
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 50px;
-    width: 100px;
-    @include mq() {
-        width: 150px;
-    }
-    @include pc() {
-        margin-bottom: 0px;
-    }
-    &__container { // listのコンテナ
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        @include mq() {
-            flex-direction: row;
-        }
-        @include pc() { // PC では横並び,高さもコンテンツに合わせる
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-    }
-    &__head { // カテゴリーアイコン(丸クリップ)
-        margin-top: 10px;
-        margin-bottom: 10px;
-        padding: 20%;
-        border-radius: 50%;
-        @include pc() {
-            padding: 25px;
-        }
-
-    }
-    &__title {
-        margin-bottom: 10px;
-        text-align: center;
-    }
-    &__body {
-        font-size: 12px;
-        letter-spacing: 1.5px;
-        line-height: 1.3;
-    }
-}
 </style>
