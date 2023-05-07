@@ -14,7 +14,7 @@ const props = defineProps({
     max: { required: false, type: Number, default: null },
     height: { required: false, type: String, default: '100' }, // textareaの高さ(px)
     rules: { required: false, type: Array<Function>, default: []}, // バリデーションルール関数
-    value: { required: true, type: String, },
+    value: { required: true, type: String, default: '' },
 })
 interface Emit {
     (e: 'update:value', value: string)
@@ -27,10 +27,10 @@ const emit = defineEmits<Emit>()
 const errorMessage = ref('')
 // computed
 const existsError = computed(() => errorMessage.value !== '')
-const count = computed(() => props.value.trim().length )
+const count = computed(() => props.value?.length ?? 0 )
 // methods
 const input = (event: Event) => {
-    const val = (event.target as HTMLInputElement).value
+    const val = (event.target as HTMLInputElement).value?.trim() ?? ''
     // 受け取ったルールでバリデーション
     props.rules.forEach(fn => {
         const result = fn(val)
