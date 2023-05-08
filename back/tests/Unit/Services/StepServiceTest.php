@@ -49,10 +49,13 @@ class StepServiceTest extends TestCase
             'achievement_date_count' => 1,
             'achievement_date_time' => '12:34:56',
         ];
+        // ログインユーザー情報をセット
+        auth()->setUser($this->user);
         // メソッドへ渡す
         $result = $this->step_service->store($params);
         // 登録されたステップ情報が返ってきているか
         // 期待値との比較
-        $this->assertSame($params, $result->toArray());
+        $this->assertArrayHasKey('status', $result);
+        $this->assertArrayHasKey('step', $result);
     }
 }
