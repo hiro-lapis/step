@@ -52,6 +52,9 @@ jobs:
     - name: migrate
       run: php artisan migrate
       working-directory: ./back
+    - name: frontend build
+      run: npm install && npm run dev
+      working-directory: ./back
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/phpunit
       working-directory: ./back
