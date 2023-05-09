@@ -2,6 +2,7 @@
 /* ==========================================================================
  HeaderNavigation
 ========================================================================== */
+@import "../../foundation/_variable";
 // ロゴ
 .c-logo {
     font-family: 'Montserrat Subrayada', sans-serif;
@@ -34,7 +35,7 @@
     justify-content:  space-between;
     position: fixed;
     top: 0;
-    z-index: 1;
+    z-index: $header-navigation-z-index;
     box-sizing: border-box;
     padding: 0 30px;
     height: $header-hight; // _variable

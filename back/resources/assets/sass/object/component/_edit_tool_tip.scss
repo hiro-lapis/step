@@ -2,6 +2,7 @@
 /* ==========================================================================
  Edit Tool Tip
 ========================================================================== */
+@import "../../foundation/_variable";
 .c-edit-tool-tip {
     display: inline-block;
     position: relative;
@@ -23,6 +24,7 @@
         font-size: .7em;
         white-space: nowrap;
         transition: opacity .3s;
+        z-index: $step-edit-menu-z-index;
     }
     &__txt {
         font-size: 12px;

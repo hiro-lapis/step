@@ -8,6 +8,7 @@ import KeyWordInput from './Atoms/KeyWordInput.vue'
 import { Condition } from '../types/components/Condition'
 import { conditionKey, searchFuncKey, showSearchUiKey } from '../types/common/Injection'
 import { useStepListStore } from '../store/stepListStore'
+import TransparentOverlay from './Atoms/TransparentOverlay.vue'
 
 // utility
 const userStore = useUserStore()
@@ -41,6 +42,7 @@ provide<() => Promise<void>>(searchFuncKey, search)
 
 <template>
     <div>
+        <TransparentOverlay />
         <header class="c-header c-header--user">
             <router-link :to="{ name: topPageName }">
                 <div class="c-logo--header">
