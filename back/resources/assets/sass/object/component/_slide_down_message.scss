@@ -2,10 +2,11 @@
 /* ==========================================================================
  Slide Down Message
 ========================================================================== */
+@import "../../foundation/_variable";
 .c-slide-down-message {
     white-space: pre;
     &__container {
-        z-index: 5;
+        z-index: $slide-down-message-z-index;
         position: fixed;
         top: 50px;
         width: 100%;

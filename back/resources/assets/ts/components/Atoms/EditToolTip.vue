@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { computed, PropType, ref } from 'vue'
+import { computed, inject, PropType, ref } from 'vue'
 import { Menu } from '../../types/components/Menu'
+import { useTransparentOverlayStore } from '../../store/components/transparentOverlay'
 // props
 const props = defineProps({
     menus: { required: false, type: Array as PropType<Menu[]>, default: () => [] },
 })
 // data
-const active = ref(false)
+const overlay = useTransparentOverlayStore()
 // computed
+const transparentOverlay = computed(() =>  overlay.active)
 const bottomVal = computed(() => {
     return (props.menus!.length * -50).toString() + 'px'
 })
@@ -16,9 +18,9 @@ const bottomVal = computed(() => {
 <template>
     <div class="c-edit-tool-tip">
         <i
-            @click="active = !active"
+            @click="overlay.toggle"
             class="c-icon--elipsis fa fa-ellipsis-h"
-            :class="{ activated: active }"
+            :class="{ activated: transparentOverlay }"
         ></i>
         <div class="c-edit-tool-tip__menus" :style="{ bottom: bottomVal }">
             <template v-for="menu in menus">

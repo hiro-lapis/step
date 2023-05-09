@@ -1,0 +1,14 @@
+@charset "utf-8";
+/* ==========================================================================
+ Overlay
+========================================================================== */
+@import "../../foundation/_variable";
+.c-edit-tool-tip-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    z-index: $transparent-overlay-z-index;
+}
