@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
-import { useTransparentOverlayStore } from '../../store/components/transparentOverlay'
+import { useTransparentOverlayStore } from '../../store/components/TransparentOverlay'
 const active = inject<boolean>('activeEditMenu')!
 const overlay = useTransparentOverlayStore()
 // computed

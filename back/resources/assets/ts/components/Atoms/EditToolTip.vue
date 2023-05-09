@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, PropType, ref } from 'vue'
 import { Menu } from '../../types/components/Menu'
-import { useTransparentOverlayStore } from '../../store/components/transparentOverlay'
+import { useTransparentOverlayStore } from '../../store/components/TransparentOverlay'
 // props
 const props = defineProps({
     menus: { required: false, type: Array as PropType<Menu[]>, default: () => [] },
