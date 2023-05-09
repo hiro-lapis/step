@@ -29,6 +29,15 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 export const router = createRouter({
+    scrollBehavior(to, from, savedPosition) {
+        // 履歴を戻る時は保存された位置にスクロール
+        if (savedPosition) {
+            return savedPosition
+        // それ以外はページトップにスクロール
+        } else {
+            return { top: 0 }
+        }
+    },
     history: createWebHistory(), // 履歴機能ON
     routes,
 })
