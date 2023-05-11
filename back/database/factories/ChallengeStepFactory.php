@@ -31,4 +31,28 @@ class ChallengeStepFactory extends Factory
             'summary' => fake()->text(),
         ];
     }
+
+    /**
+     * チャレンジ中のステータスを設定
+     *
+     * @return static
+     */
+    public function challenging()
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => ChallengeStatusEnum::Challenging->value,
+        ]);
+    }
+
+    /**
+     * クリアのステータスを設定
+     *
+     * @return static
+     */
+    public function cleared()
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => ChallengeStatusEnum::Cleared->value,
+        ]);
+    }
 }

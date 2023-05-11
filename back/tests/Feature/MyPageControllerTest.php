@@ -57,6 +57,21 @@ class MyPageControllerTest extends TestCase
 
     public function test_ProfileIndex(): void
     {
+        $step_count = rand(1, 3);
+        $challenge_step_count = rand(1, 3);
+        Step::factory($step_count)->create([
+            'user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'achievement_time_type_id' => $this->achievement_time_type->id,
+        ]);
+        ChallengeStep::factory($challenge_step_count)->challenging()->create([
+            'step_id' => 1,
+            'post_user_id' => 999,
+            'challenge_user_id' => $this->user->id,
+            'category_id' => $this->category->id,
+            'achievement_time_type_id' => $this->achievement_time_type->id,
+        ]);
+
         // ログイン状態でアクセス
         $response = $this->actingAs($this->user)->getJson('/api/mypage');
         $response->assertOk();
@@ -73,7 +88,12 @@ class MyPageControllerTest extends TestCase
         ]);
         // JSON文字列をstdClassへデコードし、さらに配列へ変換
         $result = (array)json_decode($response->content());
-        $this->assertArrayNotHasKey('password', $result);
+        $this->assertArrayHasKey('user', $result);
+        // 重要な情報(パスワード)が含まれていないか
+        $this->assertArrayNotHasKey('password', (array)$result['user']);
+        // ユーザーに紐づくステップ数情報を取得できていいるか
+        $this->assertSame($step_count, $result['posted_step_count']);
+        $this->assertSame($challenge_step_count, $result['challenging_step_count']);
     }
 
     public function test_updateProfile(): void
