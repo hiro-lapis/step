@@ -14,6 +14,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class MyPageControllerTest extends TestCase
@@ -144,11 +145,13 @@ class MyPageControllerTest extends TestCase
     public function test_updatePassword(): void
     {
         $current_password = 'password';
+        $new_password = 'new_password';
         $user = User::factory()->create(['password' => Hash::make($current_password)]);
+        // 新しいパスワードに更新
         $params = [
             'current_password' => $current_password,
-            'password' => 'new_password',
-            'password_confirmation' => 'new_password',
+            'password' => $new_password,
+            'password_confirmation' => $new_password,
         ];
         $response = $this->actingAs($user)->putJson('/api/mypage/password', $params);
         $response->assertOk();
@@ -156,6 +159,56 @@ class MyPageControllerTest extends TestCase
 
         // 更新後のハッシュ化パスワードとの整合性をチェック
         $this->assertTrue(Hash::check($params['password'], $user->password));
+
+        /**
+         * 以下バリデーションエラーケースのテスト
+         */
+        // 同じパスワードで更新しようとした時に422エラーを返すか
+        $params = [
+            'current_password' => $new_password,
+            'password' => $new_password,
+            'password_confirmation' => $new_password,
+        ];
+        $response = $this->actingAs($user)->putJson('/api/mypage/password', $params);
+        $response->assertUnprocessable();
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->where('message', 'パスワードを 現在のパスワード と違うものにしてください')
+                ->etc() // 他の項目はチェックしない
+        );
+        // 7文字のパスワードで422エラーを返すか
+        $params = [
+            'current_password' => $new_password,
+            'password' => 'abcdefg',
+            'password_confirmation' => 'abcdefg',
+        ];
+        $response = $this->actingAs($user)->putJson('/api/mypage/password', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->where('message', 'パスワードは 8 ～ 24 文字まで有効です')
+                ->etc() // 他の項目はチェックしない
+        );
+        // パスワードで422エラーを返すか
+        $params = [
+            'current_password' => $new_password,
+            'password' => 'abcdefghijklmnopqrstuvwxy',
+            'password_confirmation' => 'abcdefghijklmnopqrstuvwxy',
+        ];
+        $response = $this->actingAs($user)->putJson('/api/mypage/password', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->where('message', 'パスワードは 8 ～ 24 文字まで有効です')
+                ->etc() // 他の項目はチェックしない
+        );
+        // 数字のみのパスワードで422エラーを返すか
+        $params = [
+            'current_password' => $new_password,
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ];
+        $response = $this->actingAs($user)->putJson('/api/mypage/password', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->where('message', 'パスワード は文字を1文字以上含むのが必須です')
+                ->etc() // 他の項目はチェックしない
+        );
+        $response->assertUnprocessable();
     }
 
     public function test_postedStep(): void

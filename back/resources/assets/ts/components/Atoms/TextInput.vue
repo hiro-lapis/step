@@ -7,9 +7,11 @@ import RequiredBadge from './RequiredBadge.vue'
 // props
 const props = defineProps({
     className: { required: false, type: String, default: 'c-input--large', }, // クラス名(default: 横幅いっぱい表示のクラス)
-    errorKey: { required: false, type: String, default: '' },
+    errorKey: { required: false, type: String, default: '' }, // TODO: 削除
+    errorMessage: { required: false, type: String, default: '' }, // エラーメッセージ
     formId: { required: false, type: String, default: '', }, // ラベルとinputを紐付けるid
     inline: { required: false, type: Boolean, default: false, }, // エラーメッセージ不要な時にインライン化
+    disableShowPassword: { required: false, type: Boolean, default: false, }, // PW表示アイコン非表示
     label: { required: false, type:String, default: '', }, // 入力ラベル
     placeHolder: { required: false, type: String, default: '' }, // プレースホルダー
     required: { required: false, type: Boolean, default: false, }, // 入力必須マーク
@@ -26,19 +28,21 @@ interface Emits {
 }
 const emit = defineEmits<Emits>()
 // data
-const errorMessage = ref('')
+// const errorMessage = ref('')
+const showPassowrd = ref(false)
 // computed
-const existsError = computed(() => errorMessage.value !== '')
-
+const existsError = computed(() => props.errorMessage !== '')
+const isTypePassowrd = computed(() => props.type === 'password')
+const passwordIcon = computed(() => showPassowrd.value ? 'fa-eye-slash' : 'fa-eye')
+const inputType = computed(() => {
+    if (!isTypePassowrd.value) return props.type
+    // パスワード(設定値)かつパスワード表示モードかどうかでinput typeを変更
+    return showPassowrd.value && !props.disableShowPassword ? 'text' : 'password'
+})
 
 // methods
 const input = (event: Event) => {
     const val = (event.target as HTMLInputElement).value
-    // 受け取ったルールでバリデーション
-    props.rules.forEach(fn => {
-        const result = fn(val)
-        errorMessage.value = typeof result === 'string' ? result : ''
-    })
     emit('update:value', val)
 }
 // enter押下後にイベント発行 処理実行するかどうかは親側の実装に任せる
@@ -61,21 +65,32 @@ const emitKeyPressShiftEnter = () => {
                     </template>
                 </label>
             </template>
-            <!-- エラーメッセージのキー設定時のみ表示 -->
-            <template v-if="existsError">
-                <ErrorMessage :message="errorMessage" />
+        </div>
+        <div class="c-input__body">
+            <input
+                :value="value"
+                :type="inputType"
+                @input="$event => input($event)"
+                @keyup.enter="handleEnter()"
+                @keydown.shift.enter="emitKeyPressShiftEnter"
+                class="c-input"
+                :id="formId"
+                :class="[{'c-message--no-error': inline}, className ]"
+                :placeholder="placeHolder"
+            />
+            <!-- パスワード表示ボタン -->
+            <template v-if="isTypePassowrd">
+                <span class="c-input__password-icon">
+                    <i
+                        @click="showPassowrd = !showPassowrd"
+                        class="c-icon--eye fa"
+                        :class="passwordIcon"></i>
+                </span>
             </template>
         </div>
-        <input
-            :value="value"
-            :type="type"
-            @input="$event => input($event)"
-            @keyup.enter="handleEnter()"
-            @keydown.shift.enter="emitKeyPressShiftEnter"
-            class="c-input"
-            :id="formId"
-            :class="[{'c-message--no-error': inline}, className ]"
-            :placeholder="placeHolder"
-        />
+        <!-- エラーメッセージのキー設定時のみ表示 -->
+        <template v-if="existsError">
+            <ErrorMessage :message="errorMessage" />
+        </template>
     </div>
 </template>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Mypage\UpdatePasswordRequest;
 use App\Http\Requests\Mypage\UpdateProfileRequest;
 use App\Models\User;
 use App\Services\ChallengeStepService;
@@ -10,6 +11,7 @@ use App\Services\ChatGptService;
 use App\Services\StepService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class MypageController extends Controller
@@ -61,6 +63,21 @@ class MypageController extends Controller
         $user->refresh();
         $message = 'プロフィール情報を更新しました';
         return response()->json(compact('user', 'message'));
+    }
+
+    /**
+     * パスワード更新
+     *
+     * @param UpdatePasswordRequest $request
+     * @return void
+     */
+    public function updatePassword(UpdatePasswordRequest $request)
+    {
+        $request->validated();
+        /** @var User $user */
+        $user = auth()->user();
+        // hidden property更新のためupdate()を使用
+        $user->update(['password' => Hash::make($request['password'])]);
     }
 
     public function postedStep(): JsonResponse

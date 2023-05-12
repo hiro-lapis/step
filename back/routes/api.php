@@ -42,7 +42,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/profile', [MypageController::class, 'updateProfile'])->name('mypage.update.profile');
         Route::get('/posted-step', [MypageController::class, 'postedStep'])->name('mypage.postedStep');
         Route::get('/challenging-step', [MypageController::class, 'challengingStep'])->name('mypage.challengingStep');
-        Route::put('/password', [PasswordController::class, 'update'])->name('mypage.update.password');
+        Route::put('/password', [MypageController::class, 'updatePassword'])->name('mypage.update.password');
     });
     // ログアウト
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

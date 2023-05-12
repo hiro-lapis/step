@@ -14,22 +14,17 @@ export const useAuthFunc = () => {
      *
      * @param next ログアウト後に遷移するページ
      */
-    const logout = (next: string = 'login') => {
+    const logout = (next: string = 'top') => {
         requestStore.setLoading(true)
         // axiosでログイン情報を削除
         $repositories.auth.logout()
             .then(response => {
-                if (response.status === 204) {
-                    // vuexのログイン状態も解除
-                    userStore.setLogin(false)
-                    // 今いるページがログイン必須のページだったらTOPへ
-                    if (router.currentRoute.value.meta.requireAuth) {
-                        // TOP画面へ遷移
-                        setTimeout(() => {
-                            router.push({ name: next })
-                        }, 2000)
-                    }
-                }
+                // vuexのログイン状態も解除
+                userStore.setLogin(false)
+                // TOP画面へ遷移
+                setTimeout(() => {
+                    router.push({ name: 'home' })
+                }, 2000)
             })
             .finally(() => {
                 requestStore.setLoading(false)
