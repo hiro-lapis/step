@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\ChallengeStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -67,6 +69,27 @@ class User extends Authenticatable
     public function steps(): HasMany
     {
         return $this->hasMany(Step::class);
+    }
+
+    /**
+     * チャレンジ中・チャレンジしたことのあるステップ
+     *
+     * @return HasMany
+     */
+    public function challengeSteps(): HasMany
+    {
+        return $this->hasMany(ChallengeStep::class, 'challenge_user_id')
+            ->whereIn('status', ChallengeStatusEnum::getInChallengeStatuses());
+    }
+
+    /**
+     * チャレンジ中のステータスのステップ
+     *
+     * @return HasMany
+     */
+    public function challengingSteps(): HasMany
+    {
+        return $this->hasMany(ChallengeStep::class, 'challenge_user_id');
     }
 
     /**

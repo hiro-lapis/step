@@ -28,9 +28,11 @@ class MypageController extends Controller
      */
     public function index()
     {
-        /** @ $user App/Models/User */
+        /** @var App/Models/User  $user */
         $user = auth()->user();
-        return compact('user');
+        $posted_step_count = $user->steps()->count();
+        $challenging_step_count = $user->challengeSteps()->count();
+        return compact('user', 'posted_step_count', 'challenging_step_count');
     }
 
     /**
