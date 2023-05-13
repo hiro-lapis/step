@@ -70,7 +70,7 @@ const login = () => {
                                 @keyup-enter="login"
                                 type="password"
                                 errorKey="password"
-                                placeHolder="パスワード"
+                                placeHolder="パスワード(8~24字の半角英字)"
                             />
                         </div>
                         <div class="p-login-form__btn-box">
