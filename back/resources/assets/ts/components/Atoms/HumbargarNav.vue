@@ -51,7 +51,7 @@ const { logout } = useAuthFunc()
                         <a href="#" class="c-sp-nav__list-link">マイページ</a>
                     </li>
                 </router-link>
-                <a href="" @click="logout('top')">
+                <a href="" @click="logout()">
                     <li class="c-sp-nav__list-item">
                         <a class="c-sp-nav__list-item">ログアウト</a>
                     </li>
