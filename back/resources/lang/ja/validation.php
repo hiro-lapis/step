@@ -144,6 +144,11 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        // パスワードリセット・更新時のエラーメッセージ
+        'password' => [
+            'different' => '現在のパスワードと同じパスワードは設定できません',
+            'between' => 'パスワードは8~24文字で設定してください',
+        ]
     ],
 
     /*
