@@ -52,12 +52,21 @@
     }
 }
 .c-input {
-    // inputを囲むタグ
+    // input,labelを囲むタグ
     &__container {
         position: relative;
         margin-left: auto;
         margin-right: auto;
         width: 100%;
+    }
+    // inputとパスワードアイコンを囲むタグ
+    &__body {
+        position: relative;
+    }
+    &__password-icon {
+        position: absolute;
+        top: 35%;
+        right: 8px;
     }
     // inputのラベル
     &__label {
