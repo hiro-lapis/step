@@ -82,7 +82,7 @@ onMounted(() => {
                                 errorKey="password"
                                 type="password"
                                 formId="password"
-                                placeHolder="新パスワード(8~16文字)"
+                                placeHolder="新パスワード(8~24字の半角英字)"
                             />
                         </div>
                         <div class="p-reset-form__element">

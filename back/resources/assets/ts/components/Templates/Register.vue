@@ -87,7 +87,7 @@ const register = async () => {
                                 type="password"
                                 v-model:value="registerData.password"
                                 errorKey="password"
-                                placeHolder="パスワード"
+                                placeHolder="パスワード(8~24字の半角英字)"
                             />
                         </div>
                         <div class="p-register-form__element">
