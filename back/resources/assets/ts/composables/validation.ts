@@ -1,3 +1,4 @@
+import { computed } from 'vue'
 
 /**
  * バリデーション
@@ -5,7 +6,7 @@
  * @returns true | string (エラーメッセージ)
  */
 export const useValidation = () => {
-    // 入力必須
+    // 入力必須(空文字, null, undefined)
     const required = (value: string) => {
         return !!value || '入力必須です'
     }

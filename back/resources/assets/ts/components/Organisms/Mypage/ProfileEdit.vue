@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted, reactive, ref } from 'vue'
+import { computed, inject, onMounted, reactive, ref, watch } from 'vue'
 import { User } from '../../../types/User'
 import { useUserStore, useRequestStore, useMessageInfoStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
@@ -9,6 +9,7 @@ import TextareaInput from '../../Atoms/TextareaInput.vue'
 import UploadUserImage from '../../Atoms/UploadUserImage.vue'
 import SingleCheckbox from '../../Atoms/SingleCheckbox.vue'
 import { repositoryKey } from '../../../types/common/Injection'
+import { useValidation } from '../../../composables/validation'
 
 // utilities
 const messageStore = useMessageInfoStore()
@@ -28,8 +29,18 @@ const user = reactive<User>({
 const passwordUpdateMode = ref(false)
 const uploadImage = ref<File|null>(null)
 const fileFlg = ref(false)
+const errorMessage = reactive({
+    name: '',
+    email: '',
+    profile: '',
+})
+// computed
+const isInvalid = computed(() => {
+    return Object.values(errorMessage).some(value => value !== '')
+})
 
 // methods
+const validate = useValidation()
 const showPasswordUpdateModal = () => passwordUpdateMode.value = !passwordUpdateMode.value
 
 const fetchData = () => {
@@ -84,6 +95,37 @@ onMounted(() => {
     // APIでユーザー情報を取得
     fetchData()
 })
+// 入力情報の監視
+watch ([() => user.name],
+    ([]) => {
+        if (requestStore.isLoading) return
+        let result: true | string
+        result = validate.required(user.name)
+        errorMessage.name = result === true ? '' : result
+    }
+)
+watch ([() => user.email],
+    ([]) => {
+        if (requestStore.isLoading) return
+        let result: true | string
+        // 入力必須
+        result = validate.required(user.email)
+        errorMessage.email = result === true ? '' : result
+        if (result !== true) return
+        // メールアドレス形式
+        let result2: RegExpMatchArray | string
+        result2 = validate.email(user.email)
+        errorMessage.email = typeof result2 !== 'string' ? '' : result2
+    }
+)
+watch ([() => user.profile],
+    ([]) => {
+        if (requestStore.isLoading) return
+        let result: true | string
+        result = validate.max(user.profile, 1000)
+        errorMessage.profile = result === true ? '' : result
+    }
+)
 </script>
 
 <template>
@@ -108,24 +150,27 @@ onMounted(() => {
         </div>
         <div class="c-multi-page--profile__element">
             <TextInput
-                label="ユーザー名"
                 v-model:value="user.name"
+                :errorMessage="errorMessage.name"
+                label="ユーザー名"
                 formId="name"
                 placeHoler="アカウント名"
             />
         </div>
         <div class="c-multi-page--profile__element">
             <TextInput
-                label="メールアドレス"
                 v-model:value="user.email"
+                :errorMessage="errorMessage.email"
+                label="メールアドレス"
                 formId="email"
                 placeHoler="メールアドレス"
             />
         </div>
         <div class="c-multi-page--profile__element">
             <TextareaInput
-                label="プロフィール"
                 v-model:value="user.profile"
+                :errorMessage="errorMessage.profile"
+                label="プロフィール"
                 formId="profile"
                 placeHoler="自己紹介文"
                 counter
@@ -144,7 +189,7 @@ onMounted(() => {
             />
         </div>
         <div class="c-multi-page--profile__btn-container">
-            <button @click="update" class="c-btn--update-profile">
+            <button :disabled="isInvalid" @click="update" class="c-btn--update-profile">
                 更新
             </button>
             <button
