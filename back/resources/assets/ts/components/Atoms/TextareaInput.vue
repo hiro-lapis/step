@@ -8,6 +8,7 @@ const props = defineProps({
     className: { required: false, type: String, default: 'c-textarea', },
     formId: { required: false, type: String, default: '', },
     label: { required: true, type: String, },
+    errorMessage: { required: true, type: String, },
     placeHolder: { required: false, type: String, default: '', },
     required: { required: false, type: Boolean, default: false },
     counter: { required: false, type: Boolean, default: false },
@@ -24,18 +25,12 @@ interface Emit {
 const emit = defineEmits<Emit>()
 
 // data
-const errorMessage = ref('')
 // computed
-const existsError = computed(() => errorMessage.value !== '')
 const count = computed(() => props.value?.length ?? 0 )
+const existsError = computed(() => props.errorMessage !== '')
 // methods
 const input = (event: Event) => {
     const val = (event.target as HTMLInputElement).value?.trim() ?? ''
-    // 受け取ったルールでバリデーション
-    props.rules.forEach(fn => {
-        const result = fn(val)
-        errorMessage.value = typeof result === 'string' ? result : ''
-    })
     emit('update:value', val)
 }
 const emitKeyPressShiftEnter = () => {
@@ -57,10 +52,6 @@ const emitKeyPressShiftEnter = () => {
                 </template>
             </label>
         </template>
-        <!-- エラーメッセージのキー設定時のみ表示 -->
-        <template v-if="existsError">
-            <ErrorMessage :message="errorMessage" />
-        </template>
         <!-- cols/rowsは指定せず、スタイリングで調整 -->
         <textarea
             :value="value"
@@ -72,6 +63,9 @@ const emitKeyPressShiftEnter = () => {
             :required="required"
             :style=" { height: height + 'px' }"
         />
+        <template v-if="existsError">
+            <ErrorMessage :message="errorMessage" />
+        </template>
     </div>
 </template>
 
