@@ -199,6 +199,7 @@ return [
         'sub_steps'               => 'サブステップ',
         'title'                 => 'タイトル',
         'skip_api_confirm'       => 'API利用確認スキップ設定',
+        'profile'               => 'プロフィール',
     ],
 
 ];

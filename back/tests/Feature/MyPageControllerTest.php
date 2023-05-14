@@ -91,10 +91,23 @@ class MyPageControllerTest extends TestCase
             'errors' => [
                 'email' => ['メールアドレスは既に存在します'],
                 'skip_api_confirm' => ['API利用確認スキップ設定の値は true もしくは false のみ有効です'],
-
             ],
         ]);
         $response->assertUnprocessable();
+        // プロフィール1000文字以上で422エラー
+        $params = [
+            'name' => 'profile error',
+            'email' => 'hoge@bar.com',
+            'skip_api_confirm' => '1',
+            'profile' => fake()->realText(1001)
+        ];
+        $response = $this->actingAs($this->user)->postJson('/api/mypage/profile', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->where('message', 'プロフィールは 1000 文字以下のみ有効です')
+            ->etc() // 他の項目はチェックしない
+        );
+
+        // 正常系
         $params = [
             'name' => 'foo',
             'email' => 'hoge@bar.com',
