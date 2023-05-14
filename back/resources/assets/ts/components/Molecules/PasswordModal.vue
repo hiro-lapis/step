@@ -5,6 +5,7 @@ import { useMessageInfoStore, useRequestStore } from '../../store/globalStore'
 import TextInput from '../Atoms/TextInput.vue'
 import { repositoryKey } from '../../types/common/Injection'
 import { useValidation } from '../../composables/validation'
+
 // utilities
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
@@ -25,7 +26,7 @@ const passwordData = reactive({
     password: '',
     password_confirmation: '',
 })
-const errorMessages = reactive({
+const errorMessage = reactive({
     current_password: '',
     password: '',
     password_confirmation: '',
@@ -34,10 +35,10 @@ const currentPasswordRef = ref<InstanceType<typeof TextInput>>()
 const passwordRef = ref<InstanceType<typeof TextInput>>()
 const passwordConfirmationRef = ref<InstanceType<typeof TextInput>>()
 // computed
-const disableButton = computed(() => {
-    return errorMessages.current_password !== ''
-        || errorMessages.password !== ''
-        || errorMessages.password_confirmation !== ''
+const isInvalid = computed(() => {
+    return errorMessage.current_password !== ''
+        || errorMessage.password !== ''
+        || errorMessage.password_confirmation !== ''
 })
 // methods
 const validate = useValidation()
@@ -65,9 +66,9 @@ const reset = () => {
     passwordData.password = ''
     passwordData.password_confirmation = ''
     // エラーメッセージ初期化
-    errorMessages.current_password = ''
-    errorMessages.password = ''
-    errorMessages.password_confirmation = ''
+    errorMessage.current_password = ''
+    errorMessage.password = ''
+    errorMessage.password_confirmation = ''
     // input の パスワード表示を隠す
     currentPasswordRef.value?.hidePassword()
     passwordRef.value?.hidePassword()
@@ -79,18 +80,18 @@ watch([() => passwordData.current_password, ],
     ([ newCurrentPassword ], []) => {
         let result: true | string
         result = validate.password(newCurrentPassword)
-        errorMessages.current_password = result === true ? '' : result
+        errorMessage.current_password = result === true ? '' : result
     }
 )
 watch([() => passwordData.password, ],
     ([ newPassword ], []) => {
         let result: true | string
         result = validate.password(newPassword)
-        errorMessages.password = result === true ? '' : result
+        errorMessage.password = result === true ? '' : result
         result = validate.passwordConfirmation(newPassword, passwordData.password_confirmation)
-        if (errorMessages.password_confirmation !== '') {
+        if (errorMessage.password_confirmation !== '') {
             // パスワード確認用の入力がある場合
-            errorMessages.password_confirmation = result === true ? '' : result
+            errorMessage.password_confirmation = result === true ? '' : result
         }
     }
 )
@@ -99,7 +100,7 @@ watch(
     ([ newPasswordConfirmation ], []) => {
         let result: true | string
         result = validate.passwordConfirmation(passwordData.password, newPasswordConfirmation)
-        errorMessages.password_confirmation = result === true ? '' : result
+        errorMessage.password_confirmation = result === true ? '' : result
     }
 )
 </script>
@@ -115,7 +116,7 @@ watch(
                             <!-- autocomplateで自動入力されることあり -->
                             <TextInput
                                 v-model:value="passwordData.current_password"
-                                :errorMessage="errorMessages.current_password"
+                                :errorMessage="errorMessage.current_password"
                                 ref="currentPasswordRef"
                                 placeHolder="現在のパスワード"
                                 type="password"
@@ -124,7 +125,7 @@ watch(
                     <div class="c-password-modal__element">
                         <TextInput
                             v-model:value="passwordData.password"
-                            :errorMessage="errorMessages.password"
+                            :errorMessage="errorMessage.password"
                             ref="passwordRef"
                             type="password"
                             placeHolder="パスワード(半角英字8~24文字)"
@@ -133,7 +134,7 @@ watch(
                     <div class="c-password-modal__element">
                         <TextInput
                             v-model:value="passwordData.password_confirmation"
-                            :errorMessage="errorMessages.password_confirmation"
+                            :errorMessage="errorMessage.password_confirmation"
                             ref="passwordConfirmationRef"
                             errorKey="password_confirmation"
                             type="password"
@@ -143,7 +144,7 @@ watch(
                     <div class="c-password-modal__btn-box">
                         <button
                             @click="updatePassword"
-                            :disabled="disableButton"
+                            :disabled="isInvalid"
                             class="c-btn--exec-update-password">
                             送信
                         </button>
