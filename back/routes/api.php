@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AchievementTimeTypeController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ChallengeStepController;
 use App\Http\Controllers\Api\MypageController;
+use App\Http\Controllers\Api\PresignedUploadUrlController;
 use App\Http\Controllers\Api\StepController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/challenging-step', [MypageController::class, 'challengingStep'])->name('mypage.challengingStep');
         Route::put('/password', [MypageController::class, 'updatePassword'])->name('mypage.update.password');
     });
+    // アップロード署名付きURL取得
+    Route::post('/presigned-upload-url', [PresignedUploadUrlController::class, 'presignedUploadUrl'])->name('presignedUploadUrl');
+    Route::get('/presigned-download-url', [PresignedUploadUrlController::class, 'presignedDownloadUrl'])->name('presignedDownloadUrl');
     // ログアウト
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });

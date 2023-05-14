@@ -181,6 +181,7 @@ return [
         'description'           => '詳細',
         'detail'                => '詳細',
         'email'                 => 'メールアドレス',
+        'file_name'             => 'ファイル名',
         'img'                   => 'アイコン画像',
         'img_url'               => '画像',
         'introduction'          => '自己紹介',
