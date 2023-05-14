@@ -17,15 +17,17 @@ defineProps({
 .v-enter,
 .v-leave-to {
     opacity: 0;
+    transform: translateY(-100%);
 }
 .v-enter-to,
 .v-leave {
     opacity: 1;
+    transform: translateY(100%);
 }
 .v-enter-active {
-    transition: opacity 100ms;
+    transition: all 200ms;
 }
 .v-leave-active {
-    transition: opacity 100ms;
+    transition: all 200ms;
 }
 </style>

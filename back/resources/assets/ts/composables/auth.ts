@@ -15,7 +15,7 @@ export const useAuthFunc = () => {
      *
      * @param next ログアウト後に遷移するページ
      */
-    const logout = (next: string = 'top') => {
+    const logout = (next: string = 'home') => {
         requestStore.setLoading(true)
         // axiosでログイン情報を削除
         $repositories.auth.logout()
