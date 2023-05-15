@@ -11,8 +11,11 @@ use App\Repositories\SubStep\SubStepRepositoryInterface;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class StepService
@@ -50,11 +53,27 @@ class StepService
             $sub_step_params = collect($params['sub_steps']);
             $count = $this->step_respository->updateOrCreateSubSteps($step, $sub_step_params);
             if ($count !== $sub_step_params->count()) throw new Exception('子ステップの更新件数が一致しません');
+
+            // 一時ディレクトリの画像をステップのディレクトリに保存
+            if (!App::environment('testing') && !empty($params['image_url'])) {
+                $tmp_image_path = parse_url($params['image_url'], PHP_URL_PATH);
+                $tmp_data = Storage::disk('s3')->get($tmp_image_path);
+                $file_name = Str::afterLast($tmp_image_path, '/');
+                // ステップ用のディレクトリへファイルを保存し、URLをDBに登録
+                $upload_path = "public/steps/{$step->id}/{$file_name}";
+                Storage::disk('s3')->put($upload_path, $tmp_data, 'public');
+                $image_url = Storage::disk('s3')->url($upload_path);
+                $this->step_respository->update($step, ['image_url' => $image_url]);
+            }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             report($e);
             $status = Response::HTTP_INTERNAL_SERVER_ERROR;
+        }
+        // 一時ディレクトリの画像を削除
+        if (!App::environment('testing') && !empty($tmp_image_path)) {
+            Storage::disk('s3')->delete($tmp_image_path);
         }
         return compact('step', 'status');
     }
@@ -92,6 +111,31 @@ class StepService
         // 詳細情報取得
         $step = $this->show($step->id);
         return compact('step', 'status');
+    }
+
+    /**
+     * 画像のアップロードとURL情報の更新
+     *
+     * @param Step $step
+     * @param string|null $image_url
+     * @return void
+     */
+    private function uploadAndUpdateImageUrl(Step $step, string|null $image_url): void
+    {
+        if (App::environment('testing') || empty($params['image_url'])) {
+            return;
+        }
+        $tmp_image_path = parse_url($image_url, PHP_URL_PATH);
+        // 署名付きURLから画像パス、ファイル名を抽出
+        $tmp_data = Storage::disk('s3')->get($tmp_image_path);
+        $file_name = Str::afterLast($tmp_image_path, '/');
+
+        // ステップ用のディレクトリへファイルを保存し、URLをDBに登録
+        Storage::disk('s3')->put("public/steps/{$step->id}/{$file_name}", $tmp_data, 'public');
+        $image_url = Storage::disk('s3')->url("public/steps/{$step->id}/{$file_name}");
+        $this->step_respository->update($step, ['image_url' => $image_url]);
+
+        Storage::disk('s3')->delete($tmp_image_path);
     }
 
     /**

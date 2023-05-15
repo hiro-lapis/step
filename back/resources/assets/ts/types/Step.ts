@@ -9,6 +9,7 @@ export type Step = {
     user_id?: number
     name: string
     summary: string
+    image_url: string
     sub_steps: SubStep[]
     achievement_time_type_id: number
     sub_steps_count?: number

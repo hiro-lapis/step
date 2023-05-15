@@ -114,6 +114,9 @@ const clear = async (subStepId: number) => {
                 </div>
                 <!-- ステップ名 -->
                 <h1 class="c-title--step">{{ step.name }}</h1>
+                <div v-if="step.image_url" class="c-step-preview__eye-catch">
+                    <img class="c-img--step" :src="step.image_url" alt="step-image" />
+                </div>
                 <div class="c-step-preview__information">
                     <CategoryBadge v-if="step.category_id" :id="step.category_id" />
                     <!-- チャレンジ中のステップ情報表示時 -->

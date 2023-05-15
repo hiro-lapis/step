@@ -7,6 +7,7 @@ import { repositoryKey } from '../../types/common/Injection'
 const $repositories = inject<Repositories>(repositoryKey)!
 // props
 const props = defineProps({
+    label: { required: false, type: String, default: ''},
     previewUrl: { required: false, type: String, default: ''},
     previewMode: { required: false, type: Boolean, default: true},
 })
@@ -31,12 +32,9 @@ const handleFileSelect = async (event: Event) => {
         return
     }
     try {
-            const presignedResponse = await $repositories.file.getSignedUrl(file.name)
+        const presignedResponse = await $repositories.file.getSignedUrl(file.name)
         try {
-            await $repositories.file.upload(
-                presignedResponse.data.presigned_url,
-                file
-            )
+            await $repositories.file.upload(presignedResponse.data.presigned_url, file)
             const uploadUrl = presignedResponse.data.upload_path
             const res = await $repositories.file.download(uploadUrl)
             previewUrl.value = res.data.presigned_url
@@ -62,10 +60,15 @@ const validateFile = (file: File): boolean => {
 </script>
 
 <template>
-    <div>
-      <input type="file" @change="handleFileSelect" accept="image/jpeg, image/png">
-      <div v-if="showPreview">
-        <img :src="previewUrl" alt="Uploaded Image">
-      </div>
+    <div class="c-input--presigned-upload__container">
+        <div class="c-input--presigned-upload__label">
+            <label class="c-label" for="image-upload">{{ label }}</label>
+        </div>
+        <div class="c-input--presigned-upload__body">
+            <input id="image-upload" type="file" @change="handleFileSelect" accept="image/jpeg, image/png">
+        </div>
+        <div v-if="showPreview">
+            <img :src="previewUrl" alt="Uploaded Image">
+        </div>
     </div>
 </template>

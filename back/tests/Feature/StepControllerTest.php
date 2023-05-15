@@ -87,6 +87,7 @@ class StepControllerTest extends TestCase
         $params = [
             'name' => 'テストだよ',
             'category_id' => $this->category->id,
+            'image_url' => '',
             'achievement_time_type_id' => $this->achievement_time_type->id,
             'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
@@ -98,6 +99,40 @@ class StepControllerTest extends TestCase
         $result = Step::first();
         $this->assertSame($params['name'], $result->name);
         $this->assertSame($params['summary'], $result->summary);
+        $this->assertSame(null, $result->image_url);
+        $this->assertSame($this->user->id, $result->user_id);
+        $this->assertSame($this->category->id, $result->category_id);
+        $this->assertSame($params['achievement_time_type_id'], $result->achievement_time_type_id);
+        // サブステップの個数
+        $this->assertSame($sub_step_count, $result->subSteps()->count());
+
+        // 登録前のデータ状況を確認
+        $this->assertDatabaseCount('steps', 1);
+        $sub_step_count = rand(1, 3);
+        $sub_steps = [];
+        for ($i=1; $i <= $sub_step_count; $i++) {
+            $sub_steps[] = [
+                'name' => 'サブステップ',
+                'detail' => 'サブステップ詳細' . $i,
+                'sort_number' => $i,
+            ];
+        }
+        $params = [
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => 'example.com',
+            'achievement_time_type_id' => $this->achievement_time_type->id,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $this->actingAs($this->user)->postJson('/api/steps', $params);
+
+        // 期待値の評価
+        $this->assertDatabaseCount('steps', 2);
+        $result = Step::orderBy('id', 'desc')->first();
+        $this->assertSame($params['name'], $result->name);
+        $this->assertSame($params['summary'], $result->summary);
+        $this->assertSame($params['image_url'], $result->image_url);
         $this->assertSame($this->user->id, $result->user_id);
         $this->assertSame($this->category->id, $result->category_id);
         $this->assertSame($params['achievement_time_type_id'], $result->achievement_time_type_id);
