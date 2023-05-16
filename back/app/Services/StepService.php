@@ -56,16 +56,6 @@ class StepService
 
             // 一時ディレクトリの画像をステップのディレクトリに保存
             $this->uploadAndUpdateImageUrl($step, $params['image_url']);
-            // if (!App::environment('testing') && !empty($params['image_url'])) {
-            //     $tmp_image_path = parse_url($params['image_url'], PHP_URL_PATH);
-            //     $tmp_data = Storage::disk('s3')->get($tmp_image_path);
-            //     $file_name = Str::afterLast($tmp_image_path, '/');
-            //     // ステップ用のディレクトリへファイルを保存し、URLをDBに登録
-            //     $upload_path = "public/steps/{$step->id}/{$file_name}";
-            //     Storage::disk('s3')->put($upload_path, $tmp_data, 'public');
-            //     $image_url = Storage::disk('s3')->url($upload_path);
-            //     $this->step_respository->update($step, ['image_url' => $image_url]);
-            // }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
