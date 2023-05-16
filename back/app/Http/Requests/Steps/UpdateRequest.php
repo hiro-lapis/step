@@ -26,6 +26,7 @@ class UpdateRequest extends FormRequest
         return [
             'id' => ['required', 'exists:steps,id'],
             'name' => ['required', 'max:255'],
+            'image_url' => ['nullable', 'string'],
             'summary' => ['nullable', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
             'achievement_time_type_id' => ['required', 'exists:achievement_time_types,id'],
@@ -39,6 +40,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name' => 'ステップ名',
+            'image_url' => 'ステップアイキャッチ画像',
             'category_id' => 'カテゴリー',
             'achievement_time_type_id' => '達成時間タイプ',
             'sub_steps' => '子ステップ',

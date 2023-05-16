@@ -7,6 +7,7 @@ import AchievementTimeTypeSelectBox from '../../Atoms/AchievementTimeTypeSelectB
 import CategorySelectBox from '../../Atoms/CategorySelectBox.vue'
 import TextInput from '../../Atoms/TextInput.vue'
 import TextareaInput from '../../Atoms/TextareaInput.vue'
+import PresignedUploadInput from '../../Atoms/PresignedUploadInput.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { Step } from '../../../types/Step'
 import { repositoryKey } from '../../../types/common/Injection'
@@ -19,6 +20,11 @@ const messageStore = useMessageInfoStore()
 const $repositories = inject<Repositories>(repositoryKey)!
 const router = useRouter()
 const route = useRoute()
+// emits
+interface Emits {
+    (e: 'update:previewUrl', previewUrl: string): void
+}
+const emit = defineEmits<Emits>()
 
 // data
 const isEdit = ref(false)
@@ -26,6 +32,7 @@ const createData = reactive<Step>({
     id: 0,
     name: '',
     summary: '',
+    image_url: '',
     category_id: 0,
     achievement_time_type_id: 0,
     sub_steps: [{ name: '', detail: '', }],
@@ -82,6 +89,7 @@ const getStep = () => {
                 const step = res.data
                 createData.id = step.id!
                 createData.name = step.name
+                createData.image_url = step.image_url
                 createData.summary = step.summary
                 createData.category_id = step.category_id
                 createData.achievement_time_type_id = step.achievement_time_type_id
@@ -164,6 +172,14 @@ onMounted(() => {
                         <div class="p-step-edit-form__body">
                             <!-- ステップ名 -->
                             <div class="p-step-edit-form__element">
+                                <PresignedUploadInput
+                                    :previewMode="false"
+                                    v-model:previewUrl="createData.image_url"
+                                    label="サムネイル"
+                                 />
+                            </div>
+                            <!-- ステップ名 -->
+                            <div class="p-step-edit-form__element">
                                 <TextInput
                                     v-model:value="createData.name"
                                     errorKey="name"
@@ -194,6 +210,7 @@ onMounted(() => {
                             <div class="p-step-edit-form__element">
                                 <TextareaInput
                                     v-model:value="createData.summary"
+                                    :errorMessage="''"
                                     height="100"
                                     label="概要"
                                 />
@@ -218,6 +235,7 @@ onMounted(() => {
                                     <TextareaInput
                                         @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
                                         v-model:value="subStep.detail"
+                                        :errorMessage="''"
                                         height="200"
                                         :label="'詳細' + (index as number +1).toString()"
                                         :formId="'substep-' + index.toString()"

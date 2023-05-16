@@ -15,6 +15,7 @@ export type ChallengeStep = {
     post_user_id: number,
     category_id: number
     name: string
+    image_url: string
     summary: string
     achievement_time_type_id: number
     challenge_sub_steps: ChallengeSubStep[]

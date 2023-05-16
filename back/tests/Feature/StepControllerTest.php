@@ -87,6 +87,7 @@ class StepControllerTest extends TestCase
         $params = [
             'name' => 'テストだよ',
             'category_id' => $this->category->id,
+            'image_url' => '',
             'achievement_time_type_id' => $this->achievement_time_type->id,
             'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
@@ -98,6 +99,40 @@ class StepControllerTest extends TestCase
         $result = Step::first();
         $this->assertSame($params['name'], $result->name);
         $this->assertSame($params['summary'], $result->summary);
+        $this->assertSame(null, $result->image_url);
+        $this->assertSame($this->user->id, $result->user_id);
+        $this->assertSame($this->category->id, $result->category_id);
+        $this->assertSame($params['achievement_time_type_id'], $result->achievement_time_type_id);
+        // サブステップの個数
+        $this->assertSame($sub_step_count, $result->subSteps()->count());
+
+        // 登録前のデータ状況を確認
+        $this->assertDatabaseCount('steps', 1);
+        $sub_step_count = rand(1, 3);
+        $sub_steps = [];
+        for ($i=1; $i <= $sub_step_count; $i++) {
+            $sub_steps[] = [
+                'name' => 'サブステップ',
+                'detail' => 'サブステップ詳細' . $i,
+                'sort_number' => $i,
+            ];
+        }
+        $params = [
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => 'example.com',
+            'achievement_time_type_id' => $this->achievement_time_type->id,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $this->actingAs($this->user)->postJson('/api/steps', $params);
+
+        // 期待値の評価
+        $this->assertDatabaseCount('steps', 2);
+        $result = Step::orderBy('id', 'desc')->first();
+        $this->assertSame($params['name'], $result->name);
+        $this->assertSame($params['summary'], $result->summary);
+        $this->assertSame($params['image_url'], $result->image_url);
         $this->assertSame($this->user->id, $result->user_id);
         $this->assertSame($this->category->id, $result->category_id);
         $this->assertSame($params['achievement_time_type_id'], $result->achievement_time_type_id);
@@ -148,6 +183,7 @@ class StepControllerTest extends TestCase
             'category_id' => $step->category_id,
             'achievement_time_type_id' => $step->achievement_time_type_id,
             'name' => $step->name,
+            'image_url' => $step->image_url,
             'category_name' => $step->category_name,
             'user_name' => $step->user_name,
             'user_image_url' => $step->user_image_url,
@@ -232,6 +268,7 @@ class StepControllerTest extends TestCase
             ))
             ->create([
                 'user_id' => $this->user->id,
+                'image_url' => 'https://example.com/test.jpg',
                 'category_id' => $this->category->id,
                 'achievement_time_type_id' => $this->achievement_time_type->id,
             ]);
@@ -250,6 +287,7 @@ class StepControllerTest extends TestCase
         $params = [
             'id' => $step->id,
             'category_id' => $category->id,
+            'image_url' => 'https://example.com/test22222.jpg',
             'achievement_time_type_id' => $achievement_time_type->id,
             'name' => '編集後のステップ名',
             'sub_steps' => $sub_steps,
@@ -260,6 +298,7 @@ class StepControllerTest extends TestCase
         $step->refresh();
         $this->assertSame($params['name'], $step->name);
         $this->assertSame($params['category_id'], $step->category_id);
+        $this->assertSame($params['image_url'], $step->image_url);
         $this->assertSame($params['achievement_time_type_id'], $step->achievement_time_type_id);
         $this->assertSame($sub_step_count, $step->subSteps->count());
         foreach ($step->subSteps as $key => $sub_step) {

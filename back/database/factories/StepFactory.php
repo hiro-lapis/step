@@ -20,6 +20,7 @@ class StepFactory extends Factory
             'name' => fake()->name(),
             'user_id' => null,
             'category_id' => null,
+            'image_url' => fake()->optional()->imageUrl(),
             'achievement_time_type_id' => null,
             'summary' => fake()->text(),
         ];

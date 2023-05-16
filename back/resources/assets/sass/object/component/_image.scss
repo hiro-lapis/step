@@ -34,6 +34,11 @@
             height: 100px;
         }
     }
+    &--step {
+        width: 100%;
+        aspect-ratio: 5 / 3; // アスペクト比固定
+        object-fit: contain; // 画像を縦横比を保ったまま表示
+    }
     &--clip { // ImageClip.vue
         display: inline-flex;
         border-radius: 50%;

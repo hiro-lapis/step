@@ -50,8 +50,13 @@
             border-radius: 5px;
         }
     }
+    &--presigned-upload {
+        display: flex;
+        flex-direction: column;
+    }
 }
-.c-input {
+.c-input,
+.c-input--presigned-upload {
     // input,labelを囲むタグ
     &__container {
         position: relative;
@@ -62,6 +67,7 @@
     // inputとパスワードアイコンを囲むタグ
     &__body {
         position: relative;
+        text-align: left; // 画像アップロードボタンの位置調整
     }
     &__password-icon {
         position: absolute;

@@ -4,6 +4,7 @@ import { StepRepository } from './stepRepository'
 import { ChallengeStepRepository } from './challengeStepRepository'
 import { MyPageRepository } from './myPageRepository'
 import { ChatGptRepository } from './chatGptRepository'
+import { FileManageRepository } from './uploadRepository'
 
 export interface Repositories {
   // リソース増加で随時追加
@@ -13,6 +14,7 @@ export interface Repositories {
   common: CommonRepository,
   mypage: MyPageRepository,
   step: StepRepository,
+  file: FileManageRepository,
 }
 
 const repositories = {
@@ -22,6 +24,7 @@ const repositories = {
   challengeStep: new ChallengeStepRepository(),
   mypage: new MyPageRepository(),
   step: new StepRepository(),
+  file: new FileManageRepository(),
 }
 
 export default (): Repositories => repositories

@@ -16,6 +16,7 @@ class Step extends Model
     protected $fillable = [
         'user_id',
         'category_id',
+        'image_url',
         'name',
         'summary',
         'achievement_time_type_id',
