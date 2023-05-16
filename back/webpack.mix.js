@@ -1,4 +1,7 @@
 const mix = require('laravel-mix');
+require('mix-env-file');
+const webpack = require('webpack');
+
 const glob = require('glob');
 
 /*
@@ -11,7 +14,7 @@ const glob = require('glob');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
+ mix.env(process.env.ENV_FILE);
 // エントリーポイント, 出力先 の指定
 glob.sync('resources/assets/ts/app/**/*.ts').map(function(file) {
     mix.ts(file, 'public/js').vue();
@@ -31,6 +34,13 @@ mix.webpackConfig({
         //     }
         // ]
     },
+    plugins: [
+        new webpack.DefinePlugin({
+           'process.env': {
+            APP_URL: JSON.stringify(process.env.APP_URL),
+           },
+        }),
+    ],
     optimization: { // ライブラリの分割コンパイル
         splitChunks: {
             chunks: 'all',

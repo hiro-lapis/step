@@ -1,13 +1,13 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
+        "dev": "ENV_FILE=./.env npm run development",
         "development": "mix",
-        "watch": "mix watch",
+        "watch": "ENV_FILE=./.env mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production",
+        "production": "ENV_FILE=./.env mix --production",
         "eslint": "eslint resources/assets/ts --ext .vue,.js",
         "eslint:fix": "eslint resources/assets/ts --fix --ext .vue,.js"
     },
@@ -36,5 +36,9 @@
         "vue-eslint-parser": "^9.1.0",
         "vue-loader": "^17.0.1",
         "vue-router": "^4.1.6"
+    },
+    "dependencies": {
+        "dotenv": "^16.0.3",
+        "mix-env-file": "^0.1.1"
     }
 }
