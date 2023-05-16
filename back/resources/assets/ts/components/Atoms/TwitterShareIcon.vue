@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref, computed } from 'vue'
+import { defineProps, ref, computed, onMounted } from 'vue'
 
 // props
 const props = defineProps({
@@ -10,13 +10,11 @@ const props = defineProps({
 })
 
 // data
-const appUrl = ref(process.env.MIX_APP_URL)
-
 // computed
 const iconUrl = computed(() => {
-    return baseUrl.value + `?url=${appUrl.value}/${props.content}/${props.id}&text=${props.text}&hashtags=${props.hashtags}`;
+    return baseUrl.value + `?url=${process.env.APP_URL}/${props.content}/${props.id}&text=${props.text}`;
 })
-const baseUrl = computed(() => 'https://twitter.com/intent/tweet')
+const baseUrl = computed(() => 'https://twitter.com/share')
 </script>
 
 <template>
