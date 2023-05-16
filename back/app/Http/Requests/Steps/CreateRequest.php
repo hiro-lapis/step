@@ -40,6 +40,7 @@ class CreateRequest extends FormRequest
         return [
             'name' => 'ステップ名',
             'category_id' => 'カテゴリー',
+            'image_url' => 'ステップアイキャッチ画像',
             'achievement_time_type_id' => '達成時間タイプ',
             'sub_steps' => '子ステップ',
             'sub_steps.*.name' => '子ステップ名',

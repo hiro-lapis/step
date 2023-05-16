@@ -55,16 +55,17 @@ class StepService
             if ($count !== $sub_step_params->count()) throw new Exception('子ステップの更新件数が一致しません');
 
             // 一時ディレクトリの画像をステップのディレクトリに保存
-            if (!App::environment('testing') && !empty($params['image_url'])) {
-                $tmp_image_path = parse_url($params['image_url'], PHP_URL_PATH);
-                $tmp_data = Storage::disk('s3')->get($tmp_image_path);
-                $file_name = Str::afterLast($tmp_image_path, '/');
-                // ステップ用のディレクトリへファイルを保存し、URLをDBに登録
-                $upload_path = "public/steps/{$step->id}/{$file_name}";
-                Storage::disk('s3')->put($upload_path, $tmp_data, 'public');
-                $image_url = Storage::disk('s3')->url($upload_path);
-                $this->step_respository->update($step, ['image_url' => $image_url]);
-            }
+            $this->uploadAndUpdateImageUrl($step, $params['image_url']);
+            // if (!App::environment('testing') && !empty($params['image_url'])) {
+            //     $tmp_image_path = parse_url($params['image_url'], PHP_URL_PATH);
+            //     $tmp_data = Storage::disk('s3')->get($tmp_image_path);
+            //     $file_name = Str::afterLast($tmp_image_path, '/');
+            //     // ステップ用のディレクトリへファイルを保存し、URLをDBに登録
+            //     $upload_path = "public/steps/{$step->id}/{$file_name}";
+            //     Storage::disk('s3')->put($upload_path, $tmp_data, 'public');
+            //     $image_url = Storage::disk('s3')->url($upload_path);
+            //     $this->step_respository->update($step, ['image_url' => $image_url]);
+            // }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -102,6 +103,8 @@ class StepService
             $sub_step_params = collect($params['sub_steps']);
             $count = $this->step_respository->updateOrCreateSubSteps($step, $sub_step_params);
             if ($count !== $sub_step_params->count()) throw new Exception('子ステップの更新件数が一致しません');
+            // 画像情報更新
+            $this->uploadAndUpdateImageUrl($step, $params['image_url']);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -122,11 +125,16 @@ class StepService
      */
     private function uploadAndUpdateImageUrl(Step $step, string|null $image_url): void
     {
-        if (App::environment('testing') || empty($params['image_url'])) {
+        // 更新前と変わらないURLの場合は何もしない
+        if ($step->image_url === $image_url || empty($image_url)) return;
+        // テスト環境の場合はS3関連処理をスキップしパラメータ情報そのままでDB更新
+        if (App::environment('testing')) {
+            $this->step_respository->update($step, ['image_url' => $image_url]);
             return;
         }
-        $tmp_image_path = parse_url($image_url, PHP_URL_PATH);
+
         // 署名付きURLから画像パス、ファイル名を抽出
+        $tmp_image_path = parse_url($image_url, PHP_URL_PATH);
         $tmp_data = Storage::disk('s3')->get($tmp_image_path);
         $file_name = Str::afterLast($tmp_image_path, '/');
 
@@ -213,6 +221,7 @@ class StepService
             'category_id' => $original_step->category_id,
             'achievement_time_type_id' => $original_step->achievement_time_type_id,
             'name' => $original_step->name,
+            'image_url' => $original_step->image_url,
             'summary' => $original_step->summary,
         ];
 

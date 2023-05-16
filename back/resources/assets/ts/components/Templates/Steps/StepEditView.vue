@@ -89,6 +89,7 @@ const getStep = () => {
                 const step = res.data
                 createData.id = step.id!
                 createData.name = step.name
+                createData.image_url = step.image_url
                 createData.summary = step.summary
                 createData.category_id = step.category_id
                 createData.achievement_time_type_id = step.achievement_time_type_id

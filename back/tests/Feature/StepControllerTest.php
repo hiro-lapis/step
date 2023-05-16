@@ -183,6 +183,7 @@ class StepControllerTest extends TestCase
             'category_id' => $step->category_id,
             'achievement_time_type_id' => $step->achievement_time_type_id,
             'name' => $step->name,
+            'image_url' => $step->image_url,
             'category_name' => $step->category_name,
             'user_name' => $step->user_name,
             'user_image_url' => $step->user_image_url,
@@ -267,6 +268,7 @@ class StepControllerTest extends TestCase
             ))
             ->create([
                 'user_id' => $this->user->id,
+                'image_url' => 'https://example.com/test.jpg',
                 'category_id' => $this->category->id,
                 'achievement_time_type_id' => $this->achievement_time_type->id,
             ]);
@@ -285,6 +287,7 @@ class StepControllerTest extends TestCase
         $params = [
             'id' => $step->id,
             'category_id' => $category->id,
+            'image_url' => 'https://example.com/test22222.jpg',
             'achievement_time_type_id' => $achievement_time_type->id,
             'name' => '編集後のステップ名',
             'sub_steps' => $sub_steps,
@@ -295,6 +298,7 @@ class StepControllerTest extends TestCase
         $step->refresh();
         $this->assertSame($params['name'], $step->name);
         $this->assertSame($params['category_id'], $step->category_id);
+        $this->assertSame($params['image_url'], $step->image_url);
         $this->assertSame($params['achievement_time_type_id'], $step->achievement_time_type_id);
         $this->assertSame($sub_step_count, $step->subSteps->count());
         foreach ($step->subSteps as $key => $sub_step) {
