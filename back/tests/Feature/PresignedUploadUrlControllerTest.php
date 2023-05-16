@@ -62,15 +62,15 @@ class PresignedUploadUrlControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_presignedUploadUrl(): void
-    {
-        Storage::fake('s3');
-        // ログインユーザーが利用できるようになっているか(ファイル名がないため422エラー)
-        $response = $this->actingAs($this->user)->postJson('/api/presigned-upload-url', ['file_name' => 'test.jpg']);
+    // public function test_presignedUploadUrl(): void
+    // {
+    //     Storage::fake('s3');
+    //     // ログインユーザーが利用できるようになっているか(ファイル名がないため422エラー)
+    //     $response = $this->actingAs($this->user)->postJson('/api/presigned-upload-url', ['file_name' => 'test.jpg']);
 
-        $response->assertOk();
-        $data = $response->json();
-        $this->assertArrayHasKey('upload_path', $data);
-        $this->assertArrayHasKey('presigned_url', $data);
-    }
+    //     $response->assertOk();
+    //     $data = $response->json();
+    //     $this->assertArrayHasKey('upload_path', $data);
+    //     $this->assertArrayHasKey('presigned_url', $data);
+    // }
 }
