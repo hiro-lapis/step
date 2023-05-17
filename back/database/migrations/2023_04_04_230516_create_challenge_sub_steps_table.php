@@ -23,7 +23,7 @@ return new class extends Migration
             // ここから元となるサブステップの情報
             $table->unsignedBigInteger('sub_step_id')->comment('元となるサブステップのID');
             $table->string('name')->comment('サブステップ名');
-            $table->string('detail')->comment('詳細');
+            $table->text('detail')->comment('詳細');
             $table->unsignedTinyInteger('sort_number')->comment('並び順');
             $table->timestamps();
             $table->softDeletes();

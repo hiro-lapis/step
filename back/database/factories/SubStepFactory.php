@@ -19,7 +19,7 @@ class SubStepFactory extends Factory
         return [
             'step_id' => null,
             'name' => fake()->name(),
-            'detail' => fake()->name(),
+            'detail' => fake()->realText(1000),
             'sort_number' => fake()->unique()->numberBetween(1, 127),
         ];
     }
