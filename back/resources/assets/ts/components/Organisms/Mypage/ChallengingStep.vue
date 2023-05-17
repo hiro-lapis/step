@@ -11,7 +11,8 @@ const requestStore = useRequestStore()
 const $repositories = inject<Repositories>(repositoryKey)!
 // data
 const steps = ref<Step[]>([])
-
+// computed
+const showNotExists = computed(() => !requestStore.isLoading && steps.value.length === 0)
 const existsSteps = computed(() => steps.value.length > 0)
 // methods
 const fetchData = () => {
@@ -38,6 +39,9 @@ onMounted(() => {
                 :challengeMode="true"
             />
         </div>
+    </template>
+    <template v-else-if="showNotExists">
+        <p>挑戦したステップはありません</p>
     </template>
 </template>
 
