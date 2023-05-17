@@ -22,7 +22,7 @@ class StepFactory extends Factory
             'category_id' => null,
             'image_url' => fake()->optional()->imageUrl(),
             'achievement_time_type_id' => null,
-            'summary' => fake()->text(),
+            'summary' => fake()->realText(1000),
         ];
     }
 }
