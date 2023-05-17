@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, PropType } from 'vue'
+import { computed, inject, PropType } from 'vue'
+import { useRouter } from 'vue-router'
 import { ChallengeStep } from '../../types/ChallengeStep'
 import { Step } from '../../types/Step'
 import CategoryBadge from './CategoryBadge.vue'
@@ -15,10 +16,11 @@ import { useUserStore } from '../../store/globalStore'
 
 // utilities
 const userStore = useUserStore()
+const router = useRouter()
 // props
 const props = defineProps({
     step : { require: true, type: Object as PropType<Step|ChallengeStep>, },
-    challengeMode: { require: false, type: Boolean, default: false,}
+    challengeMode: { require: false, type: Boolean, default: false,},
 })
 // computed
 // カードクリック時の遷移先を返す
@@ -28,13 +30,25 @@ const getShowRoute = computed(() => {
     }
     return { name: 'steps-show', params: { id: props.step!.id } }
 })
+// 親コンポーネントから編集アイコン表示フラグを受け取る
+const editIcon = inject('editIcon', false)
+const showEditIcon = () => {
+    return editIcon && userStore.isLogin && !isChallengeStep(props.step!) && userStore.user.id === props.step!.user_id
+}
 // methods
 const { isChallengeStep } = useTypeGuards()
 const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step.status_name : ''
+const moveToEditPage = () => {
+    if (isChallengeStep(props.step!)) return
+    router.push({ name: 'steps-edit', params: { id: props.step!.id } })
+}
 </script>
 
 <template>
     <router-link :to="getShowRoute" class="c-step-card">
+        <span @click.prevent.stop="moveToEditPage()" class="c-step-card__edit-icon">
+            <i v-if="showEditIcon()" class="c-icon--edit fas fa-edit"></i>
+        </span>
         <h2 class="c-step-card__title u-spread">{{ step!.name }}</h2>
         <p class="c-step-card__txt u-spread">
             <div class="u-margin-b-05p">
