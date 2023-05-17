@@ -37,9 +37,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('store-challenge', function (User $user, Step $step) {
             // 自身が投稿したステップでないか
             if ($user->id === $step->user_id) return false;
-            // 現在挑戦中でないか
-            $in_challenging = ChallengeStep::stepId($step->id)->challengeUserId($user->id)->challenging()->exists();
-            if ($in_challenging) return false;
+            // 挑戦中でないか;
+            // 過去~現在に挑戦したステップでないか
+            $in_challenged = ChallengeStep::stepId($step->id)->challengeUserId($user->id)->exists();
+            if ($in_challenged) return false;
             return true;
         });
         // チャレンジ更新

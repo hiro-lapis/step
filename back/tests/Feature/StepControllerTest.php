@@ -261,6 +261,10 @@ class StepControllerTest extends TestCase
         $this->assertSame(0, $challenge->challenging_count);
         $this->assertSame(1, $challenge->clear_count);
         $this->assertSame(0, $challenge->fail_count);
+
+        // 過去に挑戦したステップに再度挑戦しようとすると403エラーレスポンスが返ってくるか
+        $response = $this->actingAs($this->user)->postJson('/api/steps/challenges', ['id' => $step->id]);
+        $response->assertForbidden();
     }
 
     public function test_updateStep(): void
