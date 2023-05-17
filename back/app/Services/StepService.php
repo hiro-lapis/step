@@ -237,10 +237,9 @@ class StepService
             report($e);
             $status = HttpResponse::HTTP_INTERNAL_SERVER_ERROR;
             $message = __('messages.database_error_has_occured');
-
         }
-
-        return compact('status', 'message');
+        $challenge_step_id = $challenge_step->id ?? null;
+        return compact('status', 'message', 'challenge_step_id');
     }
 
     public function getPosted(): array

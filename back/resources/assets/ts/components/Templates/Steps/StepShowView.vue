@@ -22,6 +22,7 @@ const step = ref<Step>({
     user_id: 0,
     name: '',
     summary: '',
+    image_url: '',
     sub_steps: [],
     achievement_time_type_id: 0,
     achievement_time_type: { id: 0, name: ''},
@@ -64,11 +65,11 @@ const challenge = async () => {
     requestStore.setLoading(true)
     await $repositories.step.challenge(step.value.id!)
         .then(response => {
+            requestStore.setLoading(false)
             // ステップを挑戦中のステップに加えボタンを非表示
             userStore.setChallengingStepId(step.value.id!)
             messageStore.setMessage(response.data.message)
-        }).finally(() => {
-            requestStore.setLoading(false)
+            gotoChallengeStepShow(response.data.challenge_step_id)
         })
 }
 // ログインページへ遷移
@@ -80,6 +81,12 @@ onMounted(() => {
 const gotoStepList = () => {
     setTimeout(() => {
         router.push({ name: 'steps-list' })
+    }, 3000)
+}
+// 3s待ってから挑戦中のステップ画面へ遷移
+const gotoChallengeStepShow = (challengeStepId: number) => {
+    setTimeout(() => {
+        router.push({ name: 'challenge-steps-show', params: { id: challengeStepId } })
     }, 3000)
 }
 </script>

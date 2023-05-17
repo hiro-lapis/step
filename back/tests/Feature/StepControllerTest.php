@@ -221,7 +221,12 @@ class StepControllerTest extends TestCase
         $response = $this->actingAs($this->user)->postJson('/api/steps/challenges', ['id' => $step->id]);
         $response->assertOk();
         // 挑戦中のチャレンジデータが作成されているか
-        $this->assertTrue(ChallengeStep::where('challenge_user_id', $this->user->id)->where('step_id', $step->id)->where('status', ChallengeStatusEnum::Challenging)->exists());
+        $challenge_step = ChallengeStep::where('challenge_user_id', $this->user->id)->where('step_id', $step->id)->where('status', ChallengeStatusEnum::Challenging)->first();
+        // レスポンスの期待値の判定
+        $response->assertJson([
+            'message' => __('messages.challenge_started'),
+            'challenge_step_id' => $challenge_step->id
+        ]);
 
         // ユーザーのチャレンジ関連情報が存在するか
         $challenge = ChallengeInformation::where('user_id', $this->user->id)->first();
