@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, provide, ref } from 'vue'
 import { Step } from '../../../types/Step'
 import { useRequestStore } from '../../../store/globalStore'
 import { Repositories } from '../../../apis/repositoryFactory'
@@ -12,7 +12,9 @@ const $repositories = inject<Repositories>(repositoryKey)!
 
 // data
 const steps = ref<Step[]>([])
+provide('editIcon', true)
 // computed
+const showNotExists = computed(() => !requestStore.isLoading && steps.value.length === 0)
 const existsSteps = computed(() => steps.value.length > 0)
 // methods
 const fetchData = () => {
@@ -35,6 +37,9 @@ onMounted(() => {
         <div class="c-posted-step">
             <StepCardColumn :stepList="steps" />
         </div>
+    </template>
+    <template v-else-if="showNotExists">
+        <p>投稿したステップはありません</p>
     </template>
 </template>
 

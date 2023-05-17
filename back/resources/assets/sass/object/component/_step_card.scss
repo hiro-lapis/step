@@ -26,4 +26,10 @@
     &:hover .c-step-card__title {
         opacity: 0.7;
     }
+    &__edit-icon {
+        position: absolute;
+        right: 16px;
+        bottom: 4px;
+        z-index: 1; // カードよりも優先的に表示
+    }
 }
