@@ -14,7 +14,6 @@ use App\Http\Requests\Steps\ShowRequest;
 use App\Services\ChatGptService;
 use App\Services\StepService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class StepController extends Controller
 {
@@ -79,7 +78,7 @@ class StepController extends Controller
     public function challenge(ChallengeRequest $request): JsonResponse
     {
         $result = $this->step_service->challenge($request->validated()['id']);
-        return response()->json(['message' => $result['message']], $result['status']);
+        return response()->json(['message' => $result['message'], 'challenge_step_id' => $result['challenge_step_id']], $result['status']);
     }
 
     /**

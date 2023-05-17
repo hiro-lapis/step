@@ -13,7 +13,7 @@ return [
     'delete_success'  => '情報を削除しました。<br>ステップ一覧画面へ移動します',
     'step_delete_forbidden'  => '削除は投稿者のみ可能です',
     'challenge_forbidden'  => '投稿者自身がチャレンジすることはできません',
-    'challenge_started'  => 'チャレンジ開始しました。<br>達成するまでがんばりましょう！',
+    'challenge_started'  => 'チャレンジを開始しました。<br>達成するまでがんばりましょう！',
     'reached_prompt_limit' => '1日の利用上限に達しました',
     'now_reached_application_prompt_limit' => '現在chat GPTと連携する機能が利用できません。',
 ];
