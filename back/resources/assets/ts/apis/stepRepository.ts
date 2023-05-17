@@ -55,5 +55,6 @@ type UpdateResponse = {
 type FindChallengeResponse = ChallengeStep
 
 type ChallengeResponse = {
-    message: string
+    message: string,
+    challenge_step_id: number,
 }
