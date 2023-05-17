@@ -99,7 +99,7 @@ const clear = async (subStepId: number) => {
         <div class="c-step-preview__container">
             <div class="c-step-preview__head">
                 <div v-if="showActionUi" class="c-step-preview__action-ui">
-                    <span class="c-step-card__edit-icon">
+                    <span class="c-step-preview__edit-icon">
                         <TwitterShareIcon v-if="!requestStore.isLoading" :id="'step-preview'" :text="step.name" :hashtags="step.category_name!" />
                         <span v-if="isAuthor" class="u-margin-l-2p">
                             <EditToolTip
