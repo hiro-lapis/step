@@ -33,6 +33,16 @@
         align-items: center;
         margin-bottom: 30px;
     }
+    &__substep-form__list { // サブステップ入力フォームラッパー
+        width: 100%;
+    }
+    &__substep-form-item {
+        position: relative;
+    }
+    &__substep-form-handle {
+        position: absolute;
+        left: -31px;
+    }
     &__element { // 各種入力UIラッパー
         width: 100%;
         margin-bottom: 15px;

@@ -11,7 +11,7 @@ import PresignedUploadInput from '../../Atoms/PresignedUploadInput.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { Step } from '../../../types/Step'
 import { repositoryKey } from '../../../types/common/Injection'
-
+import draggable from 'vuedraggable'
 
 // utilities
 const requestStore = useRequestStore()
@@ -28,6 +28,7 @@ const emit = defineEmits<Emits>()
 
 // data
 const isEdit = ref(false)
+const drag = ref(false)
 const createData = reactive<Step>({
     id: 0,
     name: '',
@@ -35,7 +36,7 @@ const createData = reactive<Step>({
     image_url: '',
     category_id: 0,
     achievement_time_type_id: 0,
-    sub_steps: [{ name: '', detail: '', }],
+    sub_steps: [{ name: '', detail: '', sort_number: 1}],
 })
 const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 
@@ -43,7 +44,11 @@ const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 const pageTitle = computed(() => isEdit.value ? 'ステップ更新' : '新規作成')
 // methods
 const initialSubStep = { name: '', detail: '', }
-const addSubStep = () => createData.sub_steps.push(Object.assign({}, initialSubStep))
+// const addSubStep = () => createData.sub_steps.push(Object.assign({}, initialSubStep))
+const addSubStep = () => {
+    const nextSortNumber = createData.sub_steps.length + 1
+    createData.sub_steps.push(Object.assign({ sort_number: nextSortNumber }, initialSubStep))
+}
 
 // 編集中のサブステップ情報を削除
 const popSubStep = (index: number) => {
@@ -219,41 +224,54 @@ onMounted(() => {
                             <div class="p-step-edit-form__explain-text">
                                 <span class="c-title--explain-completion" @click="displayComplectionExplain">＊chat GPTサジェストについて</span>
                             </div>
-                            <template :key="index" v-for="(subStep, index) in createData.sub_steps">
-                                <div class="p-step-edit-form__element">
-                                    <TextInput
-                                        @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
-                                        v-model:value="subStep.name"
-                                        :label="subStepLabel(index)"
-                                    >
-                                    <template v-slot:asideLabel>
-                                        <i v-if="index !== 0" @click="popSubStep(index)" class="c-icon--delete fas fa-times-circle"></i>
+                            <!-- サブステップ -->
+                            <!-- v-model > 配列で、並び替えはしない。List＞並び替えをする.-->
+                            <!-- ghost-classでドラッグ中のスタイル指定（sortable.jsのクラスをつかえる） -->
+                            <div class="p-step-edit-form__substep-form__list">
+                                <draggable :list="createData.sub_steps" item-key="sort_number" :animation=300 tag="div" ghost-class="blue-background-class">
+                                    <!-- slotで囲う要素は１つにまとめる -->
+                                    <template v-slot:item="{ element: subStep, index}">
+                                        <div class="p-step-edit-form__substep-form-item">
+                                            <span class="p-step-edit-form__substep-form-handle">
+                                                <span class="c-icon--line material-symbols-outlined">menu</span>
+                                            </span>
+                                            <div class="p-step-edit-form__element">
+                                                <TextInput
+                                                    @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
+                                                    v-model:value="subStep.name"
+                                                    :label="subStepLabel(index)"
+                                                >
+                                                <template v-slot:asideLabel>
+                                                    <i v-if="index !== 0" @click="popSubStep(index)" class="c-icon--delete fas fa-times-circle"></i>
+                                                </template>
+                                                </TextInput>
+                                            </div>
+                                            <div class="p-step-edit-form__element">
+                                                <TextareaInput
+                                                    @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
+                                                    v-model:value="subStep.detail"
+                                                    :errorMessage="''"
+                                                    height="200"
+                                                    :label="'詳細' + (index as number +1).toString()"
+                                                    :formId="'substep-' + index.toString()"
+                                                >
+                                                <template v-slot:labelAside>
+                                                    <span
+                                                        @click="completion(index, subStep.name, subStep.detail)"
+                                                    >
+                                                        <img
+                                                            src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/logos/chat-GPT-logo.png"
+                                                            alt="chat-GPTロゴ"
+                                                            class="c-img--chat-gpt"
+                                                        >
+                                                    </span>
+                                                </template>
+                                                </TextareaInput>
+                                            </div>
+                                        </div>
                                     </template>
-                                    </TextInput>
-                                </div>
-                                <div class="p-step-edit-form__element">
-                                    <TextareaInput
-                                        @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
-                                        v-model:value="subStep.detail"
-                                        :errorMessage="''"
-                                        height="200"
-                                        :label="'詳細' + (index as number +1).toString()"
-                                        :formId="'substep-' + index.toString()"
-                                    >
-                                    <template v-slot:labelAside>
-                                        <span
-                                            @click="completion(index, subStep.name, subStep.detail)"
-                                        >
-                                            <img
-                                                src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/logos/chat-GPT-logo.png"
-                                                alt="chat-GPTロゴ"
-                                                class="c-img--chat-gpt"
-                                            >
-                                        </span>
-                                    </template>
-                                    </TextareaInput>
-                                </div>
-                            </template>
+                                </draggable>
+                            </div>
                             <!-- サブステップ追加 -->
                             <div class="p-step-edit-form__bottom">
                                 <button
@@ -290,4 +308,11 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
 </style>
