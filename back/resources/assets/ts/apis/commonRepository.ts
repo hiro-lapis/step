@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios'
+import { AchievementTimeType } from '../types/AchievementTimeType'
 import axios from './baseRepository'
 
 /**
@@ -10,7 +12,9 @@ export class CommonRepository {
     async category(): Promise<any> {
         return await axios.get(`${this.categoryUrl}`)
     }
-    async achievementTimeType(): Promise<any> {
+    async achievementTimeType(): Promise<AxiosResponse<AchievementTimeTypeResponse>> {
         return await axios.get(`${this.achievementTimeTypeUrl}`)
     }
 }
+
+type AchievementTimeTypeResponse = AchievementTimeType[]

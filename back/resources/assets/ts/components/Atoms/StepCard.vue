@@ -70,7 +70,7 @@ const moveToEditPage = () => {
                 </span>
             </div>
             <span>
-                達成目安時間: {{ step!.achievement_time_type!.name }}
+                達成目安時間: {{ step!.achievement_time! }}
             </span>
         </p>
     </router-link>

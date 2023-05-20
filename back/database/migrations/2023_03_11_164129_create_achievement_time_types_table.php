@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('achievement_time_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->comment('表記名');
+            $table->string('display_name')->comment('単位名');
             $table->unsignedSmallInteger('sort_number');
             $table->timestamps();
 

@@ -27,6 +27,7 @@ class ChallengeStepFactory extends Factory
             'post_user_id' => null,
             'category_id' => null,
             'achievement_time_type_id' => null,
+            'time_count' => 0,
             'name' => fake()->text(),
             'summary' => fake()->text(),
         ];

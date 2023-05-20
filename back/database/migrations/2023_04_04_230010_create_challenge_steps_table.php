@@ -25,6 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('post_user_id')->comment('チャレンジを投稿したユーザーID');
             $table->unsignedBigInteger('category_id')->comment('カテゴリーID');
             $table->unsignedBigInteger('achievement_time_type_id')->comment('達成目安期間ID');
+            $table->unsignedBigInteger('time_count')->comment('達成目安時間の時間量');
             $table->string('name')->comment('ステップ名');
             $table->text('summary')->nullable()->comment('ステップの概要');
             $table->timestamps();

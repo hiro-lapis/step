@@ -25,7 +25,8 @@ const step = ref<Step>({
     image_url: '',
     sub_steps: [],
     achievement_time_type_id: 0,
-    achievement_time_type: { id: 0, name: ''},
+    time_count: 0,
+    achievement_time_type: { id: 0, name: '', display_name: ''},
     category: { id: 0, name: ''},
 })
 const isInitialized = ref(false)

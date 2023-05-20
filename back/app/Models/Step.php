@@ -20,12 +20,17 @@ class Step extends Model
         'name',
         'summary',
         'achievement_time_type_id',
+        'time_count',
     ];
 
     protected $casts = [
         'created_at' => 'datetime:Y年n月j日',
         'updated_at' => 'datetime:Y年n月j日',
         'deleted_at' => 'datetime:Y年n月j日',
+    ];
+
+    protected $appends = [
+        'achievement_time',
     ];
 
     /** accessor */
@@ -50,9 +55,9 @@ class Step extends Model
         return $this->category->name ?? '';
     }
 
-    public function getAchievementTimeTypeNameAttribute(): string
+    public function getAchievementTimeAttribute(): string
     {
-        return $this->achievementTimeType->name ?? '';
+        return ($this->time_count . $this->achievementTimeType->display_name) ?? '';
     }
 
     /**

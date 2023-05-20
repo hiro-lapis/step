@@ -4,6 +4,7 @@
         "summary": "私がプログラミング初心者のときに実際にやってみて効果的だった学習順番を共有します。\n\nプログラミング初心者の方にオススメの学習順番は、まずは基礎的なプログラミング言語を学ぶことです。例えば、PythonやJavaScriptなどがおすすめです。それから、プログラミングの基本的な概念や構文、データ型などを学びます。次に、制御構文や関数、オブジェクト指向などの応用的な内容に進みます。最後に、実際にプロジェクトを作成しながら実践的なスキルを身につけることで、学習をより深化させることができます。\n\nこの学習順番で学んでいくと、基礎から応用まで段階的に学ぶことができ、プログラミングの基本的な理解が身につきます。",
         "category_id": 1,
         "achievement_time_type_id": 2,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "基本的なプログラミング言語の学習",
@@ -32,6 +33,7 @@
         "summary": "英語学習の基礎として、まずはアルファベットの発音と基本的な単語の覚え方を学びます。初心者向けのSTEPです。",
         "category_id": 1,
         "achievement_time_type_id": 1,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "アルファベットの発音を覚える",
@@ -55,6 +57,7 @@
         "summary": "英語のリスニング力を向上させるためのステップです。実践的な方法を学びながら、リスニングスキルを伸ばします。",
         "category_id": 1,
         "achievement_time_type_id": 2,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "英語の音声教材を聴く",
@@ -73,6 +76,7 @@
         "summary": "英語学習の基本的なステップを紹介します。英語初心者向けの内容で、英語の基礎を固めるためのステップです。毎日少しずつ取り組むことで、英語の基礎を身に付けることができます。ステップ1から順番に進めることをおすすめします。",
         "category_id": 1,
         "achievement_time_type_id": 1,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "単語の学習",
@@ -102,6 +106,7 @@
         "summary": "私が3ヶ月で10kg痩せたダイエット法を紹介します。ダイエットには、食事制限や運動など様々な方法がありますが、私は食事制限で炭水化物をとる量を減らし筋トレをすることで痩せることができました。",
         "category_id": 1,
         "achievement_time_type_id": 1,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "筋トレをする",
@@ -130,6 +135,7 @@
         "summary": "",
         "category_id": 2,
         "achievement_time_type_id": 4,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "下準備：2000語以上ある英単語帳を買う",
@@ -168,6 +174,7 @@
         "summary": "",
         "category_id": 2,
         "achievement_time_type_id": 7,
+        "time_count": 1,
         "sub_steps": [
             {
             "name": "英語の基礎を学ぶ",
@@ -196,6 +203,7 @@
         "summary": "",
         "category_id": 2,
         "achievement_time_type_id": 7,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "簡単な英語で書く",
@@ -234,6 +242,7 @@
         "category_id": 2,
         "summary": "",
         "achievement_time_type_id": 7,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "英語の音楽や映画を楽しむ",
@@ -262,6 +271,7 @@
         "category_id": 4,
         "summary": "",
         "achievement_time_type_id": 4,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "寝る前にベッドルームを整理する",
@@ -295,6 +305,7 @@
         "category_id": 4,
         "summary": "",
         "achievement_time_type_id": 5,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "朝食をしっかりとる",
@@ -333,6 +344,7 @@
         "category_id": 4,
         "summary": "",
         "achievement_time_type_id": 4,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "起きてすぐトレーニングするまでの準備をしておく",
@@ -356,6 +368,7 @@
         "category_id": 1,
         "summary": "",
         "achievement_time_type_id": 1,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "開いている画面のページ名を変えよう",
@@ -374,6 +387,7 @@
         "category_id": 1,
         "summary": "",
         "achievement_time_type_id": 2,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "HTMLのマークアップを作成する",
@@ -397,6 +411,7 @@
         "category_id": 1,
         "summary": "",
         "achievement_time_type_id": 1,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "現在日時を表示しよう",
@@ -425,6 +440,7 @@
         "category_id": 1,
         "summary": "",
         "achievement_time_type_id": 6,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "おためしレッスンでホームページを作ってみる",
@@ -448,6 +464,7 @@
         "category_id": 1,
         "summary": "",
         "achievement_time_type_id": 5,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "ロードマップを把握する",
@@ -476,6 +493,7 @@
         "category_id": 3,
         "summary": "",
         "achievement_time_type_id": 5,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "糖質制限を徹底する",
@@ -509,6 +527,7 @@
         "category_id": 3,
         "summary": "",
         "achievement_time_type_id": 5,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "脂質を制限する",
@@ -542,6 +561,7 @@
         "category_id": 3,
         "summary": "",
         "achievement_time_type_id": 5,
+        "time_count": 1,
         "sub_steps": [
             {
                 "name": "準備",

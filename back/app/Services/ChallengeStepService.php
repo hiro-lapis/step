@@ -34,7 +34,7 @@ class ChallengeStepService
         // アクセサの設定
         return $step->setAppends([
             'category_name',
-            'achievement_time_type_name',
+            'achievement_time',
             'post_user_name',
             'post_user_image_url',
             'post_user_profile',
