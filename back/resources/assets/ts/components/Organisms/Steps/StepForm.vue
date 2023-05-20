@@ -6,6 +6,7 @@ import StepPreview from './StepPreview.vue'
 import AchievementTimeTypeSelectBox from '../../Atoms/AchievementTimeTypeSelectBox.vue'
 import CategorySelectBox from '../../Atoms/CategorySelectBox.vue'
 import TextInput from '../../Atoms/TextInput.vue'
+import BorderLine from '../../Atoms/BorderLine.vue'
 import TextareaInput from '../../Atoms/TextareaInput.vue'
 import PresignedUploadInput from '../../Atoms/PresignedUploadInput.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
@@ -234,21 +235,25 @@ onMounted(() => {
                             <!-- v-model > 配列で、並び替えはしない。List＞並び替えをする.-->
                             <!-- ghost-classでドラッグ中のスタイル指定（sortable.jsのクラスをつかえる） -->
                             <div class="p-step-edit-form__substep-form__list">
-                                <draggable :list="createData.sub_steps" item-key="sort_number" :animation=300 tag="div" ghost-class="blue-background-class">
+                                <draggable :list="createData.sub_steps" item-key="sort_number" :animation=300 tag="div">
                                     <!-- slotで囲う要素は１つにまとめる -->
                                     <template v-slot:item="{ element: subStep, index}">
                                         <div class="p-step-edit-form__substep-form-item">
+                                            <div class="p-step-edit-form__substep-form-border">
+                                                <BorderLine />
+                                            </div>
                                             <span class="p-step-edit-form__substep-form-handle">
                                                 <span class="c-icon--line material-symbols-outlined">format_line_spacing</span>
                                             </span>
+                                            <h3 class="c-title--edit-sub-step u-margin-b-2p">サブステップ{{ String(index + 1) }}</h3>
                                             <div class="p-step-edit-form__element">
                                                 <TextInput
                                                     @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
                                                     v-model:value="subStep.name"
-                                                    :label="subStepLabel(index)"
+                                                    :label="'タイトル'"
                                                 >
                                                 <template v-slot:asideLabel>
-                                                    <i v-if="index !== 0" @click="popSubStep(index)" class="c-icon--delete fas fa-times-circle"></i>
+                                                    <i @click="popSubStep(index)" class="c-icon--delete fas fa-times-circle"></i>
                                                 </template>
                                                 </TextInput>
                                             </div>
@@ -258,7 +263,7 @@ onMounted(() => {
                                                     v-model:value="subStep.detail"
                                                     :errorMessage="''"
                                                     height="200"
-                                                    :label="'詳細' + (index as number +1).toString()"
+                                                    :label="'詳細'"
                                                     :formId="'substep-' + index.toString()"
                                                 >
                                                 <template v-slot:labelAside>
