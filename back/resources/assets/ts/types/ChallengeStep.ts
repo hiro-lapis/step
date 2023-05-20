@@ -18,6 +18,7 @@ export type ChallengeStep = {
     image_url: string
     summary: string
     achievement_time_type_id: number
+    time_count: number
     challenge_sub_steps: ChallengeSubStep[]
     challenge_sub_steps_count: number
     cleared_sub_step_count: number
@@ -25,7 +26,7 @@ export type ChallengeStep = {
     category: Category
     created_at?: string
     // 以下アクセサで必要に応じて設定
-    achievement_time_type_name?: string
+    achievement_time?: string
     category_name?: string
     post_user_name?: string
     post_user_image_url?: string

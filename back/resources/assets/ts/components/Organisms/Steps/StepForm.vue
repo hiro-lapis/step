@@ -6,6 +6,7 @@ import StepPreview from './StepPreview.vue'
 import AchievementTimeTypeSelectBox from '../../Atoms/AchievementTimeTypeSelectBox.vue'
 import CategorySelectBox from '../../Atoms/CategorySelectBox.vue'
 import TextInput from '../../Atoms/TextInput.vue'
+import NumberInput from '../../Atoms/NumberInput.vue'
 import BorderLine from '../../Atoms/BorderLine.vue'
 import TextareaInput from '../../Atoms/TextareaInput.vue'
 import PresignedUploadInput from '../../Atoms/PresignedUploadInput.vue'
@@ -43,6 +44,7 @@ const createData = reactive<Step>({
     image_url: '',
     category_id: 0,
     achievement_time_type_id: 0,
+    time_count: 0,
     sub_steps: [{ name: '', detail: '', sort_number: 1}],
 })
 const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
@@ -106,6 +108,7 @@ const getStep = () => {
                 createData.summary = step.summary
                 createData.category_id = step.category_id
                 createData.achievement_time_type_id = step.achievement_time_type_id
+                createData.time_count = step.time_count
                 createData.sub_steps = step.sub_steps
                 requestStore.setLoading(false)
                 // ログインユーザーとステップのユーザーが異なる場合、ステップ一覧にリダイレクト
@@ -211,11 +214,17 @@ onMounted(() => {
                                 />
                             </div>
                             <!-- 達成目安時間 -->
-                            <div class="p-step-edit-form__element">
+                            <div class="p-step-edit-form__achievement-time">
+                                <NumberInput
+                                    v-model:value="createData.time_count"
+                                    className="c-input--large u-margin-b-2p"
+                                    label="達成目安時間(時間/期間の単位)"
+                                    required
+                                />
                                 <AchievementTimeTypeSelectBox
                                     v-model:value="createData.achievement_time_type_id"
-                                    label="達成目安時間"
-                                    required
+                                    label=""
+                                    selectClass="c-input--large u-margin-b-2p"
                                 />
                             </div>
                             <!-- 概要 -->

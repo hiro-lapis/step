@@ -1,4 +1,5 @@
 export type AchievementTimeType = {
-    id: number,
+    id: number
     name: string
+    display_name: string
 }

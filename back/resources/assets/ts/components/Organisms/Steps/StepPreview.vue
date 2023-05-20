@@ -44,6 +44,23 @@ const { isChallengeStep, isChallengeSubStep } = useTypeGuards()
 const settedSummary = computed(() => {
     return props.step.summary !== null && props.step.summary !== ''
 })
+// TODO; ページレベルでAPIから取得した値をinject,他のコンポーネントもinjectしたものを使う
+const achievementTimeTypeName = computed(() => {
+    switch (props.step.achievement_time_type_id) {
+        case 1:
+            return '分間'
+        case 2:
+            return '時間'
+        case 3:
+            return '日間'
+        case 4:
+            return '週間'
+        case 5:
+            return 'ヶ月間'
+        case 6:
+            return '年間'
+    }
+})
 // methods
 const { isInChallenge, isCleard } = ChallengeStatusJudgement()
 // サブステップのインデックスを文字列で返す
@@ -98,6 +115,7 @@ const clear = async (subStepId: number) => {
     <div class="c-step-preview">
         <div class="c-step-preview__container">
             <div class="c-step-preview__head">
+                <!-- ボタン,twitterシェアボタン -->
                 <div v-if="showActionUi" class="c-step-preview__action-ui">
                     <span class="c-step-preview__edit-icon">
                         <TwitterShareIcon v-if="!requestStore.isLoading" :id="'step-preview'" :text="step.name" :hashtags="step.category_name!" />
@@ -117,8 +135,13 @@ const clear = async (subStepId: number) => {
                 <div v-if="step.image_url" class="c-step-preview__eye-catch">
                     <img class="c-img--step" :src="step.image_url" alt="step-image" />
                 </div>
+                <!-- 基本情報 -->
                 <div class="c-step-preview__information">
                     <CategoryBadge v-if="step.category_id" :id="step.category_id" />
+                    <!-- 達成目安時間 -->
+                    <template v-if="step.achievement_time_type_id && step.time_count">
+                        <p class="u-margin-l-1p">達成目安時間: {{ String(step.time_count) + achievementTimeTypeName  }}</p>
+                    </template>
                     <!-- チャレンジ中のステップ情報表示時 -->
                     <template v-if="isChallengeStep(step)">
                         <div class="c-step-preview__challenge-information">

@@ -3,6 +3,7 @@ import { computed, inject, onMounted, ref } from 'vue'
 import { Repositories } from '../../apis/repositoryFactory'
 import RequiredBadge from './RequiredBadge.vue'
 import { repositoryKey } from '../../types/common/Injection'
+import { AchievementTimeType } from '../../types/AchievementTimeType'
 
 // utilities
 const $repositories = inject<Repositories>(repositoryKey)!
@@ -16,10 +17,6 @@ const props = defineProps({
     value: { required: true, type: Number, },
 })
 // data
-type AchievementTimeType = {
-    id: number
-    name: string
-}
 const achievementTimeTypeList = ref<AchievementTimeType[]>([])
 const errorMessage = ref('')
 const initialState = ref(true)
@@ -49,7 +46,7 @@ const changedValue = (event: Event) => {
  * 未選択オプションのテキスト
  * 選択必須かどうかで文章をかえる
  */
-const initialOptionText = computed(() => props.required ? '選択してください' : '達成目安時間')
+const initialOptionText = computed(() => props.required ? '時間の単位を選択してください' : '達成目安時間')
 const notSelected = computed(() => {
     return props.value === 0
 })

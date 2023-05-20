@@ -14,7 +14,7 @@ export class StepRepository {
     private readonly challengeFindUrl = '/api/steps'
     private readonly challengeUrl = '/api/steps/challenges'
 
-    async store(data: { category_id: number, achievement_time_type_id: number, name: string, summary: string }): Promise<any> {
+    async store(data: { category_id: number, achievement_time_type_id: number, time_count: number, name: string, summary: string }): Promise<any> {
         return await axios.post(`${this.baseUrl}`, data)
     }
     async update (data: Step): Promise<AxiosResponse<UpdateResponse>> {
