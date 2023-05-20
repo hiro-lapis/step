@@ -233,7 +233,7 @@ onMounted(() => {
                                     <template v-slot:item="{ element: subStep, index}">
                                         <div class="p-step-edit-form__substep-form-item">
                                             <span class="p-step-edit-form__substep-form-handle">
-                                                <span class="c-icon--line material-symbols-outlined">menu</span>
+                                                <span class="c-icon--line material-symbols-outlined">format_line_spacing</span>
                                             </span>
                                             <div class="p-step-edit-form__element">
                                                 <TextInput
@@ -276,22 +276,22 @@ onMounted(() => {
                             <div class="p-step-edit-form__bottom">
                                 <button
                                     @click="addSubStep"
-                                    class="c-btn c-btn--middle c-btn--add-sub-step"
+                                    class="c-btn c-btn--large c-btn--add-sub-step"
                                 >
                                     サブステップ追加
                                 </button>
                             <template v-if="!isEdit">
                                 <button
                                     @click="create"
-                                    class="c-btn c-btn--middle c-btn--create"
+                                    class="c-btn c-btn--large c-btn--create"
                                 >
                                     登録
                                 </button>
                             </template>
                             <template v-else>
                                 <button
-                                @click="update"
-                                class="c-btn c-btn--middle c-btn--update"
+                                    @click="update"
+                                    class="c-btn c-btn--large c-btn--update"
                                 >
                                 更新
                             </button>

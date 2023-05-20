@@ -15,7 +15,7 @@
         box-sizing: border-box;
         text-align: center;
         @include pc() {
-            width: 600px;
+            width: 700px;
             box-shadow: 0 0 8px #ccc;
         }
     }
@@ -41,7 +41,8 @@
     }
     &__substep-form-handle {
         position: absolute;
-        left: -31px;
+        left: -38px;
+        top: -9px;
     }
     &__element { // 各種入力UIラッパー
         width: 100%;
