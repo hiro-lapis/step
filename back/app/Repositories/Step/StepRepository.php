@@ -61,7 +61,7 @@ class StepRepository implements StepRepositoryInterface
         }
 
         return $query->with('category:id,name')
-            ->with('achievementTimeType:id,name')
+            ->with('achievementTimeType:id,display_name')
             ->withCount('subSteps')
             ->addSelect('steps.*')
             ->paginate(10);
@@ -98,7 +98,7 @@ class StepRepository implements StepRepositoryInterface
     {
         return $this->step
             ->where('user_id', $user_id)
-            ->with(['category:id,name', 'achievementTimeType:id,name'])
+            ->with(['category:id,name', 'achievementTimeType:id,display_name'])
             ->withCount('subSteps')
             ->get();
     }

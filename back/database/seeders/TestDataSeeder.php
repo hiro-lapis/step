@@ -56,6 +56,7 @@ class TestDataSeeder extends Seeder
                         'user_id' => $users->random()->id,
                         'category_id' => $step_data->category_id,
                         'achievement_time_type_id' => $step_data->achievement_time_type_id,
+                        'time_count' => $step_data->time_count,
                     ]);
                     if ($step->subSteps()->count() === 0) {
                         foreach ($step_data->sub_steps as $key => $value) {

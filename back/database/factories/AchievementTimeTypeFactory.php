@@ -18,6 +18,7 @@ class AchievementTimeTypeFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'display_name' => fake()->name(),
             'sort_number' => fake()->unique()->numberBetween(1, 65535), // small int max値
         ];
     }
