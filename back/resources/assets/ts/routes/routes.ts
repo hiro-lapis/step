@@ -7,6 +7,7 @@ import Register from '../components/Templates/Register.vue'
 import PasswordForgot from '../components/Templates/Password/Forgot.vue'
 import PasswordReset from '../components/Templates/Password/Reset.vue'
 import MypageView from '../components/Templates/Mypage/MypageView.vue'
+import StepCreateView from '../components/Templates/Steps/StepCreateView.vue'
 import StepEditView from '../components/Templates/Steps/StepEditView.vue'
 import StepShowView from '../components/Templates/Steps/StepShowView.vue'
 import ChallengeStepShowView from '../components/Templates/ChallengeSteps/ChallengeStepShowView.vue'
@@ -20,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     { path: '/login', name: 'login', component: Login, meta: { title: 'ログイン', requiresAuth: false, guestOnly: true, },  },
     { path: '/password/forgot', name: 'password-forgot', component: PasswordForgot, meta: { title: 'パスワード再発行', requiresAuth: false, guestOnly: true, } },
     { path: '/password/reset', name: 'password-reset', component: PasswordReset, meta: { title: 'パスワードリセット', requiresAuth: false, guestOnly: true, }, },
-    { path: '/steps/create', name: 'steps-create', component: StepEditView, meta: { title: 'ステップ新規作成', requiresAuth: true, guestOnly: false, },  },
+    { path: '/steps/create', name: 'steps-create', component: StepCreateView, meta: { title: 'ステップ新規作成', requiresAuth: true, guestOnly: false, },  },
     { path: '/steps/edit/:id', name: 'steps-edit', component: StepEditView, meta: { title: 'ステップ編集', requiresAuth: true, guestOnly: false, },  },
     { path: '/steps', name: 'steps-list', component: StepListView, meta: { title: 'ステップ一覧', requiresAuth: false, guestOnly: false, },   },
     { path: '/steps/:id', name: 'steps-show', component: StepShowView, meta: { title: 'ステップ詳細', requiresAuth: false, guestOnly: false, }, },
