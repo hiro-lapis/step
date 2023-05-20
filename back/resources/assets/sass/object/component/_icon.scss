@@ -66,7 +66,19 @@
         transition: all 0.3s;
     }
 }
-
+.c-icon--line {
+	align-items: center;
+    appearance: none;
+    background-color: #fff;
+    border: 1px solid $color_white4;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    height: 35px;
+    -webkit-box-pack: center;
+    justify-content: center;
+    width: 35px;
+}
 .c-icon--loading {
 	position: absolute;
 	top: 50%;

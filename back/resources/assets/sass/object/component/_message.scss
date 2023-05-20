@@ -38,3 +38,14 @@
     position: relative;
     top: 0;
 }
+
+.c-message {
+    &--requirement {
+        font-size: 12px;
+        background-color: #d9534f;
+        color: #fff;
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+}

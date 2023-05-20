@@ -11,11 +11,11 @@
     }
     &__editor { // 編集フォーム
         width: 100%;
-        padding: 20px 40px;
+        padding: 20px;
         box-sizing: border-box;
         text-align: center;
         @include pc() {
-            width: 600px;
+            width: 700px;
             box-shadow: 0 0 8px #ccc;
         }
     }
@@ -32,6 +32,29 @@
         flex-direction: column;
         align-items: center;
         margin-bottom: 30px;
+    }
+    &__substep-form__list { // サブステップ入力フォームラッパー
+        width: 100%;
+    }
+    &__substep-form-item {
+        position: relative;
+        margin-bottom: 80px;
+        box-sizing: border-box;
+        padding: 10px 20px;
+        border: 1px solid $color_white4;
+        border-radius: 3px;
+        box-shadow: 0px 0px 3px $color_white4;
+        @include pc() {
+            margin-bottom: 60px;
+        }
+    }
+    &__substep-form-border {
+        margin-bottom: 30px;
+    }
+    &__substep-form-handle {
+        position: absolute;
+        left: 10px;
+        top: 8px;
     }
     &__element { // 各種入力UIラッパー
         width: 100%;

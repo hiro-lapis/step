@@ -60,6 +60,7 @@ input,
 textarea,
 select {
     font-size: $font-size_default;
+    font-family: $font-family_default;
     border: none;
     outline: none; // focus時の枠線を消す
 }

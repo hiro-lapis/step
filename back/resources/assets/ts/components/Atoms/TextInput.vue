@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import ErrorMessage from './ErrorMessage.vue'
-import RequiredBadge from './RequiredBadge.vue'
+import RequirementText from './RequirementText.vue'
 
 // props
 const props = defineProps({
@@ -15,6 +15,7 @@ const props = defineProps({
     label: { required: false, type:String, default: '', }, // 入力ラベル
     placeHolder: { required: false, type: String, default: '' }, // プレースホルダー
     required: { required: false, type: Boolean, default: false, }, // 入力必須マーク
+    optional: { required: false, type: Boolean, default: false, }, // 入力任意マーク
     rules: { required: false, type: Array<Function>, default: []}, // バリデーションルール関数
     type: { required: false, type: String, default: 'text' }, // inputのtype属性
     value: { required: false, type:String, default: '', }, // 編集画面などの初期値
@@ -69,7 +70,10 @@ defineExpose({
                     {{ label }}
                     <slot name="asideLabel"></slot>
                     <template v-if="required">
-                        <RequiredBadge />
+                        <RequirementText />
+                    </template>
+                    <template v-if="optional">
+                        <RequirementText :isRequired="false" />
                     </template>
                 </label>
             </template>
