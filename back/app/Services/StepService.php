@@ -36,6 +36,11 @@ class StepService
     public function get(array $params): array
     {
         $result = $this->step_respository->pagenateByCondition($params);
+        $result->getCollection()->each(function ($step) {
+            $step->setAppends([
+                'achievement_time',
+            ]);
+        });
         return compact('result');
     }
 
@@ -117,7 +122,7 @@ class StepService
     {
         // 更新前と変わらないURLの場合は何もしない
         if ($step->image_url === $image_url || empty($image_url)) return;
-        // テスト環境の場合はS3関連処理をスキップしパラメータ情報そのままでDB更新
+        // NOTE: テスト環境の場合はS3関連処理をスキップしパラメータ情報そのままでDB更新
         if (App::environment('testing')) {
             $this->step_respository->update($step, ['image_url' => $image_url]);
             return;
@@ -148,7 +153,7 @@ class StepService
         // アクセサの設定
         return $step->setAppends([
             'category_name',
-            'achievement_time_type_name',
+            'achievement_time',
             'is_writer',
             'user_name',
             'user_image_url',
@@ -210,6 +215,7 @@ class StepService
             'post_user_id' => $original_step->user_id,
             'category_id' => $original_step->category_id,
             'achievement_time_type_id' => $original_step->achievement_time_type_id,
+            'time_count' => $original_step->time_count,
             'name' => $original_step->name,
             'image_url' => $original_step->image_url,
             'summary' => $original_step->summary,
@@ -245,14 +251,14 @@ class StepService
     public function getPosted(): array
     {
         $steps = $this->step_respository->getByUserId(auth()->user()->id);
-        $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time_type_name']));
+        $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time']));
         return compact('steps');
     }
 
     public function getChallenging(): array
     {
         $steps = $this->challenge_step_respository->getByChallengeUserId(auth()->user()->id);
-        $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time_type_name', 'status_name', 'cleared_sub_step_count']));
+        $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time', 'status_name', 'cleared_sub_step_count']));
         return compact('steps');
     }
 }

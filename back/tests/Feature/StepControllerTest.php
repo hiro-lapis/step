@@ -14,6 +14,7 @@ use App\Models\SubStep;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 // use OpenAI\Laravel\Facades\OpenAI;
 // use OpenAI\Responses\Completions\CreateResponse;
@@ -89,6 +90,7 @@ class StepControllerTest extends TestCase
             'category_id' => $this->category->id,
             'image_url' => '',
             'achievement_time_type_id' => $this->achievement_time_type->id,
+            'time_count' => rand(1, 6),
             'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
         ];
@@ -122,6 +124,7 @@ class StepControllerTest extends TestCase
             'category_id' => $this->category->id,
             'image_url' => 'example.com',
             'achievement_time_type_id' => $this->achievement_time_type->id,
+            'time_count' => rand(1, 6),
             'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
         ];
@@ -136,6 +139,7 @@ class StepControllerTest extends TestCase
         $this->assertSame($this->user->id, $result->user_id);
         $this->assertSame($this->category->id, $result->category_id);
         $this->assertSame($params['achievement_time_type_id'], $result->achievement_time_type_id);
+        $this->assertSame($params['time_count'], $result->time_count);
         // サブステップの個数
         $this->assertSame($sub_step_count, $result->subSteps()->count());
     }
@@ -151,12 +155,19 @@ class StepControllerTest extends TestCase
             ])
             ->create();
         $response = $this->getJson('/api/steps');
+        $response->dump();
         $paginate = $response['result'];
         // 期待値の判定
         // 総件数
         $this->assertSame(10, $paginate['total']);
-        //
-        $this->assertSame(10, $paginate['total']);
+        // 表示に使うステップの項目があるか
+        $step = $response['result']['data'][0];
+        $this->assertArrayHasKey('id', $step);
+        $this->assertArrayHasKey('category_id', $step);
+        $this->assertArrayHasKey('name', $step);
+        $this->assertArrayHasKey('image_url', $step);
+        $this->assertArrayHasKey('summary', $step);
+        $this->assertArrayHasKey('achievement_time', $step);
     }
 
     public function test_stepShow(): void
@@ -176,20 +187,23 @@ class StepControllerTest extends TestCase
         ]);
         $response = $this->getJson('/api/steps/' . $step->id);
 
+        // 表示用の情報を取得できているか
         $step = Step::find($step->id);
-        $response->assertJson([
-            'id' => $step->id,
-            'user_id' => $step->user_id,
-            'category_id' => $step->category_id,
-            'achievement_time_type_id' => $step->achievement_time_type_id,
-            'name' => $step->name,
-            'image_url' => $step->image_url,
-            'category_name' => $step->category_name,
-            'user_name' => $step->user_name,
-            'user_image_url' => $step->user_image_url,
-            'achievement_time_type_name' => $step->achievement_time_type_name,
-            'is_writer' => $step->is_writer,
-        ]);
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->where('id', $step->id)
+                ->where('user_id', $step->user_id)
+                ->where('category_id', $step->category_id)
+                ->where('achievement_time_type_id', $step->achievement_time_type_id)
+                ->where('time_count',  1)
+                ->where('name', $step->name)
+                ->where('image_url', $step->image_url)
+                ->where('category_name', $step->category_name)
+                ->where('user_name', $step->user_name)
+                ->where('user_image_url', $step->user_image_url)
+                ->where('achievement_time', $step->time_count . $step->achievementTimeType->display_name)
+                ->where('is_writer', $step->is_writer)
+                ->etc()
+        );
     }
 
     public function test_challenge(): void
@@ -298,6 +312,7 @@ class StepControllerTest extends TestCase
             'category_id' => $category->id,
             'image_url' => 'https://example.com/test22222.jpg',
             'achievement_time_type_id' => $achievement_time_type->id,
+            'time_count' => 2,
             'name' => '編集後のステップ名',
             'sub_steps' => $sub_steps,
         ];
