@@ -39,11 +39,18 @@ const showEditIcon = () => {
 // methods
 const { isChallengeStep } = useTypeGuards()
 const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step.status_name : ''
+const moveToEditPage = (stepId: number) => {
+    router.push({ name: 'steps-edit', params: { id: stepId } })
+}
 </script>
 
 <template>
     <router-link :to="getShowRoute" class="c-step-card">
-        <EditIcon v-if="showEditIcon()" :stepId="step?.id" />
+        <EditIcon v-if="showEditIcon()"
+            :stepId="step?.id"
+            :clickFunc="moveToEditPage"
+            classname="c-step-card__edit-icon"
+        />
         <h2 class="c-step-card__title u-spread">{{ step!.name }}</h2>
         <p class="c-step-card__txt u-spread">
             <div class="u-margin-b-05p">

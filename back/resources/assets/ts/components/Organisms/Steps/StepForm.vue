@@ -252,7 +252,7 @@ onMounted(() => {
                                                 <BorderLine />
                                             </div>
                                             <span class="p-step-edit-form__substep-form-handle">
-                                                <span class="c-icon--line material-symbols-outlined">format_line_spacing</span>
+                                                <span class="c-icon--drag-indicator material-symbols-outlined">drag_indicator</span>
                                             </span>
                                             <h3 class="c-title--edit-sub-step u-margin-b-2p">サブステップ{{ String(index + 1) }}</h3>
                                             <div class="p-step-edit-form__element">

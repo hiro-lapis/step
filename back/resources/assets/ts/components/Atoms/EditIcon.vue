@@ -1,20 +1,14 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-
-// utilities
-const router = useRouter()
 // props
 const props = defineProps({
     stepId : { require: true, type: Number, },
+    clickFunc: { require: false, type: Function, default: () => {} },
+    classname: { require: false, type: String, default: '' },
 })
-// data
-const moveToEditPage = () => {
-    router.push({ name: 'steps-edit', params: { id: props.stepId } })
-}
 </script>
 
 <template>
-    <span @click.prevent.stop="moveToEditPage()" class="c-step-card__edit-icon">
-        <i class="c-icon--edit fas fa-edit"></i>
+    <span @click.prevent.stop="clickFunc(stepId)" :class="classname">
+        <span class="c-icon--edit material-symbols-outlined">edit_square</span>
     </span>
 </template>
