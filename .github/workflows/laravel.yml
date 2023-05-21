@@ -48,7 +48,7 @@ jobs:
       id: npm-cache
       with:
         path: ${{ github.workspace }}/node_modules
-        key: key: ${{ runner.os }}-node-${{ hashFiles('**/.node-version') }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/.node-version') }}-${{ hashFiles('**/package-lock.json') }}
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       working-directory: ./back
