@@ -12,3 +12,27 @@
         padding: 5px;
     }
 }
+// 画像アップロード
+.c-label--image-upload {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    transition: all .3s;
+    background-color: #1da1f2;
+    border: 1px solid #1da1f2;
+    color: #fff;
+    &:hover {
+        background-color: #fff;
+        color: #1da1f2;
+        &:disabled {
+            color: #fff;
+            background-color: #fff;
+            background-color: #1da1f2;
+            border: 1px solid #1da1f2;
+        }
+    }
+}

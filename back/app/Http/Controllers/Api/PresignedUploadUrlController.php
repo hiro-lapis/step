@@ -55,7 +55,6 @@ class PresignedUploadUrlController extends Controller
         /** @var FilesystemManager $s3 */
         $s3 = Storage::disk('s3');
         $presigned_url = $s3->temporaryUrl($file_path, '+2 minutes');
-        \Log::info('HIRO:presigned_url >>>' . print_r($presigned_url, true));
         return response()->json(compact('presigned_url'));
         // $s3Client = new S3Client([
         //     'region' => config('filesystems.disks.s3.region'),

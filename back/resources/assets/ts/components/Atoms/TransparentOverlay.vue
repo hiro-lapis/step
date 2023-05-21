@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import { useTransparentOverlayStore } from '../../store/components/TransparentOverlay'
-const active = inject<boolean>('activeEditMenu')!
+const active = inject<boolean>('activeEditMenu', false)!
 const overlay = useTransparentOverlayStore()
 // computed
 const transparentOverlay = computed(() =>  overlay.active)

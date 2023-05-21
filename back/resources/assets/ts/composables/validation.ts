@@ -10,6 +10,10 @@ export const useValidation = () => {
     const required = (value: string) => {
         return !!value || '入力必須です'
     }
+    // 入力必須(空文字, null, undefined)
+    const selectRequired = (value: number) => {
+        return !!value || '入力必須です'
+    }
     // 最大文字数
     const max = (value: string, max: number) => {
         return (value || '').length <= max || `${max}文字以内で入力してください`
@@ -157,8 +161,54 @@ export const useValidation = () => {
             ) || '時間を入力してください'
         )
     }
+
+    /**
+     * 各種項目のバリデーション
+     */
+    const stepName = (name: string) => {
+        let result = required(name)
+        if (result !== true) {
+            return result
+        }
+        result = max(name, 255)
+        return result
+    }
+    const stepSummary = (summary: string) => {
+        return max(summary, 500)
+    }
+    const stepTimeCount = (timeCount: number, achievementTimeType: number) => {
+        let result = selectRequired(timeCount)
+        if (result === true) {
+            return result
+        }
+        result = minValue(timeCount, 1)
+        if (result === true) {
+            return result
+        }
+        switch (timeCount) {
+            case 1:
+                return maxValue(timeCount, 59)
+            case 2:
+                return maxValue(timeCount, 23)
+            case 3:
+                return maxValue(timeCount, 30)
+            case 4:
+                return maxValue(timeCount, 6)
+            case 5:
+                return maxValue(timeCount, 11)
+            case 6:
+                return maxValue(timeCount, 99)
+            default:
+                return true
+        }
+    }
+
     return {
+        stepName,
+        stepSummary,
+        stepTimeCount,
         required,
+        selectRequired,
         max,
         min,
         maxValue,

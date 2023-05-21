@@ -2,12 +2,17 @@
 import { computed, inject, ref } from 'vue'
 import { Repositories } from '../../apis/repositoryFactory'
 import { repositoryKey } from '../../types/common/Injection'
+import RequirementText from './RequirementText.vue'
+import { useMessageInfoStore } from '../../store/globalStore'
 
 // utility
 const $repositories = inject<Repositories>(repositoryKey)!
+const messageStore = useMessageInfoStore()
 // props
 const props = defineProps({
     label: { required: false, type: String, default: ''},
+    required: { required: false, type: Boolean, default: false},
+    optional: { required: false, type: Boolean, default: false},
     previewUrl: { required: false, type: String, default: ''},
     previewMode: { required: false, type: Boolean, default: true},
 })
@@ -19,6 +24,8 @@ const emit = defineEmits<Emits>()
 
 // data
 const previewUrl = ref('')
+const fileInputRef = ref<InstanceType<typeof HTMLInputElement>>()
+
 // computed
 const showPreview = computed(() => {
     return props.previewMode && previewUrl.value !== ''
@@ -28,7 +35,7 @@ const handleFileSelect = async (event: Event) => {
     const file = (event.target as HTMLInputElement).files?.[0]
     if (!file) return
     if (!validateFile(file)) {
-        alert('ファイルの拡張子は.jpgまたは.pngで、サイズは10MB以下である必要があります。')
+        alert('ファイルの拡張子は.jpegまたは.pngで、サイズは10MB以下である必要があります')
         return
     }
     try {
@@ -39,12 +46,15 @@ const handleFileSelect = async (event: Event) => {
             const res = await $repositories.file.download(uploadUrl)
             previewUrl.value = res.data.presigned_url
             emit('update:previewUrl', res.data.presigned_url)
+            messageStore.setMessage('画像のアップロードに成功しました')
+            fileInputRef.value!.blur()
+
         } catch (error) {
             console.error('アップロードエラー:', error)
-            alert('ファイルのアップロードに失敗しました。')
+            alert('ファイルのアップロードに失敗しました')
         }
     } catch (error) {
-        throw new Error('署名付きURLの取得に失敗しました。')
+        throw new Error('署名付きURLの取得に失敗しました')
     }
 }
 
@@ -57,15 +67,44 @@ const validateFile = (file: File): boolean => {
     if (file.size > maxSize) return false
     return true
 }
+const reset = () => {
+    previewUrl.value = ''
+    fileInputRef.value!.value = ''
+    emit('update:previewUrl', '')
+}
 </script>
 
 <template>
     <div class="c-input--presigned-upload__container">
         <div class="c-input--presigned-upload__label">
-            <label class="c-label" for="image-upload">{{ label }}</label>
+            <span class="c-label" for="image-upload">
+                {{ label }}
+                <template v-if="required">
+                    <RequirementText />
+                </template>
+                <template v-else-if="optional">
+                    <RequirementText  :isRequired="false" showOptional />
+                </template>
+                <template v-if="previewUrl">
+                    <!-- reset button -->
+                    <button type="button" class="c-button--reset" @click.stop.prevent="reset">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </template>
+            </span>
         </div>
         <div class="c-input--presigned-upload__body">
-            <input id="image-upload" type="file" @change="handleFileSelect" accept="image/jpeg, image/png">
+            <label class="c-label--image-upload">
+                <span class="c-icon--image-upload material-symbols-outlined">upload_file</span>
+                画像アップロード
+                <input
+                    name="image-upload"
+                    class="u-hidden"
+                    type="file"
+                    ref="fileInputRef"
+                    @change="handleFileSelect" accept="image/jpeg, image/png"
+                >
+            </label>
         </div>
         <div v-if="showPreview">
             <img :src="previewUrl" alt="Uploaded Image">

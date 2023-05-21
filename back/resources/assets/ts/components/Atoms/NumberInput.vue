@@ -24,7 +24,7 @@ const props = defineProps({
 
 // emits
 interface Emits {
-    (e: 'update:value', value: string): void
+    (e: 'update:value', value: Number): void
     (e: 'keyupEnter'): void
     (e: 'keyDown:shiftEnter'): void
 }
@@ -37,7 +37,7 @@ const existsError = computed(() => props.errorMessage !== '')
 // methods
 const input = (event: Event) => {
     const val = (event.target as HTMLInputElement).value
-    emit('update:value', val)
+    emit('update:value', Number(val))
 }
 const hidePassword = () => {
     showPassowrd.value = false
