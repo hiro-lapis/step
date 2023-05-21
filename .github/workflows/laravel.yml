@@ -48,7 +48,7 @@ jobs:
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       working-directory: ./back
     - name: Install Dependencies
-      if: steps.composer-cache.outputs.cache-hit != 'true'
+      if: steps.composer-cache.outputs.cache-hit != 'true' # if composer.local has changed
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       working-directory: ./back
     - name: Generate key
