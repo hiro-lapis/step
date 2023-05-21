@@ -67,7 +67,7 @@ class Step extends Model
 
     public function getOgpSummaryAttribute(): string
     {
-        return $this->summary ?? $this->user_name . 'さんが書いた' . $this->category_name . 'についてのステップです';
+        return !empty($this->summary) ? $this->summary : $this->user_name . 'さんが書いた' . $this->category_name . 'についてのステップです';
     }
 
     /**
