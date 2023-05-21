@@ -19,6 +19,7 @@
         <!-- twitter固有OGP設定(カード種類,記事タイトル)-->
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="{{ $title }}">
+        <meta name="twitter:image:src" content="{{ $image_url }}" />
         @endif
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
