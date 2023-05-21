@@ -40,15 +40,15 @@ jobs:
       id: composer-cache # cache-name
       uses: actions/cache@v3
       with:
-        path: ${{ github.workspace }}/vendor
+        path: ./back/vendor
         key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: ${{ runner.os }}-composer-
-    - name: Make Node modules Cache Directory
-      id: npm-cache
-      uses: actions/checkout@v3
-      with:
-        path: ${{ github.workspace }}/node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/.node-version') }}-${{ hashFiles('**/package-lock.json') }}
+    # - name: Make Node modules Cache Directory
+    #   id: npm-cache
+    #   uses: actions/checkout@v3
+    #   with:
+    #     path: ./back/node_modules
+    #     key: ${{ runner.os }}-node-${{ hashFiles('**/.node-version') }}-${{ hashFiles('**/package-lock.json') }}
     - uses: actions/checkout@v3
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
@@ -67,7 +67,7 @@ jobs:
       run: php artisan migrate
       working-directory: ./back
     - name: Frontend setup if not cache-hit
-      if: ${{ steps.npm-cache.outputs.cache-hit }}" != "true"
+      # if: steps.npm-cache.outputs.cache-hit != "true"
       run: npm ci
       working-directory: ./back
     - name: Frontend build
