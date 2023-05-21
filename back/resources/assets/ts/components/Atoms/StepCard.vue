@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { computed, inject, PropType } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../../store/globalStore'
 import { ChallengeStep } from '../../types/ChallengeStep'
 import { Step } from '../../types/Step'
 import CategoryBadge from './CategoryBadge.vue'
+import EditIcon from './EditIcon.vue'
 import StepProgressionCountBadge from './StepProgressionCountBadge.vue'
 import SubStepCountBadge from './SubStepCountBadge.vue'
 import { useTypeGuards } from '../../composables/typeGuards'
-import { useUserStore } from '../../store/globalStore'
 
 /**
  * ステップカード
@@ -38,17 +39,11 @@ const showEditIcon = () => {
 // methods
 const { isChallengeStep } = useTypeGuards()
 const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step.status_name : ''
-const moveToEditPage = () => {
-    if (isChallengeStep(props.step!)) return
-    router.push({ name: 'steps-edit', params: { id: props.step!.id } })
-}
 </script>
 
 <template>
     <router-link :to="getShowRoute" class="c-step-card">
-        <span @click.prevent.stop="moveToEditPage()" class="c-step-card__edit-icon">
-            <i v-if="showEditIcon()" class="c-icon--edit fas fa-edit"></i>
-        </span>
+        <EditIcon v-if="showEditIcon()" :stepId="step?.id" />
         <h2 class="c-step-card__title u-spread">{{ step!.name }}</h2>
         <p class="c-step-card__txt u-spread">
             <div class="u-margin-b-05p">

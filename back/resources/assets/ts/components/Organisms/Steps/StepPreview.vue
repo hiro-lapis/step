@@ -13,6 +13,7 @@ import EditToolTip from '../../Atoms/EditToolTip.vue'
 import TwitterShareIcon from '../../Atoms/TwitterShareIcon.vue'
 import { RouterLocation } from '../../../types/common/Router'
 import { repositoryKey } from '../../../types/common/Injection'
+import EditIcon from '../../Atoms/EditIcon.vue'
 
 
 const $repositories = inject<Repositories>(repositoryKey)!
@@ -120,13 +121,14 @@ const clear = async (subStepId: number) => {
                     <span class="c-step-preview__edit-icon">
                         <TwitterShareIcon v-if="!requestStore.isLoading" :id="'step-preview'" :text="step.name" :hashtags="step.category_name!" />
                         <span v-if="isAuthor" class="u-margin-l-2p">
-                            <EditToolTip
+                            <EditIcon :stepId="props.step.id"></EditIcon>
+                            <!-- <EditToolTip
                                 :menus="editToolTipMenus"
                             >
                             <template v-slot:bottom>
                                 <p class="c-edit-tool-tip__txt" @click="deleteStep">削除</p>
                             </template>
-                            </EditToolTip>
+                            </EditToolTip> -->
                         </span>
                     </span>
                 </div>
