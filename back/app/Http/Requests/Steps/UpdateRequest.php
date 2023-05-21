@@ -37,6 +37,9 @@ class UpdateRequest extends FormRequest
         ];
 
         $achievement_time_type_id = $this->input('achievement_time_type_id');
+        if (is_null($achievement_time_type_id)) {
+            return $default_rule;
+        }
         $default_rule['time_count'] = CreateRequest::getAchievementTimtTypeMaxRule($achievement_time_type_id);
         return $default_rule;
     }
@@ -57,7 +60,7 @@ class UpdateRequest extends FormRequest
 
     public function messages()
     {
-        $achievement_time_type_id = $this->input('achievement_time_type_id');
+        $achievement_time_type_id = $this->input('achievement_time_type_id') ?? 0;
 
         return [
             'sub_steps.min' => 'サブステップを1つ以上登録してください',
