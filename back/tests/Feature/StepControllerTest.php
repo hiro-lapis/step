@@ -38,9 +38,9 @@ class StepControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        Artisan::call('db:seed', ['--class' => AchievementTimeTypeSeeder::class]);
         $this->user = User::factory()->create();
         $this->category = Category::factory()->create();
+        $this->seed(AchievementTimeTypeSeeder::class);
         $this->achievement_time_type = AchievementTimeType::first();
     }
 
@@ -299,7 +299,6 @@ class StepControllerTest extends TestCase
             'sub_steps' => $sub_steps,
         ];
         $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
-        $response->dump();
         $response->assertUnprocessable();
         $response->assertJson(fn (AssertableJson $json) =>
             $json->where('message', '目安達成時間の単位が 分 なので59分以下を入力してください')
@@ -421,7 +420,7 @@ class StepControllerTest extends TestCase
 
     public function test_stepShow(): void
     {
-        $step_id = '1';
+        $step_id = '999999999999';
         $response = $this->getJson('/api/steps/' . $step_id);
         // 存在しないステップを参照するとバリデーションで弾かれるか
         $response->assertUnprocessable();
