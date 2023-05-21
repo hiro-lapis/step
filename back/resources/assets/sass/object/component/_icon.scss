@@ -20,20 +20,26 @@
     &--eye,
     &--delete {
         @extend %c-icon;
-        color: #555;
+        color: $color_black5;
         &:hover {
             color: #999;
         }
     }
-    &--edit {
+    &--edit,
+    &--delete-trash-box {
         cursor: pointer;
         transition: all 0.5s;
-        padding: 3px;
-        color: #555;
+        color: $color_black5;
         font-size: 25px;
         &:hover {
             color: #ccc;
         }
+    }
+    &--edit {
+        padding: 3px;
+    }
+    &--delete-trash-box {
+        padding-top: 5px;
     }
     &--side-menu {
         color: $color_black8;
@@ -66,11 +72,14 @@
         transition: all 0.3s;
     }
 }
-.c-icon--line {
+.c-icon--drag-indicator {
+    @extend %c-icon;
+    color: $color_black5;
 	align-items: center;
     appearance: none;
     background-color: #fff;
-    border: 1px solid $color_white4;
+    border: .1px solid $color_white4;
+    box-shadow: 0px 0px 3px $color_white4;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -78,6 +87,9 @@
     -webkit-box-pack: center;
     justify-content: center;
     width: 35px;
+    &:hover {
+        color: $color_white5;
+    }
 }
 .c-icon--loading {
 	position: absolute;

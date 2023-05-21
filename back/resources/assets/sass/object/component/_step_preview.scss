@@ -19,10 +19,23 @@
         margin-bottom: 5px;
         display: flex;
         justify-content: right;
+        align-items: center;
     }
     &__information {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
+        > *:nth-child(n) { // SPの時は改行時のため余白設定
+            margin-right: 10px;
+            margin-bottom: 10px;
+            @include pc() {
+                margin-bottom: 0;
+            }
+        }
+        > *:last-child {
+            margin-right: 0;
+            margin-bottom: 0;
+        }
     }
     &__challenge-information {
         font-size: 12px;

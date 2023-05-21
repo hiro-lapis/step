@@ -173,7 +173,7 @@
         "name": "無料で英会話力を身につける方法",
         "summary": "",
         "category_id": 2,
-        "achievement_time_type_id": 7,
+        "achievement_time_type_id": 6,
         "time_count": 1,
         "sub_steps": [
             {
@@ -202,7 +202,7 @@
         "name": "英語日記で英語力を鍛える方法！",
         "summary": "",
         "category_id": 2,
-        "achievement_time_type_id": 7,
+        "achievement_time_type_id": 6,
         "time_count": 1,
         "sub_steps": [
             {
@@ -241,7 +241,7 @@
         "name": "遊び感覚で英語を学ぶ５つの方法",
         "category_id": 2,
         "summary": "",
-        "achievement_time_type_id": 7,
+        "achievement_time_type_id": 6,
         "time_count": 1,
         "sub_steps": [
             {

@@ -13,6 +13,8 @@ import EditToolTip from '../../Atoms/EditToolTip.vue'
 import TwitterShareIcon from '../../Atoms/TwitterShareIcon.vue'
 import { RouterLocation } from '../../../types/common/Router'
 import { repositoryKey } from '../../../types/common/Injection'
+import EditIcon from '../../Atoms/EditIcon.vue'
+import DeleteTrashBoxIcon from '../../Atoms/DeleteTrashBoxIcon.vue'
 
 
 const $repositories = inject<Repositories>(repositoryKey)!
@@ -117,18 +119,11 @@ const clear = async (subStepId: number) => {
             <div class="c-step-preview__head">
                 <!-- ボタン,twitterシェアボタン -->
                 <div v-if="showActionUi" class="c-step-preview__action-ui">
-                    <span class="c-step-preview__edit-icon">
-                        <TwitterShareIcon v-if="!requestStore.isLoading" :id="'step-preview'" :text="step.name" :hashtags="step.category_name!" />
-                        <span v-if="isAuthor" class="u-margin-l-2p">
-                            <EditToolTip
-                                :menus="editToolTipMenus"
-                            >
-                            <template v-slot:bottom>
-                                <p class="c-edit-tool-tip__txt" @click="deleteStep">削除</p>
-                            </template>
-                            </EditToolTip>
-                        </span>
-                    </span>
+                    <TwitterShareIcon v-if="!requestStore.isLoading" :id="'step-preview'" :text="step.name" :hashtags="step.category_name!" />
+                    <template v-if="isAuthor">
+                        <EditIcon className="c-step-preview__edit-icon u-margin-l-2p" :stepId="props.step.id"></EditIcon>
+                        <DeleteTrashBoxIcon @click="deleteStep()" className="u-margin-l-2p" :stepId="props.step.id"></DeleteTrashBoxIcon>
+                    </template>
                 </div>
                 <!-- ステップ名 -->
                 <h1 class="c-title--step">{{ step.name }}</h1>
@@ -140,20 +135,20 @@ const clear = async (subStepId: number) => {
                     <CategoryBadge v-if="step.category_id" :id="step.category_id" />
                     <!-- 達成目安時間 -->
                     <template v-if="step.achievement_time_type_id && step.time_count">
-                        <p class="u-margin-l-1p">達成目安時間: {{ String(step.time_count) + achievementTimeTypeName  }}</p>
+                        <p>達成目安時間: {{ String(step.time_count) + achievementTimeTypeName  }}</p>
                     </template>
                     <!-- チャレンジ中のステップ情報表示時 -->
                     <template v-if="isChallengeStep(step)">
                         <div class="c-step-preview__challenge-information">
-                            <span class="u-margin-l-1p">挑戦開始:{{ step.challenged_at }}</span>
+                            <span>挑戦開始:{{ step.challenged_at }}</span>
                             <template v-if="step.cleared_at">
-                                <span class="u-margin-l-1p">達成:{{ step.cleared_at }}</span>
+                                <span>達成:{{ step.cleared_at }}</span>
                             </template>
                         </div>
                     </template>
                     <!-- ステップ詳細画面 -->
                     <template v-if="!isChallengeStep(step) && !!step.created_at">
-                        <span class="u-margin-l-1p">投稿日:{{ step.created_at }}</span>
+                        <span>投稿日:{{ step.created_at }}</span>
                     </template>
                 </div>
                 <div v-if="settedSummary" class="c-step-preview__summary">
