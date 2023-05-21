@@ -6,6 +6,20 @@
 
         <title>{{ config('app.name') }}</title>
 
+        <!-- OGP -->
+        @if ($enable_ogp)
+        <meta property="og:type" content="website">
+        <meta property="og:locale" content="ja_JP" />
+        <!-- サイト名,ページタイトル,ページ概要,ページURL,画像URL -->
+        <meta property="og:site_name" content="{{ config('app.name') }}" />
+        <meta property="og:title" content="{{ $title }}" />
+        <meta property="og:description" content="{{ $summary }}" />
+        <meta property="og:url" content="{{ $url }}" />
+        <meta property="og:image" content="{{ $image_url }}" />
+        <!-- twitter固有OGP設定(カード種類,記事タイトル)-->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="{{ $title }}">
+        @endif
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <!-- Favicon -->

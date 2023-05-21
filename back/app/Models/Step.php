@@ -60,6 +60,16 @@ class Step extends Model
         return ($this->time_count . $this->achievementTimeType->display_name) ?? '';
     }
 
+    public function getOgpImageUrlAttribute(): string
+    {
+        return $this->image_url ?? 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/ogp-default.png';
+    }
+
+    public function getOgpSummaryAttribute(): string
+    {
+        return $this->summary ?? $this->user_name . 'さんが書いた' . $this->category_name . 'についてのステップです';
+    }
+
     /**
      * 作成したユーザー自身か判定
      * 未ログイン時は一律false
