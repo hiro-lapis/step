@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Steps;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class IndexRequest extends FormRequest
 {
@@ -26,6 +27,9 @@ class IndexRequest extends FormRequest
         return [
             'key_word' => ['nullable'],
             'page' => ['nullable', 'integer'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'order_by' => ['nullable', 'string', Rule::in(['steps.created_at', 'sub_steps_count', 'achievement_time_types.sort_number'])],
+            'desc' => ['nullable', 'boolean'],
         ];
     }
 }

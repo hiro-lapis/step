@@ -6,6 +6,7 @@ namespace App\Repositories\Step;
 use App\Models\Step;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class StepRepository implements StepRepositoryInterface
 {
@@ -47,23 +48,43 @@ class StepRepository implements StepRepositoryInterface
      */
     public function pagenateByCondition(array $condition): LengthAwarePaginator
     {
+        // 並び順指定のためサブステップ数をサブクエリで取得
+        $sub_step_count = DB::table('sub_steps')
+            ->select('step_id', DB::raw('count(*) as sub_steps_count'))
+            ->groupBy('step_id');
         $query = $this->step->query()
             ->joinMasterTables()
+            ->joinSub($sub_step_count, 'sub_step', function ($join) {
+                $join->on('steps.id', '=', 'sub_step.step_id');
+            })
             ->joinUsers();
         // キーワード(ステップ名,カテゴリー,ユーザー名)
         if (isset($condition['key_word'])) {
             $key_word = $condition['key_word'];
             $query->where(function ($query) use ($key_word) {
                 $query->orWhere('steps.name', 'like', '%' . $key_word . '%');
-                $query->orWhere('categories.name', 'like', '%' . $key_word . '%');
                 $query->orWhere('users.name', 'like', '%' . $key_word . '%');
             });
+        }
+        // カテゴリー
+        if (isset($condition['category_id'])) {
+            $query->where('steps.category_id', $condition['category_id']);
+        }
+        // 並び順
+        if (isset($condition['order_by'])) {
+            $order_by = $condition['order_by'];
+            $desc = $condition['desc'] ?? false;
+            $query->orderBy($order_by, $desc ? 'desc' : 'asc');
+            // 達成目安時間の時はtime_countを第二ソートキーにする
+            if ($order_by === 'achievement_time_types.sort_number') {
+                $query->orderBy('steps.time_count', $desc ? 'desc' : 'asc');
+            }
         }
 
         return $query->with('category:id,name')
             ->with('achievementTimeType:id,display_name')
-            ->withCount('subSteps')
             ->addSelect('steps.*')
+            ->addSelect('sub_steps_count') // sort key 設定項目のため別名禁止
             ->paginate(10);
     }
 

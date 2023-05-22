@@ -460,6 +460,39 @@ class StepControllerTest extends TestCase
         );
     }
 
+    // public function test_stepIndexReturnDataByCondition(): void
+    // {
+    //     $first_category = Category::factory()->create();
+    //     $second_category = Category::factory()->create();
+    //     $minute = AchievementTimeType::where('id', 1)->first();
+    //     $hour = AchievementTimeType::where('id', 2)->first();
+    //     $day = AchievementTimeType::where('id', 3)->first();
+    //     $week = AchievementTimeType::where('id', 4)->first();
+    //     $month = AchievementTimeType::where('id', 5)->first();
+    //     $year = AchievementTimeType::where('id', 6)->first();
+    //     // 最初のカテゴリーのステップを1件作成
+    //     User::factory()
+    //         ->hasSteps(1, [
+    //             'category_id' => $first_category->id,
+    //             'achievement_time_type_id' => $minute->id,
+    //         ])
+    //         ->create();
+    //     // 2つめのカテゴリーのステップを2件作成
+    //     User::factory()
+    //         ->hasSteps(2, [
+    //             'category_id' => $second_category->id,
+    //             'achievement_time_type_id' => $hour->id,
+    //         ])
+    //         ->create();
+
+    //     $params = [
+    //         'category_id' => $first_category->id,
+    //         'achievement_time_type_id' => $minute->id,
+    //     ];
+    //     $response = $this->getJson('/api/steps', $params);
+    //     $paginate = $response['result'];
+    // }
+
     public function test_challenge(): void
     {
         // 自分が作者のステップ情報(子ステップ2つ)を作成 (sort_numberを設定しつつ作成)

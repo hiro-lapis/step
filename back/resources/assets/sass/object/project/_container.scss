@@ -13,6 +13,11 @@
     &__steps-list {
         max-width: 1000px;
         position: relative;
+        margin-top: 80px;
+        margin-bottom: 50px;
+        @include pc() {
+            margin-top: 100px;
+        }
     }
     &--steps-form {
         max-width: 1440px;

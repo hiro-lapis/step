@@ -22,10 +22,13 @@ const showNoDataMessage = computed(() => isEmpty.value && !requestStore.isLoadin
                 <StepCard :step="step" />
             </li>
         </template>
-        <template v-if="showNoDataMessage">
-            <p>検索にマッチする情報が見つかりませんでした</p>
-        </template>
     </ul>
+    <template v-if="showNoDataMessage">
+        <p class="c-message--data-not-found">
+            検索にマッチする情報が見つかりませんでした<br>
+            条件を変えて検索しなおしてください
+        </p>
+    </template>
 </template>
 
 <style scoped lang="scss">
