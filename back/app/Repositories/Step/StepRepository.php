@@ -54,7 +54,7 @@ class StepRepository implements StepRepositoryInterface
             ->groupBy('step_id');
         $query = $this->step->query()
             ->joinMasterTables()
-            ->joinSub($sub_step_count, 'sub_step', function ($join) {
+            ->leftJoinSub($sub_step_count, 'sub_step', function ($join) {
                 $join->on('steps.id', '=', 'sub_step.step_id');
             })
             ->joinUsers();

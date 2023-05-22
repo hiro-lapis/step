@@ -269,7 +269,6 @@ class StepControllerTest extends TestCase
     {
         // 登録前のデータ状況を確認
         $result = AchievementTimeType::all();
-        \Log::info('HIRO:resultの中身' . print_r($result->toArray(), true));
         $this->assertDatabaseCount('steps', 0);
         $sub_step_count = rand(1, 3);
         $sub_steps = [];
@@ -410,6 +409,7 @@ class StepControllerTest extends TestCase
             ])
             ->create();
         $response = $this->getJson('/api/steps');
+        $response->dump();
         $paginate = $response['result'];
         // 期待値の判定
         // 総件数
