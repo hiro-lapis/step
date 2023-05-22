@@ -30,7 +30,7 @@ onBeforeUnmount(() => {
 <template>
     <footer class="l-footer" :style="{ position: isFix ? 'fixed' : 'relative' }">
         <!-- pc footer -->
-        <div class="c-footer u-color--user">
+        <div class="c-footer u-color--theme">
             <div class="c-footer__head">
                 <router-link :to="logoRoute">
                     <div class="c-logo__container--footer">

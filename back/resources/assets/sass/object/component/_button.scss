@@ -119,28 +119,7 @@
             }
         }
     }
-    &--purchase {
-        background-color: #ff4800;
-        border: 1px solid #ff4800;
-        color: #fff;
-        &:hover {
-            background-color: #fff;
-            color: #ff4800;
-            // 使えない時は色も変えない
-            &:disabled {
-                color: #fff;
-                background-color: #ff4800;
-                border: 1px solid #ff4800;
-            }
-        }
-    }
 
-    // &--product-edit {
-    //     color: white;
-    //     background: red;
-    //     padding: 15px 14px 15px 18px;
-    //     border-radius: 50%;
-    // }
 }
 // TOPページ登録ページ
 .c-btn--form-link-register {
@@ -148,7 +127,7 @@
     @extend .c-btn--x-large;
     @extend .c-btn--agree;
 }
-// TOPページ商品一覧ページ
+// TOPページ,ステップ一覧ページ
 .c-btn--step-list {
     @extend .c-btn;
     @extend .c-btn--x-large;

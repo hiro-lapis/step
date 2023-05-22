@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, ref } from 'vue'
 import { Repositories } from '../../apis/repositoryFactory'
-import RequiredBadge from './RequiredBadge.vue'
+import RequirementText from './RequirementText.vue'
 import { repositoryKey } from '../../types/common/Injection'
+import ErrorMessage from './ErrorMessage.vue'
 
 // utilities
 const $repositories = inject<Repositories>(repositoryKey)!
@@ -12,6 +13,7 @@ const props = defineProps({
     errorKey: { required: false, type: String, default: 'category-id' },
     formId: { required: false, type: String, default: 'category-id' },
     label: { required: false, type: String, default: '' },
+    errorMessage: { required: false, type: String, default: '' },
     required: { required: false, type: Boolean, default: false },
     selectClass: { required: false, type: String, default: 'c-input--large' },
     value: { required: true, type: Number, },
@@ -63,7 +65,8 @@ const notSelected = computed(() => {
 const validate = (): boolean => {
     if (!props.required) return true
 
-    if (props.value === 0 || categoryList.value.some(cat => cat.id === props.value)) {
+    if (props.value === 0) {
+    // if (props.value === 0 || categoryList.value.some(cat => cat.id === props.value)) {
         errorMessage.value = '選択してください'
         return false
     }
@@ -83,11 +86,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="c-input__container">
+    <div class="c-input__container" :style="{ marginBottom: !!errorMessage ? '0' : '15px' }">
         <label class="c-input__label" :for="formId">
             {{ label }}
             <template v-if="required">
-                <RequiredBadge />
+                <RequirementText />
             </template>
         </label>
             <select
@@ -104,6 +107,10 @@ onMounted(() => {
                     :key="index"
                     :value="category.id">{{category.name}}</option>
             </select>
+            <!-- エラーメッセージのキー設定時のみ表示 -->
+            <template v-if="!!errorMessage">
+                <ErrorMessage class="u-margin-l-1p" :message="errorMessage" />
+            </template>
     </div>
 </template>
 

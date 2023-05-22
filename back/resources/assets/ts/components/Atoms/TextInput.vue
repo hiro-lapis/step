@@ -29,7 +29,6 @@ interface Emits {
 }
 const emit = defineEmits<Emits>()
 // data
-// const errorMessage = ref('')
 const showPassowrd = ref(false)
 // computed
 const existsError = computed(() => props.errorMessage !== '')
@@ -62,7 +61,7 @@ defineExpose({
 </script>
 
 <template>
-    <div class="c-input__container">
+    <div class="c-input__container" :style="{ marginBottom: !!errorMessage ? '0' : '15px' }">
         <div class="c-input__label">
             <!-- エラーメッセージのキー設定時のみ表示 -->
             <template v-if="label">
@@ -100,9 +99,8 @@ defineExpose({
                 </span>
             </template>
         </div>
-        <!-- エラーメッセージのキー設定時のみ表示 -->
         <template v-if="existsError">
-            <ErrorMessage :message="errorMessage" />
+            <ErrorMessage class="u-margin-l-1p" :message="errorMessage" />
         </template>
     </div>
 </template>

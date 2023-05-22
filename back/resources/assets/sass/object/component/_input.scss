@@ -5,7 +5,7 @@
 @import "../../foundation/_breakpoints.scss";
 
 %c-input {
-    padding: 5px 10px;
+    padding: 5px 2px;
     box-sizing: border-box;
     border: 1px solid #e8e8e8;
     border-radius: 5px;
@@ -53,6 +53,9 @@
     &--presigned-upload {
         display: flex;
         flex-direction: column;
+        &__label {
+            margin-bottom: 10px;
+        }
     }
 }
 .c-input,
@@ -62,6 +65,7 @@
         position: relative;
         margin-left: auto;
         margin-right: auto;
+        text-align: left;
         width: 100%;
     }
     // inputとパスワードアイコンを囲むタグ

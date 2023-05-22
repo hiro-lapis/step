@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, provide, ref, reactive, readonly } from 'vue'
+import { computed, inject, onMounted, provide, ref, reactive, readonly, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useMessageInfoStore, useRequestStore, useUserStore } from '../../../store/globalStore'
 import StepPreview from './StepPreview.vue'
@@ -12,6 +12,8 @@ import TextareaInput from '../../Atoms/TextareaInput.vue'
 import PresignedUploadInput from '../../Atoms/PresignedUploadInput.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { Step } from '../../../types/Step'
+import { useValidation } from '../../../composables/validation'
+import { useAchievementTimeTypeCheck } from '../../../composables/achievementTimeTypeCheck'
 import { repositoryKey } from '../../../types/common/Injection'
 import draggable from 'vuedraggable'
 
@@ -22,6 +24,7 @@ const messageStore = useMessageInfoStore()
 const $repositories = inject<Repositories>(repositoryKey)!
 const router = useRouter()
 const route = useRoute()
+const timeType = useAchievementTimeTypeCheck()
 
 // props
 const props = defineProps({
@@ -35,41 +38,56 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 // data
-// const isEdit = ref(false)
-const drag = ref(false)
 const createData = reactive<Step>({
     id: 0,
     name: '',
     summary: '',
     image_url: '',
     category_id: 0,
-    achievement_time_type_id: 0,
-    time_count: 0,
+    achievement_time_type_id: 1,
+    time_count: 1,
     sub_steps: [{ name: '', detail: '', sort_number: 1}],
+})
+const errorMessage = reactive({
+    name: '',
+    summary: '',
+    image_url: '',
+    category_id: '',
+    achievement_time_type_id: '',
+    time_count: '',
+    sub_steps: [ { name: '', detail: '', sort_number: 1, } ], // TODO: ドラッグしても追随するようにするか、エラーにしてドラッグできなくする
 })
 const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 
 // computed
 const isEdit = computed(() => props.mode === 'edit')
 const pageTitle = computed(() => isEdit.value ? 'ステップ更新' : '新規作成')
+const disableSubmit = computed(() => {
+    return Object.keys(errorMessage).some(element => {
+        if (element === 'sub_steps') {
+            return errorMessage[element].some(subStep => subStep.name.length > 0 && subStep.detail.length > 0)
+        }
+        return errorMessage[element].length > 0
+    })
+})
 // methods
 const initialSubStep = { name: '', detail: '', }
-// const addSubStep = () => createData.sub_steps.push(Object.assign({}, initialSubStep))
 const addSubStep = () => {
     const nextSortNumber = createData.sub_steps.length + 1
     createData.sub_steps.push(Object.assign({ sort_number: nextSortNumber }, initialSubStep))
 }
-
+const getValidTimeCountSpan = computed(() => {
+    return timeType.getValidTimeCountSpan(createData.achievement_time_type_id)
+})
 // 編集中のサブステップ情報を削除
 const popSubStep = (index: number) => {
     if (createData.sub_steps.length === 1) return
     createData.sub_steps.splice(index, 1)
 }
+
 // ステップ新規作成
 const create = async () => {
     if (requestStore.isLoading) return
-    categorySelect.value?.validate()
-
     requestStore.setLoading(true)
     await $repositories.step.store(createData).then(() => {
         messageStore.setMessage('ステップが登録されました')
@@ -157,6 +175,60 @@ const subStepLabel = (index: number): string => {
 const displayComplectionExplain = () => {
     messageStore.setMessage('*chat GPTサジェストを利用したい方は、サブステップのタイトルと詳細の概要を書いてアイコンをクリック、またはshift + Enter を押してください')
 }
+
+//　ステップの入力状態を見てバリデーション。エラーメッセージの表示を切り替え
+const validate = useValidation()
+// ステップ名
+watch(
+    () => createData.name,
+    (newData) => {
+        let result: boolean|string
+        result = validate.stepName(newData)
+        errorMessage.name = result !== true ? result : ''
+    }, { deep: true }
+)
+// ステップ概要
+watch(
+    () => createData.summary,
+    (newData) => {
+        let result: boolean|string
+        result = validate.stepSummary(newData)
+        errorMessage.name = result !== true ? result : ''
+    }
+)
+// ステップカテゴリー
+watch(
+    () => createData.category_id,
+    (newData) => {
+        let result: boolean|string
+        result = validate.selectRequired(newData)
+        errorMessage.name = result !== true ? result : ''
+    }
+)
+// 達成目安時間(単位)
+watch(
+    () => [createData.achievement_time_type_id ],
+    ([newAchievementTimeType ]) => {
+        const limitTimeCount = timeType.getLimitTimeCount(newAchievementTimeType)
+        // 目安期間の単位を変えたことで、目安期間が上限を超えている場合、目安期間を1に戻す
+        if (createData.time_count > limitTimeCount) {
+            createData.time_count = 1
+        }
+        let result: boolean|string
+        result = validate.selectRequired(newAchievementTimeType)
+        errorMessage.achievement_time_type_id = result !== true ? result : ''
+    }
+)
+// 達成目安時間
+watch(
+    () => [createData.achievement_time_type_id, createData.time_count ],
+    ([newAchievementTimeType, newTimeCount ]) => {
+        let result: boolean|string
+        result = validate.stepTimeCount(newTimeCount, newAchievementTimeType)
+        errorMessage.time_count = result !== true ? result : ''
+    }
+)
+
 // 初期化
 const init = () => {
     // 編集画面か判定
@@ -189,8 +261,9 @@ onMounted(() => {
                             <div class="p-step-edit-form__element">
                                 <PresignedUploadInput
                                     :previewMode="false"
+                                    optional
                                     v-model:previewUrl="createData.image_url"
-                                    label="サムネイル"
+                                    label="サムネイル(10MBまで / .png .jpgのみ)"
                                  />
                             </div>
                             <!-- ステップ名 -->
@@ -202,29 +275,40 @@ onMounted(() => {
                                     formId="step-name"
                                     placeHolder="入力必須"
                                     required
+                                    :errorMessage="errorMessage.name"
                                 />
                             </div>
                             <!-- カテゴリー -->
                             <div class="p-step-edit-form__element">
                                 <CategorySelectBox
+                                    :class="'u-margin-b-2p'"
                                     ref="categorySelect"
                                     v-model:value="createData.category_id"
                                     label="カテゴリー"
                                     required
+                                    :error-message="errorMessage.category_id"
                                 />
                             </div>
                             <!-- 達成目安時間 -->
-                            <div class="p-step-edit-form__achievement-time">
+                            <div class="p-step-edit-form__element">
+                                <AchievementTimeTypeSelectBox
+                                    v-model:value="createData.achievement_time_type_id"
+                                    label="達成目安時間(単位)"
+                                    :initial-option-text="'分,時間,日,週,月,年'"
+                                    selectClass="c-input--large"
+                                    required
+                                    :error-message="errorMessage.achievement_time_type_id"
+                                />
+                            </div>
+                            <div class="p-step-edit-form__element">
                                 <NumberInput
                                     v-model:value="createData.time_count"
                                     className="c-input--large u-margin-b-2p"
-                                    label="達成目安時間(時間/期間の単位)"
+                                    :label="'達成目安時間(時間' + getValidTimeCountSpan + ')'"
                                     required
-                                />
-                                <AchievementTimeTypeSelectBox
-                                    v-model:value="createData.achievement_time_type_id"
-                                    label=""
-                                    selectClass="c-input--large u-margin-b-2p"
+                                    :min="1"
+                                    :max="timeType.getLimitTimeCount(createData.achievement_time_type_id)"
+                                    :error-message="errorMessage.time_count"
                                 />
                             </div>
                             <!-- 概要 -->
@@ -303,6 +387,7 @@ onMounted(() => {
                             <template v-if="!isEdit">
                                 <button
                                     @click="create"
+                                    :disabled="disableSubmit"
                                     class="c-btn c-btn--large c-btn--create"
                                 >
                                     登録

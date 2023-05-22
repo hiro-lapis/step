@@ -12,8 +12,10 @@ use App\Models\ChatGptUsageInformation;
 use App\Models\Step;
 use App\Models\SubStep;
 use App\Models\User;
+use Database\Seeders\AchievementTimeTypeSeeder;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 // use OpenAI\Laravel\Facades\OpenAI;
@@ -24,6 +26,7 @@ class StepControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    private $initialised = false;
     private User $user;
     private Category $category;
     private AchievementTimeType $achievement_time_type;
@@ -36,9 +39,13 @@ class StepControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        if (!$this->initialised) {
+            $this->initialised = true;
+            $this->seed(AchievementTimeTypeSeeder::class);
+        }
         $this->user = User::factory()->create();
         $this->category = Category::factory()->create();
-        $this->achievement_time_type = AchievementTimeType::factory()->create();
+        $this->achievement_time_type = AchievementTimeType::first();
     }
 
     public function tearDown(): void
@@ -68,7 +75,7 @@ class StepControllerTest extends TestCase
         $response = $this->postJson('/api/steps', []);
         $response->assertUnauthorized();
         // ログイン状態でのアクセスを確認
-        $response = $this->actingAs($this->user)->json('post', '/api/steps');
+        $response = $this->actingAs($this->user)->json('post', '/api/steps', ['achievement_time_type_id' => $this->achievement_time_type->id]);
         $response->assertUnprocessable();
     }
 
@@ -144,6 +151,254 @@ class StepControllerTest extends TestCase
         $this->assertSame($sub_step_count, $result->subSteps()->count());
     }
 
+    public function test_storeFailInValidAchievementTime(): void
+    {
+        // 登録前のデータ状況を確認
+        $this->assertDatabaseCount('steps', 0);
+        $sub_step_count = rand(1, 3);
+        $sub_steps = [];
+        for ($i=1; $i <= $sub_step_count; $i++) {
+            $sub_steps[] = [
+                'name' => 'サブステップ',
+                'detail' => 'サブステップ詳細' . $i,
+                'sort_number' => $i,
+            ];
+        }
+
+        // 時間単位(分の時)に時間が60の場合
+        $params = [
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 1, // 時間単位(分)
+            'time_count' => 60,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->postJson('/api/steps', $params);
+        $response->assertUnprocessable();
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->where('message', '目安達成時間の単位が 分 なので59分以下を入力してください')
+            ->etc()
+        );
+        // 時間単位(時間の時)に時間が13の場合
+        $params = [
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 2, // 時間単位(分)
+            'time_count' => 24,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->postJson('/api/steps', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->where('message', '目安達成時間の単位が 時間 なので23時間以下を入力してください')
+            ->etc()
+        );
+        $response->assertUnprocessable();
+
+        // 時間単位(日の時)に時間が31の場合
+        $params = [
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 3, // 時間単位(日)
+            'time_count' => 31,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->postJson('/api/steps', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->where('message', '目安達成時間の単位が 日 なので30日以下を入力してください')
+            ->etc()
+        );
+
+        // 時間単位(週の時)に時間が5の場合
+        $params = [
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 4, // 時間単位(週)
+            'time_count' => 5,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->postJson('/api/steps', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->where('message', '目安達成時間の単位が 週間 なので4週間以下を入力してください')
+            ->etc()
+        );
+        $response->assertUnprocessable();
+
+        // 時間単位(月の時)に時間が13の場合
+        $params = [
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 5, // 時間単位(月)
+            'time_count' => 13,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->postJson('/api/steps', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->where('message', '目安達成時間の単位が 月 なので11ヶ月以下を入力してください')
+            ->etc()
+        );
+
+        // 時間単位(年の時)に時間が100の場合
+        $params = [
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 6, // 時間単位(月)
+            'time_count' => 100,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->postJson('/api/steps', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->where('message', '目安達成時間の単位が 年 なので10年以下を入力してください')
+            ->etc()
+        );
+        $response->assertUnprocessable();
+    }
+
+    public function test_updateFailInValidAchievementTime(): void
+    {
+        // 登録前のデータ状況を確認
+        $result = AchievementTimeType::all();
+        \Log::info('HIRO:resultの中身' . print_r($result->toArray(), true));
+        $this->assertDatabaseCount('steps', 0);
+        $sub_step_count = rand(1, 3);
+        $sub_steps = [];
+        for ($i=1; $i <= $sub_step_count; $i++) {
+            $sub_steps[] = [
+                'name' => 'サブステップ',
+                'detail' => 'サブステップ詳細' . $i,
+                'sort_number' => $i,
+            ];
+        }
+        $params = [
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => $this->achievement_time_type->id,
+            'time_count' => rand(1, 6),
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $this->actingAs($this->user)->postJson('/api/steps', $params);
+        // 登録ができているか確認
+        $this->assertDatabaseCount('steps', 1);
+        $step = Step::first();
+        // 時間単位(分の時)に時間が60の場合
+        $params = [
+            'id' => $step->id,
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 1, // 時間単位(分)
+            'time_count' => 60,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response->assertUnprocessable();
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->where('message', '目安達成時間の単位が 分 なので59分以下を入力してください')
+            ->etc()
+        );
+        // 時間単位(時間の時)に時間が13の場合
+        $params = [
+            'id' => $step->id,
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 2, // 時間単位(分)
+            'time_count' => 24,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->where('message', '目安達成時間の単位が 時間 なので23時間以下を入力してください')
+            ->etc()
+        );
+        $response->assertUnprocessable();
+
+        // 時間単位(日の時)に時間が31の場合
+        $params = [
+            'id' => $step->id,
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 3, // 時間単位(日)
+            'time_count' => 31,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->where('message', '目安達成時間の単位が 日 なので30日以下を入力してください')
+            ->etc()
+        );
+
+        // 時間単位(週の時)に時間が5の場合
+        $params = [
+            'id' => $step->id,
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 4, // 時間単位(週)
+            'time_count' => 5,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->where('message', '目安達成時間の単位が 週間 なので4週間以下を入力してください')
+            ->etc()
+        );
+        $response->assertUnprocessable();
+
+        // 時間単位(月の時)に時間が13の場合
+        $params = [
+            'id' => $step->id,
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 5, // 時間単位(月)
+            'time_count' => 13,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->where('message', '目安達成時間の単位が 月 なので11ヶ月以下を入力してください')
+            ->etc()
+        );
+
+        // 時間単位(年の時)に時間が100の場合
+        $params = [
+            'id' => $step->id,
+            'name' => 'テストだよ',
+            'category_id' => $this->category->id,
+            'image_url' => '',
+            'achievement_time_type_id' => 6, // 時間単位(月)
+            'time_count' => 100,
+            'summary' => 'テストサマリーだよ',
+            'sub_steps' => $sub_steps,
+        ];
+        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->where('message', '目安達成時間の単位が 年 なので10年以下を入力してください')
+            ->etc()
+        );
+        $response->assertUnprocessable();
+    }
+
     public function test_StepIndexReturnExpectedData(): void
     {
         // ユーザー2人それぞれステップを5件づつ登録
@@ -155,7 +410,6 @@ class StepControllerTest extends TestCase
             ])
             ->create();
         $response = $this->getJson('/api/steps');
-        $response->dump();
         $paginate = $response['result'];
         // 期待値の判定
         // 総件数
@@ -172,7 +426,7 @@ class StepControllerTest extends TestCase
 
     public function test_stepShow(): void
     {
-        $step_id = '1';
+        $step_id = '999999999999';
         $response = $this->getJson('/api/steps/' . $step_id);
         // 存在しないステップを参照するとバリデーションで弾かれるか
         $response->assertUnprocessable();

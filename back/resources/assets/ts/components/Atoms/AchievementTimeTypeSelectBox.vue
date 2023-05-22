@@ -4,6 +4,7 @@ import { Repositories } from '../../apis/repositoryFactory'
 import RequiredBadge from './RequiredBadge.vue'
 import { repositoryKey } from '../../types/common/Injection'
 import { AchievementTimeType } from '../../types/AchievementTimeType'
+import RequirementText from './RequirementText.vue'
 
 // utilities
 const $repositories = inject<Repositories>(repositoryKey)!
@@ -13,6 +14,7 @@ const props = defineProps({
     formId: { required: false, type: String, default: 'achievement_time_type_id' },
     label: { required: false, type: String, default: '' },
     required: { required: false, type: Boolean, default: false },
+    initialOptionText: { required: false, type: String, default: '選択してください' },
     selectClass: { required: false, type: String, default: 'c-input--large' },
     value: { required: true, type: Number, },
 })
@@ -42,11 +44,6 @@ const changedValue = (event: Event) => {
     emit('update:value', Number(selected))
 }
 
-/**
- * 未選択オプションのテキスト
- * 選択必須かどうかで文章をかえる
- */
-const initialOptionText = computed(() => props.required ? '時間の単位を選択してください' : '達成目安時間')
 const notSelected = computed(() => {
     return props.value === 0
 })
@@ -77,7 +74,7 @@ onMounted(() => {
         <label class="c-input__label" :for="formId">
             {{ label }}
             <template v-if="required">
-                <RequiredBadge />
+                <RequirementText />
             </template>
         </label>
             <select

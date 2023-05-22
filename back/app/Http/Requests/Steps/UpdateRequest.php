@@ -23,7 +23,7 @@ class UpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $default_rule = [
             'id' => ['required', 'exists:steps,id'],
             'name' => ['required', 'max:255'],
             'image_url' => ['nullable', 'string'],
@@ -35,19 +35,33 @@ class UpdateRequest extends FormRequest
             'sub_steps.*.name' => ['required', 'string', 'max:255'],
             'sub_steps.*.detail' => ['required', 'string',],
         ];
+
+        $achievement_time_type_id = $this->input('achievement_time_type_id');
+        $default_rule['time_count'] = CreateRequest::getAchievementTimtTypeMaxRule($achievement_time_type_id);
+        return $default_rule;
     }
 
     public function attributes()
     {
         return [
             'name' => 'ステップ名',
-            'image_url' => 'ステップアイキャッチ画像',
             'category_id' => 'カテゴリー',
-            'achievement_time_type_id' => '達成時間タイプ',
+            'image_url' => 'ステップアイキャッチ画像',
+            'achievement_time_type_id' => '達成時間単位',
             'time_count' => '達成時間',
-            'sub_steps' => '子ステップ',
-            'sub_steps.*.name' => '子ステップ名',
-            'sub_steps.*.detail' => '子ステップ詳細',
+            'sub_steps' => 'サブステップ',
+            'sub_steps.*.name' => 'サブステップ名',
+            'sub_steps.*.detail' => 'サブステップ詳細',
         ];
+    }
+
+    public function messages()
+    {
+        $achievement_time_type_id = $this->input('achievement_time_type_id');
+
+        return [
+            'sub_steps.min' => 'サブステップを1つ以上登録してください',
+            'time_count.min' => ':attributeは1以上の値を入力してください',
+        ] + CreateRequest::getAchievementTimtTypeMaxMessage($achievement_time_type_id);
     }
 }
