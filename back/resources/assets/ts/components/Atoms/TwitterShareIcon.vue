@@ -12,7 +12,7 @@ const props = defineProps({
 // data
 // computed
 const iconUrl = computed(() => {
-    return baseUrl.value + `?url=${process.env.APP_URL}/${props.content}/${props.id}&text=${props.text}`;
+    return baseUrl.value + `?url=${process.env.APP_URL}/${props.content}/${props.id}&text=${props.text}&hashtags=${props.hashtags}`;
 })
 const baseUrl = computed(() => 'https://twitter.com/share')
 </script>
