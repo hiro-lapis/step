@@ -62,7 +62,7 @@ onMounted(() => {
             <div class="p-reset-form">
                 <div class="p-reset-form__container">
                     <div class="p-reset-form__head">
-                        <h2>パスワードリセット</h2>
+                        <h2 class="c-title--reset">パスワードリセット</h2>
                     </div>
 
                     <div class="p-reset-form__body">
