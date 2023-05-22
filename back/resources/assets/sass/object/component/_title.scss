@@ -87,6 +87,8 @@
     }
     &--login,
     &--register,
+    &--reset,
+    &--forgot,
     &--step-edit {
         @extend %c-title;
         @extend %c-title--font-size--page;

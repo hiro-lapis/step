@@ -36,7 +36,7 @@ const send = () => {
             <div class="p-forgot-form">
                 <div class="p-forgot-form__container">
                     <div class="p-forgot-form__head">
-                        <h2>パスワードリセット</h2>
+                        <h2 class="c-title--forgot">パスワードリセット</h2>
                     </div>
                     <div class="p-forgot-form__body">
                         <!-- Eメール -->
