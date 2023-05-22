@@ -26,6 +26,7 @@ class StepControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    private $initialised = false;
     private User $user;
     private Category $category;
     private AchievementTimeType $achievement_time_type;
@@ -38,9 +39,12 @@ class StepControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        if (!$this->initialised) {
+            $this->initialised = true;
+            $this->seed(AchievementTimeTypeSeeder::class);
+        }
         $this->user = User::factory()->create();
         $this->category = Category::factory()->create();
-        $this->seed(AchievementTimeTypeSeeder::class);
         $this->achievement_time_type = AchievementTimeType::first();
     }
 
@@ -71,7 +75,7 @@ class StepControllerTest extends TestCase
         $response = $this->postJson('/api/steps', []);
         $response->assertUnauthorized();
         // ログイン状態でのアクセスを確認
-        $response = $this->actingAs($this->user)->json('post', '/api/steps');
+        $response = $this->actingAs($this->user)->json('post', '/api/steps', ['achievement_time_type_id' => $this->achievement_time_type->id]);
         $response->assertUnprocessable();
     }
 
@@ -264,6 +268,8 @@ class StepControllerTest extends TestCase
     public function test_updateFailInValidAchievementTime(): void
     {
         // 登録前のデータ状況を確認
+        $result = AchievementTimeType::all();
+        \Log::info('HIRO:resultの中身' . print_r($result->toArray(), true));
         $this->assertDatabaseCount('steps', 0);
         $sub_step_count = rand(1, 3);
         $sub_steps = [];
