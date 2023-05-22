@@ -9,6 +9,8 @@ export const useStepListStore = defineStore('stepList', () => {
     // data store.$reset()で初期化
     const stepList = ref<Step[]>([])
     const pageInfo = ref({
+        from: 1,
+        to: 1,
         current_page: 1,
         last_page: 1,
         total: 1,
@@ -26,6 +28,8 @@ export const useStepListStore = defineStore('stepList', () => {
         await $repositories.step.get(params)
             .then(response => {
                 stepList.value = response.data.result.data
+                pageInfo.value.from = response.data.result.from
+                pageInfo.value.to = response.data.result.to
                 pageInfo.value.current_page = response.data.result.current_page
                 pageInfo.value.last_page = response.data.result.last_page
                 pageInfo.value.total = response.data.result.total

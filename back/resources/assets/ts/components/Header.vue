@@ -9,7 +9,6 @@ import { Condition, sortType } from '../types/components/Condition'
 import HumbargarNav from './Atoms/HumbargarNav.vue'
 import KeyWordInput from './Atoms/KeyWordInput.vue'
 import TransparentOverlay from './Atoms/TransparentOverlay.vue'
-import ItemSelectBox from './Atoms/ItemSelectBox.vue'
 import CategorySearchSelectBox from './Atoms/CategorySearchSelectBox.vue'
 
 // utility
@@ -31,12 +30,6 @@ provide(showSearchUiKey, showSearchUi)
 const topPageName = computed(() => userStore.isLogin ? 'steps-list' : 'home')
 const isLogin = computed(() => userStore.isLogin)
 const userImage = computed(() => userStore.user.image_url ?? '')
-// 並び順セレクトボックス
-const sortItems = computed(() => {
-    return Object.keys(sortType).map(key => {
-        return { value: key, text: sortType[key].text } as { value: string, text: string }
-    })
-})
 // 並び順の変更
 watch(() => condition.value.sort_type,
     (newVal) => {
@@ -76,12 +69,6 @@ provide<() => Promise<void>>(searchFuncKey, search)
                             :placeHolder="''"
                             @keyupEnter="search()"
                             v-model:value="condition.key_word"
-                        />
-                        <ItemSelectBox
-                            :items="sortItems"
-                            v-model:value="condition.sort_type"
-                            class="u-margin-r-1p"
-                            @change="search()"
                         />
                     </div>
                     <!-- ログイン済メニュー -->

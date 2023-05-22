@@ -3,6 +3,7 @@ import { computed, inject, ref, Ref } from 'vue'
 import { useUserStore } from '../../../ts/store/globalStore'
 import { useAuthFunc } from '../../composables/auth'
 import KeyWordInput from './KeyWordInput.vue'
+import CategorySearchSelectBox from './CategorySearchSelectBox.vue'
 import { conditionKey, searchFuncKey, showSearchUiKey } from '../../types/common/Injection'
 import { Condition } from '../../types/components/Condition'
 
@@ -27,6 +28,12 @@ const { logout } = useAuthFunc()
 	<!-- SPメニュー -->
 	<nav class="c-sp-nav" :class="{ active: isActive }">
         <ul class="c-sp-nav__list">
+            <li v-if="showSearchUi" class="c-sp-nav__list-item">
+                <CategorySearchSelectBox
+                    v-model:value="condition.category_id"
+                    @change="spSearch()"
+                />
+            </li>
             <li v-if="showSearchUi" class="c-sp-nav__list-item">
                 <KeyWordInput
                     :placeHolder="''"
