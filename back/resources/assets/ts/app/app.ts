@@ -87,9 +87,9 @@ requireComponent.keys().forEach(fileName => {
 
 import repository from '../apis/repositoryFactory'
 import { conditionKey, repositoryKey } from '../types/common/Injection'
-import { Condition } from '../types/components/Condition'
+import { Condition, sortType } from '../types/components/Condition'
 import { ref } from 'vue'
 
 app.provide(repositoryKey, repository())
-app.provide(conditionKey, ref<Condition>({ key_word: '', page: 1, }))
+app.provide(conditionKey, ref<Condition>({ key_word: '', page: 1, category_id: 0, sort_type: '1', order_by: sortType[1].order_by, desc: sortType[1].desc}))
 app.mount("#app")

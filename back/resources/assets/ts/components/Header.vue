@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { computed, inject, provide, Ref } from 'vue'
-import { useRequestStore, useUserStore } from '../store/globalStore'
-import HumbargarNav from '../components/Atoms/HumbargarNav.vue'
-import { useAuthFunc } from '../composables/auth'
+import { computed, inject, provide, Ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import KeyWordInput from './Atoms/KeyWordInput.vue'
-import { Condition } from '../types/components/Condition'
-import { conditionKey, searchFuncKey, showSearchUiKey } from '../types/common/Injection'
+import { useRequestStore, useUserStore } from '../store/globalStore'
 import { useStepListStore } from '../store/stepListStore'
+import { conditionKey, searchFuncKey, showSearchUiKey } from '../types/common/Injection'
+import { useAuthFunc } from '../composables/auth'
+import { Condition, sortType } from '../types/components/Condition'
+import HumbargarNav from './Atoms/HumbargarNav.vue'
+import KeyWordInput from './Atoms/KeyWordInput.vue'
 import TransparentOverlay from './Atoms/TransparentOverlay.vue'
+import CategorySearchSelectBox from './Atoms/CategorySearchSelectBox.vue'
 
 // utility
 const userStore = useUserStore()
@@ -29,6 +30,13 @@ provide(showSearchUiKey, showSearchUi)
 const topPageName = computed(() => userStore.isLogin ? 'steps-list' : 'home')
 const isLogin = computed(() => userStore.isLogin)
 const userImage = computed(() => userStore.user.image_url ?? '')
+// 並び順の変更
+watch(() => condition.value.sort_type,
+    (newVal) => {
+    condition.value.order_by = sortType[newVal].order_by
+    condition.value.desc = sortType[newVal].desc
+})
+// 検索
 const search: () => Promise<void> = async () => {
     // ページ番号を初期化
     condition.value.page = 1
@@ -52,7 +60,11 @@ provide<() => Promise<void>>(searchFuncKey, search)
             <!-- PC用メニュー -->
             <nav class="c-nav">
                 <ul class="c-nav__list">
-                    <div v-if="showSearchUi" class="c-nav__list__keyword-input">
+                    <div v-if="showSearchUi" class="c-nav__list__contidion-list">
+                        <CategorySearchSelectBox
+                            v-model:value="condition.category_id"
+                            @change="search()"
+                        />
                         <KeyWordInput
                             :placeHolder="''"
                             @keyupEnter="search()"

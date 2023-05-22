@@ -48,4 +48,13 @@
         padding: 5px 10px;
         border-radius: 3px;
     }
+    &--data-not-found {
+        text-align: center;
+        font-size: 15px;
+        @include mq() {
+            text-align: left;
+            font-size: $font-size_default;
+            line-height: 1.6;
+        }
+    }
 }

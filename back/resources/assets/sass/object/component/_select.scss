@@ -2,8 +2,60 @@
 /* ==========================================================================
  Select
 ========================================================================== */
+%c-select {
+    padding: 5px 2px;
+    box-sizing: border-box;
+    border: 1px solid #e8e8e8;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
 .c-select {
     &--not-selected {
         color: #999;
+    }
+}
+
+.c-select--category-search {
+    @extend %c-select;
+    padding-left: 5px;
+    height: 36px;
+    @include pc() {
+        width: 170px;
+    }
+    &__container {
+        display: flex;
+        align-items: center;
+    }
+    &__label {
+        text-align: left;
+        vertical-align: sub;
+        padding-left: 5px;
+        height: 20px;
+    }
+
+}
+
+.c-select--item-select {
+    @extend %c-select;
+    font-size: 13px;
+    height: 36px;
+    padding-left: 5px;
+    height: 36px;
+    width: 100%;
+    @include pc() {
+        font-size: 16px;
+        width: 200px;
+    }
+    &__container {
+        display: flex;
+        align-items: center;
+    }
+    &__label {
+        text-align: left;
+        vertical-align: sub;
+        padding-left: 5px;
+        height: 20px;
     }
 }

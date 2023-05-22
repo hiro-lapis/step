@@ -2,13 +2,27 @@
 /* ==========================================================================
  Step List
 ========================================================================== */
-.p-steps-list {
+.p-step-list {
     &__body {
         margin-bottom: 30px;
         padding-bottom: 50px;
         @include mq() {
             padding-bottom: 45px;
         }
+    }
+    &__page-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        font-size: 13px;
+        @include mq() {
+            font-size: 14px;
+        }
+    }
+    &__counts {
+        color: #888;
+        font-size: 12px;
     }
     &__pagination {
         width: 100%;

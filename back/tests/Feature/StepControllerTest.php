@@ -269,7 +269,6 @@ class StepControllerTest extends TestCase
     {
         // 登録前のデータ状況を確認
         $result = AchievementTimeType::all();
-        \Log::info('HIRO:resultの中身' . print_r($result->toArray(), true));
         $this->assertDatabaseCount('steps', 0);
         $sub_step_count = rand(1, 3);
         $sub_steps = [];
@@ -410,6 +409,7 @@ class StepControllerTest extends TestCase
             ])
             ->create();
         $response = $this->getJson('/api/steps');
+        $response->dump();
         $paginate = $response['result'];
         // 期待値の判定
         // 総件数
@@ -459,6 +459,39 @@ class StepControllerTest extends TestCase
                 ->etc()
         );
     }
+
+    // public function test_stepIndexReturnDataByCondition(): void
+    // {
+    //     $first_category = Category::factory()->create();
+    //     $second_category = Category::factory()->create();
+    //     $minute = AchievementTimeType::where('id', 1)->first();
+    //     $hour = AchievementTimeType::where('id', 2)->first();
+    //     $day = AchievementTimeType::where('id', 3)->first();
+    //     $week = AchievementTimeType::where('id', 4)->first();
+    //     $month = AchievementTimeType::where('id', 5)->first();
+    //     $year = AchievementTimeType::where('id', 6)->first();
+    //     // 最初のカテゴリーのステップを1件作成
+    //     User::factory()
+    //         ->hasSteps(1, [
+    //             'category_id' => $first_category->id,
+    //             'achievement_time_type_id' => $minute->id,
+    //         ])
+    //         ->create();
+    //     // 2つめのカテゴリーのステップを2件作成
+    //     User::factory()
+    //         ->hasSteps(2, [
+    //             'category_id' => $second_category->id,
+    //             'achievement_time_type_id' => $hour->id,
+    //         ])
+    //         ->create();
+
+    //     $params = [
+    //         'category_id' => $first_category->id,
+    //         'achievement_time_type_id' => $minute->id,
+    //     ];
+    //     $response = $this->getJson('/api/steps', $params);
+    //     $paginate = $response['result'];
+    // }
 
     public function test_challenge(): void
     {
