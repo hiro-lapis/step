@@ -51,35 +51,30 @@ const moveToEditPage = (stepId: number) => {
             :clickFunc="moveToEditPage"
             classname="c-step-card__edit-icon"
         />
-        <div class="c-step-card__head">
-            <img :src="step!.image_url" alt="" class="c-step-card__img">
-        </div>
-        <div class="c-step-card__body">
-            <h2 class="c-step-card__title u-spread">{{ step!.name }}</h2>
-            <p class="c-step-card__txt u-spread">
-                <div class="u-margin-b-05p">
-                    <CategoryBadge :id="step!.category_id" />
-                    <!-- チャレンジ進捗 -->
-                    <template v-if="isChallengeStep(step!)">
-                        <span class="u-margin-l-1p">
-                            <StepProgressionCountBadge :step="step!" />
-                        </span>
-                    </template>
-                    <template v-else>
-                        <!-- サブステップ数 -->
-                        <span class="u-margin-l-1p">
-                            <SubStepCountBadge :step="step!" />
-                        </span>
-                    </template>
-                    <span v-if="challengeMode" class="u-margin-l-1p">
-                        {{ getStatusName(step!) }}
+        <h2 class="c-step-card__title u-spread">{{ step!.name }}</h2>
+        <p class="c-step-card__txt u-spread">
+            <div class="u-margin-b-05p">
+                <CategoryBadge :id="step!.category_id" />
+                <!-- チャレンジ進捗 -->
+                <template v-if="isChallengeStep(step!)">
+                    <span class="u-margin-l-1p">
+                        <StepProgressionCountBadge :step="step!" />
                     </span>
-                </div>
-                <span>
-                    達成目安時間: {{ step!.achievement_time! }}
+                </template>
+                <template v-else>
+                    <!-- サブステップ数 -->
+                    <span class="u-margin-l-1p">
+                        <SubStepCountBadge :step="step!" />
+                    </span>
+                </template>
+                <span v-if="challengeMode" class="u-margin-l-1p">
+                    {{ getStatusName(step!) }}
                 </span>
-            </p>
-        </div>
+            </div>
+            <span>
+                達成目安時間: {{ step!.achievement_time! }}
+            </span>
+        </p>
     </router-link>
 </template>
 

@@ -121,7 +121,10 @@ const clear = async (subStepId: number) => {
                 <div v-if="showActionUi" class="c-step-preview__action-ui">
                     <TwitterShareIcon v-if="!requestStore.isLoading" :id="String(step.id!)" :text="step.name" :hashtags="step.category_name!" />
                     <template v-if="isAuthor">
-                        <EditIcon className="c-step-preview__edit-icon u-margin-l-2p" :stepId="props.step.id"></EditIcon>
+                        <EditIcon
+                            className="c-step-preview__edit-icon u-margin-l-2p"
+                            :click-func="() => $router.push({ name: 'steps-edit', params: { id: props.step.id }})"
+                            :stepId="props.step.id"></EditIcon>
                         <DeleteTrashBoxIcon @click="deleteStep()" className="u-margin-l-2p" :stepId="props.step.id"></DeleteTrashBoxIcon>
                     </template>
                 </div>
