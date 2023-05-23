@@ -46,6 +46,8 @@ class ChallengeStep extends Model
         'post_user_name',
         'post_user_image_url',
         'post_user_profile',
+        'is_challenged',
+        'is_cleared',
     ];
 
     public function getStatusNameAttribute(): string
@@ -112,6 +114,16 @@ class ChallengeStep extends Model
     public function getAchievementTimeAttribute(): string
     {
         return ($this->time_count . $this->achievementTimeType->display_name) ?? '';
+    }
+
+    public function getIsChallengedAttribute(): bool
+    {
+        return ChallengeStatusEnum::isInChallenge($this->status);
+    }
+
+    public function getIsClearedAttribute(): bool
+    {
+        return ChallengeStatusEnum::isCleared($this->status);
     }
 
     /** relation */

@@ -15,6 +15,7 @@ const props = defineProps({
     optional: { required: false, type: Boolean, default: false},
     previewUrl: { required: false, type: String, default: ''},
     previewMode: { required: false, type: Boolean, default: true},
+    recommendSizeText: { required: false, type: String, default: ''},
 })
 
 interface Emits {
@@ -105,6 +106,11 @@ const reset = () => {
                     @change="handleFileSelect" accept="image/jpeg, image/png"
                 >
             </label>
+            <template v-if="recommendSizeText">
+                <span class="c-message--recommend-size u-margin-l-1p">
+                    {{ recommendSizeText }}
+                </span>
+            </template>
         </div>
         <div v-if="showPreview">
             <img :src="previewUrl" alt="Uploaded Image">

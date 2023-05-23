@@ -51,8 +51,18 @@ const moveToEditPage = (stepId: number) => {
             :clickFunc="moveToEditPage"
             classname="c-step-card__edit-icon"
         />
+        <span v-if="step!.is_cleared!" class="c-step-card__cleared-icon">
+            <span class="c-icon--cleared__container">
+                <span class="c-icon--cleared material-symbols-outlined">new_releases</span>クリア済
+            </span>
+        </span>
+        <span v-if="step!.is_challenged!" class="c-step-card__challenged-icon">
+            <span class="c-icon--challenged__container">
+                <span class="c-icon--challenged material-symbols-outlined">brightness_empty</span>挑戦中
+            </span>
+        </span>
         <div class="c-step-card__head">
-            <img :src="step!.image_url" alt="" class="c-step-card__img">
+            <img :src="step!.image_url" alt="" class="c-img--step-card">
         </div>
         <div class="c-step-card__body">
             <h2 class="c-step-card__title u-spread">{{ step!.name }}</h2>
