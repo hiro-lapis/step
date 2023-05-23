@@ -26,6 +26,7 @@ class ChallengeStep extends Model
         'achievement_time_type_id',
         'time_count',
         'name',
+        'image_url',
         'summary',
     ];
 
@@ -38,12 +39,13 @@ class ChallengeStep extends Model
     ];
 
     protected $appends = [
+        'achievement_time',
+        'category_name',
+        'cleared_sub_step_count',
         'status_name',
         'post_user_name',
         'post_user_image_url',
         'post_user_profile',
-        'category_name',
-        'achievement_time',
     ];
 
     public function getStatusNameAttribute(): string

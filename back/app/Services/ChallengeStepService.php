@@ -30,16 +30,7 @@ class ChallengeStepService
      */
     public function show(int $challenge_step_id): ChallengeStep
     {
-        $step = $this->challenge_step_repository->findShowData($challenge_step_id, auth()->id());
-        // アクセサの設定
-        return $step->setAppends([
-            'category_name',
-            'achievement_time',
-            'post_user_name',
-            'post_user_image_url',
-            'post_user_profile',
-            'cleared_sub_step_count',
-        ]);
+        return $this->challenge_step_repository->findShowData($challenge_step_id, auth()->id());
     }
 
     /**
@@ -94,8 +85,6 @@ class ChallengeStepService
                 });
             // 次のサブステップがある場合、チャンレジ開始
             $has_next_sub_step = $next_sub_steps->count() > 0;
-            $next_challenge_sub_step_id = $has_next_sub_step ?
-                    $next_sub_steps->first()->id : null;
             if ($has_next_sub_step) {
                 $next_sub_steps->first()->update([
                     'challenged_at' => now(),

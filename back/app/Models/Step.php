@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Step extends Model
 {
@@ -31,7 +32,21 @@ class Step extends Model
 
     protected $appends = [
         'achievement_time',
+        'is_challenged',
+        'is_cleared',
     ];
+
+    public const DEFAULT_IMAGE_URL = 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/ogp-default.png';
+
+    /** mutator */
+
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ?? self::DEFAULT_IMAGE_URL,
+            set: fn ($value) => $value,
+        );
+    }
 
     /** accessor */
 
@@ -62,12 +77,33 @@ class Step extends Model
 
     public function getOgpImageUrlAttribute(): string
     {
+        return $this->image_url ;
         return $this->image_url ?? 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/ogp-default.png';
     }
 
     public function getOgpSummaryAttribute(): string
     {
         return !empty($this->summary) ? $this->summary : $this->user_name . 'さんが書いた' . $this->category_name . 'についてのステップです';
+    }
+
+    public function getIsChallengedAttribute(): bool
+    {
+        if (auth()->guest()) return false;
+        $query = ChallengeStep::query();
+        return $query->stepId($this->id)
+            ->challengeUserId(auth()->user()->id)
+            ->challenging()
+            ->exists();
+    }
+
+    public function getIsClearedAttribute(): bool
+    {
+        if (auth()->guest()) return false;
+        $query = ChallengeStep::query();
+        return $query->stepId($this->id)
+            ->challengeUserId(auth()->user()->id)
+            ->cleared()
+            ->exists();
     }
 
     /**
