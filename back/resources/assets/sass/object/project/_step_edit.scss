@@ -68,6 +68,9 @@
     &__element { // 各種入力UIラッパー
         width: 100%;
         margin-bottom: 15px;
+        &:first-child {
+            margin-bottom: 25px;
+        }
     }
     &__bottom { // 登録更新ボタンラッパー
         // 新規作成(ボタンが2つ存在しない)の時のため、2番目のボタンにマージンを設定

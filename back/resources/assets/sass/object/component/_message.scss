@@ -38,6 +38,10 @@
     position: relative;
     top: 0;
 }
+.c-message--recommend-size {
+    font-size: 12px;
+    color: $color_black7;
+}
 
 .c-message {
     &--requirement {

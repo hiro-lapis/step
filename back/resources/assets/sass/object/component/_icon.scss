@@ -59,6 +59,32 @@
     padding: 5px;
     cursor: pointer;
 }
+.c-icon--cleared,
+.c-icon--challenged {
+	&__container {
+		display: flex;
+		align-items: center;
+		font-size: 12px;
+	}
+}
+.c-icon--cleared {
+	font-size: 20px;
+	&__container {
+		background: $wink;
+		padding: 3px 10px;
+		color: #fff;
+		border-radius: 3px;
+	}
+}
+.c-icon--challenged {
+	font-size: 20px;
+	&__container {
+		background: $blue;
+		padding: 3px 10px;
+		color: #fff;
+		border-radius: 3px;
+	}
+}
 
 .c-icon--upload {
     @extend %c-icon;

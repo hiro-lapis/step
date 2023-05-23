@@ -25,6 +25,8 @@ export type ChallengeStep = {
     achievement_time_type: AchievementTimeType
     category: Category
     created_at?: string
+    is_cleared?: boolean
+    is_challenged?: boolean
     // 以下アクセサで必要に応じて設定
     achievement_time?: string
     category_name?: string

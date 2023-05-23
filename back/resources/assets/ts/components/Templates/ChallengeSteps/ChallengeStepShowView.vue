@@ -19,6 +19,7 @@ const route = useRoute()
 const step = ref<ChallengeStep>()
 const isInitialized = ref(false)
 // methods
+// 初期表示,クリアボタンクリック時に実行
 const fetchData = async () => {
     const stepId = Number(route.params.id)
     requestStore.setLoading(true)

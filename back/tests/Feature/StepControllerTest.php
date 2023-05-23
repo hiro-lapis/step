@@ -108,7 +108,8 @@ class StepControllerTest extends TestCase
         $result = Step::first();
         $this->assertSame($params['name'], $result->name);
         $this->assertSame($params['summary'], $result->summary);
-        $this->assertSame(null, $result->image_url);
+        // 画像未設定の時はデフォルトの画像URLが設定されるか
+        $this->assertSame(Step::DEFAULT_IMAGE_URL, $result->image_url);
         $this->assertSame($this->user->id, $result->user_id);
         $this->assertSame($this->category->id, $result->category_id);
         $this->assertSame($params['achievement_time_type_id'], $result->achievement_time_type_id);

@@ -36,11 +36,6 @@ class StepService
     public function get(array $params): array
     {
         $result = $this->step_respository->pagenateByCondition($params);
-        $result->getCollection()->each(function ($step) {
-            $step->setAppends([
-                'achievement_time',
-            ]);
-        });
         return compact('result');
     }
 
@@ -154,6 +149,8 @@ class StepService
         return $step->setAppends([
             'category_name',
             'achievement_time',
+            'is_challenged',
+            'is_cleared',
             'is_writer',
             'user_name',
             'user_image_url',
@@ -251,14 +248,18 @@ class StepService
     public function getPosted(): array
     {
         $steps = $this->step_respository->getByUserId(auth()->user()->id);
-        $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time']));
+        $steps->each(fn ($step) => $step->setAppends([
+            'category_name',
+            'achievement_time',
+            'is_challenged',
+            'is_cleared',
+        ]));
         return compact('steps');
     }
 
     public function getChallenging(): array
     {
         $steps = $this->challenge_step_respository->getByChallengeUserId(auth()->user()->id);
-        $steps->each(fn ($step) => $step->setAppends(['category_name', 'achievement_time', 'status_name', 'cleared_sub_step_count']));
         return compact('steps');
     }
 }

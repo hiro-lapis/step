@@ -262,8 +262,9 @@ onMounted(() => {
                                 <PresignedUploadInput
                                     :previewMode="false"
                                     optional
+                                    recommendSizeText="推奨サイズ: 1200x630px"
                                     v-model:previewUrl="createData.image_url"
-                                    label="サムネイル(10MBまで / .png .jpgのみ)"
+                                    label="サムネイル(10MBまで)"
                                  />
                             </div>
                             <!-- ステップ名 -->

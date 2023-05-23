@@ -20,6 +20,8 @@ export type Step = {
     created_at?: string
     // 以下アクセサで必要に応じて設定
     achievement_time?: string
+    is_cleared?: boolean
+    is_challenged?: boolean
     category_name?: string
     user_name?: string
     user_image_url?: string

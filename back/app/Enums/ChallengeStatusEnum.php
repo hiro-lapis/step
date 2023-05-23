@@ -71,4 +71,15 @@ enum ChallengeStatusEnum: int
             self::Failed, self::Failed->value => false,
         };
     }
+
+    /**
+     * クリア済かどうか判定
+     *
+     * @param integer $status
+     * @return boolean
+     */
+    public static function isCleared(int $status): bool
+    {
+        return $status === self::Cleared->value;
+    }
 }

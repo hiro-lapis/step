@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <span @click.prevent.stop="clickFunc(stepId)" :class="classname">
+    <span @click.prevent.stop="clickFunc()" :class="classname">
         <span class="c-icon--edit material-symbols-outlined">edit_square</span>
     </span>
 </template>
