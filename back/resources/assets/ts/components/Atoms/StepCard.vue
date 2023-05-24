@@ -50,6 +50,7 @@ const moveToEditPage = (stepId: number) => {
             :stepId="step?.id"
             :clickFunc="moveToEditPage"
             classname="c-step-card__edit-icon"
+            v-tooltip="{ content: '編集', placement: 'bottom',tooltipClass: 'c-tooltip--gray' }"
         />
         <span v-if="step!.is_cleared!" class="c-step-card__cleared-icon">
             <span class="c-icon--cleared__container">
