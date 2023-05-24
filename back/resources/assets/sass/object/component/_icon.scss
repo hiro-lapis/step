@@ -30,7 +30,7 @@
         cursor: pointer;
         transition: all 0.5s;
         color: $color_black5;
-        font-size: 25px;
+        font-size: 40px;
         &:hover {
             color: #ccc;
         }
@@ -39,7 +39,7 @@
         padding: 3px;
     }
     &--delete-trash-box {
-        padding-top: 5px;
+        padding-top: 10px;
     }
     &--side-menu {
         color: $color_black8;

@@ -59,6 +59,10 @@ import { createPinia } from 'pinia'
 const pinia = createPinia()
 app.use(pinia)
 
+import FloatingVue from 'floating-vue'
+import 'floating-vue/dist/style.css'
+app.use(FloatingVue)
+
 import { camelCase, upperFirst } from 'lodash'
 
 // ページコンポーネントをグローバル登録
