@@ -39,8 +39,8 @@ const showEditIcon = () => {
 // methods
 const { isChallengeStep } = useTypeGuards()
 const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step.status_name : ''
-const moveToEditPage = (stepId: number) => {
-    router.push({ name: 'steps-edit', params: { id: stepId } })
+const moveToEditPage = () => {
+    router.push({ name: 'steps-edit', params: { id: props.step!.id } })
 }
 </script>
 

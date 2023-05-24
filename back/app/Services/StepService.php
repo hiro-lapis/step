@@ -47,6 +47,9 @@ class StepService
         $status = Response::HTTP_OK;
         try {
             DB::beginTransaction();
+            // 登録時に署名付きURLが設定されないよう変数を分ける
+            $image_url = $params['image_url'];
+            unset($params['image_url']);
             // ステップ登録
             $step = $this->step_respository->create($params)->fresh();
             // 子ステップ登録
@@ -55,7 +58,7 @@ class StepService
             if ($count !== $sub_step_params->count()) throw new Exception('子ステップの更新件数が一致しません');
 
             // 一時ディレクトリの画像をステップのディレクトリに保存
-            $this->uploadAndUpdateImageUrl($step, $params['image_url']);
+            $this->uploadAndUpdateImageUrl($step, $image_url);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -81,6 +84,9 @@ class StepService
         $message = '';
         DB::beginTransaction();
         try {
+            // 更新時に署名付きURLが設定されないよう変数を分ける
+            $image_url = $params['image_url'];
+            unset($params['image_url']);
             // 著者でない時は更新不可
             $step = $this->step_respository->findOrFailByUserId($params['id'], auth()->user()->id);
             if (!Gate::allows('edit-step', $step)) {
@@ -94,7 +100,7 @@ class StepService
             $count = $this->step_respository->updateOrCreateSubSteps($step, $sub_step_params);
             if ($count !== $sub_step_params->count()) throw new Exception('子ステップの更新件数が一致しません');
             // 画像情報更新
-            $this->uploadAndUpdateImageUrl($step, $params['image_url']);
+            $this->uploadAndUpdateImageUrl($step, $image_url);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
