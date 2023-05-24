@@ -43,7 +43,7 @@ interface StepRepositoryInterface
     public function pagenateByCondition(array $condition): LengthAwarePaginator;
 
     /**
-     * 詳細画面の情報取得
+     * 詳細画面(公開)の情報取得
      *
      * @param int $step_id
      * @return Step
@@ -74,4 +74,31 @@ interface StepRepositoryInterface
      * @return bool
      */
     public function delete(Step $step): bool;
+
+    /**
+     * ステップの存在確認
+     *
+     * @param integer $step_id
+     * @param integer $user_id
+     * @return boolean
+     */
+    public function isExists(int $step_id, int $user_id): bool;
+
+    /**
+     * ステップを下書きとして非公開で新規登録
+     *
+     * @param int $user_id
+     * @param string $json
+     * @return Step
+     */
+    public function createAsDraft(int $user_id, string $json): Step;
+
+    /**
+     * ステップの下書き情報を保存
+     *
+     * @param Step $step
+     * @param string $json
+     * @return bool
+     */
+    public function updateDraft(Step $step, string $json): bool;
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Steps;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ShowRequest extends FormRequest
 {
@@ -24,7 +25,12 @@ class ShowRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:steps,id'],
+            'id' => [
+                'required',
+                Rule::exists('steps', 'id')->where(function ($query) {
+                    $query->where('is_active', true);
+                }),
+            ],
         ];
     }
 
