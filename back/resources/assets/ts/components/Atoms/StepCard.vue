@@ -5,6 +5,7 @@ import { useUserStore } from '../../store/globalStore'
 import { ChallengeStep } from '../../types/ChallengeStep'
 import { Step } from '../../types/Step'
 import CategoryBadge from './CategoryBadge.vue'
+import CustomBadge from './CustomBadge.vue'
 import EditIcon from './EditIcon.vue'
 import StepProgressionCountBadge from './StepProgressionCountBadge.vue'
 import SubStepCountBadge from './SubStepCountBadge.vue'
@@ -18,16 +19,21 @@ import { useTypeGuards } from '../../composables/typeGuards'
 // utilities
 const userStore = useUserStore()
 const router = useRouter()
+const { isChallengeStep, isDraftStep } = useTypeGuards()
 // props
 const props = defineProps({
-    step : { require: true, type: Object as PropType<Step|ChallengeStep>, },
-    challengeMode: { require: false, type: Boolean, default: false,},
+    step : { required: true, type: Object as PropType<Step|ChallengeStep>, },
+    challengeMode: { required: false, type: Boolean, default: false,},
 })
 // computed
 // カードクリック時の遷移先を返す
 const getShowRoute = computed(() => {
     if (props.challengeMode && isChallengeStep(props.step!)) {
         return { name: 'challenge-steps-show', params: { id: props.step.id } }
+    }
+    // 下書きの場合は編集ページへ遷移
+    if (isDraftStep(props.step!)) {
+        return { name: 'steps-edit', params: { id: props.step!.id } }
     }
     return { name: 'steps-show', params: { id: props.step!.id } }
 })
@@ -36,8 +42,11 @@ const editIcon = inject('editIcon', false)
 const showEditIcon = () => {
     return editIcon && userStore.isLogin && !isChallengeStep(props.step!) && userStore.user.id === props.step!.user_id
 }
+const editTooltopText = computed(() => {
+    return isDraftStep(props.step) ? '下書きを編集' : 'ステップを編集'
+})
 // methods
-const { isChallengeStep } = useTypeGuards()
+
 const getStatusName = (step: Step|ChallengeStep) => isChallengeStep(step) ? step.status_name : ''
 const moveToEditPage = () => {
     router.push({ name: 'steps-edit', params: { id: props.step!.id } })
@@ -50,7 +59,7 @@ const moveToEditPage = () => {
             :stepId="step?.id"
             :clickFunc="moveToEditPage"
             classname="c-step-card__edit-icon"
-            v-tooltip="{ content: '編集', placement: 'bottom',tooltipClass: 'c-tooltip--gray' }"
+            v-tooltip="{ content: editTooltopText, placement: 'bottom', tooltipClass: 'c-tooltip--gray' }"
         />
         <span v-if="step!.is_cleared!" class="c-step-card__cleared-icon">
             <span class="c-icon--cleared__container">
@@ -69,7 +78,13 @@ const moveToEditPage = () => {
             <h2 class="c-step-card__title u-spread">{{ step!.name }}</h2>
             <p class="c-step-card__txt u-spread">
                 <div class="u-margin-b-05p">
-                    <CategoryBadge :id="step!.category_id" />
+                    <template v-if="step!.category_id">
+                        <CategoryBadge :id="step!.category_id" class="u-margin-r-1p" />
+                    </template>
+                    <!-- 下書きバッジ -->
+                    <div class="c-step-card__draft-badge">
+                        <CustomBadge :step="step" mode="draft" />
+                    </div>
                     <!-- チャレンジ進捗 -->
                     <template v-if="isChallengeStep(step!)">
                         <span class="u-margin-l-1p">
@@ -78,7 +93,7 @@ const moveToEditPage = () => {
                     </template>
                     <template v-else>
                         <!-- サブステップ数 -->
-                        <span class="u-margin-l-1p">
+                        <span :class="{ 'u-margin-l-1p' : step!.category_id }">
                             <SubStepCountBadge :step="step!" />
                         </span>
                     </template>

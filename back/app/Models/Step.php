@@ -22,12 +22,16 @@ class Step extends Model
         'summary',
         'achievement_time_type_id',
         'time_count',
+        'is_active',
+        'draft',
     ];
 
     protected $casts = [
         'created_at' => 'datetime:Y年n月j日',
         'updated_at' => 'datetime:Y年n月j日',
         'deleted_at' => 'datetime:Y年n月j日',
+        'draft'      => 'object',
+        'is_active'  => 'bool',
     ];
 
     protected $appends = [
@@ -40,11 +44,28 @@ class Step extends Model
 
     /** mutator */
 
+    /**
+     * 画像未設定の時はデフォルトのURLを設定
+     *
+     * @return Attribute
+     */
     protected function imageUrl(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value ?? self::DEFAULT_IMAGE_URL,
             set: fn ($value) => $value,
+        );
+    }
+
+    /**
+     * ステップ名未設定の時は名称未設定として表示
+     *
+     * @return Attribute
+     */
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => empty($value) ? '(名称未設定)' : $value,
         );
     }
 
@@ -72,12 +93,12 @@ class Step extends Model
 
     public function getAchievementTimeAttribute(): string
     {
-        return ($this->time_count . $this->achievementTimeType->display_name) ?? '';
+        return isset($this->achievementTimeType->display_name)
+            ? ($this->time_count . $this->achievementTimeType->display_name) ?? '' : '';
     }
 
     public function getOgpImageUrlAttribute(): string
     {
-        return $this->image_url ;
         return $this->image_url ?? 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/ogp-default.png';
     }
 
@@ -194,5 +215,10 @@ class Step extends Model
     public function scopeWriterUser(Builder $query, int $user_id): Builder
     {
         return $query->where('steps.user_id', $user_id);
+    }
+
+    public function scopeIsActive(Builder $query): Builder
+    {
+        return $query->where('steps.is_active', true);
     }
 }

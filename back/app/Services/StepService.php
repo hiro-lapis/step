@@ -73,7 +73,7 @@ class StepService
     }
 
     /**
-     * ステップの更新
+     * ステップの更新(下書きの場合は公開状態にして更新)
      *
      * @param array $params
      * @return array
@@ -91,6 +91,11 @@ class StepService
             $step = $this->step_respository->findOrFailByUserId($params['id'], auth()->user()->id);
             if (!Gate::allows('edit-step', $step)) {
                 abort(HttpResponse::HTTP_FORBIDDEN);
+            }
+            // 非公開=>公開にして下書きを削除
+            if ($step->is_active === false) {
+                $params['is_active'] = true;
+                $params['draft'] = null;
             }
             // ステップ更新
             $this->step_respository->update($step, collect($params)->except('sub_steps')->toArray());
@@ -113,20 +118,49 @@ class StepService
     }
 
     /**
+     * 新規作成の下書き保存
+     *
+     * @param array $params
+     * @return array
+     */
+    public function storeDraft(array $params): array
+    {
+        $status = Response::HTTP_OK;
+        // $params にid がなければ非公開状態でステップ情報を作成
+        $exists = $params['id'] !== 0 && $this->step_respository->isExists($params['id'], auth()->user()->id);
+        $image_url = $params['image_url'];
+        // 画像情報を一時ディレクトリからステップのディレクトリに移動
+        $params['image_url'] = $this->uploadAndUpdateImageUrl(null, $image_url);
+        $json = collect($params)->except(['id'])->toJson(JSON_UNESCAPED_UNICODE);
+        if (!$exists) {
+            $step = $this->step_respository->createAsDraft(auth()->user()->id, $json);
+        } else {
+            $step = $this->step_respository->findOrFailByUserId($params['id'], auth()->user()->id);
+            $this->step_respository->updateDraft($step, $json);
+        }
+        $step->refresh();
+        // 既存の情報の下書き情報を更新
+        return compact('step', 'status');
+    }
+
+    /**
      * 画像のアップロードとURL情報の更新
      *
-     * @param Step $step
+     * @param Step|null $step
      * @param string|null $image_url
-     * @return void
+     * @param bool $is_draft (下書き保存時のみtrue)
+     * @return string アップロードした画像のURL
      */
-    private function uploadAndUpdateImageUrl(Step $step, string|null $image_url): void
+    private function uploadAndUpdateImageUrl(Step|null $step, string|null $image_url): string
     {
-        // 更新前と変わらないURLの場合は何もしない
-        if ($step->image_url === $image_url || empty($image_url)) return;
+        // 画像未設定の場合は何もしない
+        if (empty($image_url) || $step === null) return '';
+        // 既存のステップ情報があり。更新前と変わらないURLの場合は何もしない
+        if ($step->image_url === $image_url) return '';
         // NOTE: テスト環境の場合はS3関連処理をスキップしパラメータ情報そのままでDB更新
         if (App::environment('testing')) {
             $this->step_respository->update($step, ['image_url' => $image_url]);
-            return;
+            return '';
         }
 
         // 署名付きURLから画像パス、ファイル名を抽出
@@ -137,9 +171,12 @@ class StepService
         // ステップ用のディレクトリへファイルを保存し、URLをDBに登録
         Storage::disk('s3')->put("public/steps/{$step->id}/{$file_name}", $tmp_data, 'public');
         $image_url = Storage::disk('s3')->url("public/steps/{$step->id}/{$file_name}");
-        $this->step_respository->update($step, ['image_url' => $image_url]);
 
+        if ($step !== null) {
+            $this->step_respository->update($step, ['image_url' => $image_url]);
+        }
         Storage::disk('s3')->delete($tmp_image_path);
+        return $image_url;
     }
 
     /**
@@ -162,6 +199,40 @@ class StepService
             'user_image_url',
             'user_profile',
         ]);
+    }
+
+    /**
+     * 編集対象の詳細情報を取得
+     *
+     * @param integer $step_id
+     * @return Step $step
+     */
+    public function edit(int $step_id): Step
+    {
+        $step = $this->step_respository->findEditData($step_id, auth()->user()->id);
+
+        // アクセサの設定
+        $step->setAppends([
+            'category_name',
+            'achievement_time',
+            'is_challenged',
+            'is_cleared',
+            'is_writer',
+            'user_name',
+            'user_image_url',
+            'user_profile',
+        ]);
+
+        // 下書き中の場合は、draft設定をプロパティにセット
+        if ($step->is_active === false) {
+            $draft_data = json_decode($step->draft, true);
+            foreach ($draft_data as $key => $value) {
+                $step->$key = $value;
+            }
+            \Log::info('HIRO:draft_dataの中身' . print_r(($step->toArray()), true));
+        }
+
+        return $step;
     }
 
     /**

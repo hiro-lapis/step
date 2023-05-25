@@ -13,6 +13,8 @@ export type Step = {
     sub_steps: SubStep[]
     achievement_time_type_id: number
     time_count: number
+    is_active?: boolean
+    // draft: {}
     sub_steps_count?: number
     achievement_time_type?: AchievementTimeType
     category?: Category

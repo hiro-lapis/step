@@ -27,6 +27,10 @@ const emit = defineEmits<Emit>()
 // data
 // computed
 const count = computed(() => props.value?.length ?? 0 )
+const countText = computed(() => {
+    if (props.max === null) return count.value
+    return `${count.value}/${props.max}`
+})
 const existsError = computed(() => props.errorMessage !== '')
 // methods
 const input = (event: Event) => {
@@ -48,7 +52,7 @@ const emitKeyPressShiftEnter = () => {
                 </template>
                 <slot name="labelAside"></slot>
                 <template v-if="counter">
-                    <span class="c-textare__counter">({{ count }} 文字)</span>
+                    <span class="c-textare__counter">({{ countText }} 文字)</span>
                 </template>
             </label>
         </template>

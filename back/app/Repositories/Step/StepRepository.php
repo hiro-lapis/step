@@ -53,6 +53,7 @@ class StepRepository implements StepRepositoryInterface
             ->select('step_id', DB::raw('count(*) as sub_steps_count'))
             ->groupBy('step_id');
         $query = $this->step->query()
+            ->isActive()
             ->joinMasterTables()
             ->leftJoinSub($sub_step_count, 'sub_step', function ($join) {
                 $join->on('steps.id', '=', 'sub_step.step_id');
@@ -89,7 +90,7 @@ class StepRepository implements StepRepositoryInterface
     }
 
     /**
-     * 詳細画面の情報取得
+     * 詳細画面(公開中)の情報取得
 
      * @param int $step_id
      * @return Step
@@ -101,6 +102,41 @@ class StepRepository implements StepRepositoryInterface
             ->with('user')
             // 並び順に取得
             ->with('subSteps')
+            ->isActive()
+            ->find($step_id);
+    }
+
+    /**
+     * 編集画面(公開/非公開両方)の情報取得
+     *
+     * @param int $step_id
+     * @return Step
+     */
+    public function findEditData(int $step_id, int $user_id): Step
+    {
+        return $this->step
+        ->with('category')
+        ->with('user')
+        // 並び順に取得
+        ->with('subSteps')
+        ->writerUser($user_id)
+        ->find($step_id);
+    }
+
+    /**
+     * 詳細画面(非公開)の情報取得
+
+     * @param int $step_id
+     * @return Step
+     */
+    public function findNotActiveData(int $step_id): Step
+    {
+        return $this->step
+            ->with('category')
+            ->with('user')
+            // 並び順に取得
+            ->with('subSteps')
+            ->isNotActive()
             ->find($step_id);
     }
 
@@ -127,5 +163,47 @@ class StepRepository implements StepRepositoryInterface
     public function delete(Step $step): bool
     {
         return $step->delete();
+    }
+
+    /**
+     * ステップの存在確認
+     *
+     * @param integer $step_id
+     * @param integer $user_id
+     * @return boolean
+     */
+    public function isExists(int $step_id, int $user_id): bool
+    {
+        return $this->step->writerUser($user_id)->where('steps.id', $step_id)->exists();
+    }
+
+    /**
+     * ステップを下書きとして非公開で新規登録
+     *
+     * @param int $user_id
+     * @param string $json
+     * @return Step
+     */
+    public function createAsDraft(int $user_id, string $json): Step
+    {
+        return $this->step->create([
+            'user_id' => $user_id,
+            'draft' => $json,
+            'is_active' => false,
+        ]);
+    }
+
+    /**
+     * ステップの下書き情報を保存
+     *
+     * @param Step $step
+     * @param string $json
+     * @return bool
+     */
+    public function updateDraft(Step $step, string $json): bool
+    {
+        // 引数にとった配列(サブステップ込)をJSON形式に変換して保存
+        $step->draft = $json;
+        return $step->save();
     }
 }

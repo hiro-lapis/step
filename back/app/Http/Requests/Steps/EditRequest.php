@@ -5,7 +5,7 @@ namespace App\Http\Requests\Steps;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ShowRequest extends FormRequest
+class EditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,9 @@ class ShowRequest extends FormRequest
         return [
             'id' => [
                 'required',
+                // 公開非公開関係なく、ユーザーIDに紐づくステップが存在するか
                 Rule::exists('steps', 'id')->where(function ($query) {
-                    $query->where('is_active', true);
+                    $query->where('user_id', auth()->user()->id);
                 }),
             ],
         ];

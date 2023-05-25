@@ -55,7 +55,7 @@ const errorMessage = reactive({
     category_id: '',
     achievement_time_type_id: '',
     time_count: '',
-    sub_steps: [ { name: '', detail: '', sort_number: 1, } ], // TODO: ドラッグしても追随するようにするか、エラーにしてドラッグできなくする
+    sub_steps: [ { name: '', detail: '' } ], // TODO: ドラッグしても追随するようにするか、エラーにしてドラッグできなくする
 })
 const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 
@@ -63,22 +63,23 @@ const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 const isEdit = computed(() => props.mode === 'edit')
 const pageTitle = computed(() => isEdit.value ? 'ステップ更新' : '新規作成')
 const disableSubmit = computed(() => {
-    return Object.keys(errorMessage).some(element => {
+    const existError = Object.keys(errorMessage).every(element => {
         if (element === 'sub_steps') {
-            return errorMessage[element].some(subStep => subStep.name.length > 0 && subStep.detail.length > 0)
+            return errorMessage[element].every(subStep => subStep.name.length === 0 && subStep.detail.length === 0)
         }
-        return errorMessage[element].length > 0
+        return errorMessage[element].length === 0
     })
+    return !existError
 })
+const updateText = computed(() => createData.is_active ? '更新' : '更新して公開')
+const showDraft = computed(() => !isEdit.value || createData.is_active === false)
 // methods
-const initialSubStep = { name: '', detail: '', }
 const addSubStep = () => {
+    const initialSubStep = { name: '', detail: '', }
     const nextSortNumber = createData.sub_steps.length + 1
     createData.sub_steps.push(Object.assign({ sort_number: nextSortNumber }, initialSubStep))
 }
-const getValidTimeCountSpan = computed(() => {
-    return timeType.getValidTimeCountSpan(createData.achievement_time_type_id)
-})
+const getValidTimeCountSpan = computed(() => timeType.getValidTimeCountSpan(createData.achievement_time_type_id))
 // 編集中のサブステップ情報を削除
 const popSubStep = (index: number) => {
     if (createData.sub_steps.length === 1) return
@@ -91,9 +92,7 @@ const create = async () => {
     requestStore.setLoading(true)
     await $repositories.step.store(createData).then(() => {
         messageStore.setMessage('ステップが登録されました')
-        setTimeout(() => {
-            router.push({ name: 'steps-list' })
-        }, 3000)
+        setTimeout(() => router.push({ name: 'steps-list' }), 3000)
     }).finally(() => {
         requestStore.setLoading(false)
     })
@@ -104,11 +103,20 @@ const update = async () => {
     categorySelect.value?.validate()
     requestStore.setLoading(true)
     await $repositories.step.update(createData).then((response) => {
-        messageStore.setMessage('ステップが更新されました')
+        const operate = !createData.is_active && response.data.step.is_active ? '公開' : '更新'
+        messageStore.setMessage(`ステップが${operate}されました`)
         // 詳細画面へ遷移
-        setTimeout(() => {
-            router.push({ name: 'steps-show', params: { id: response.data.step.id! } })
-        }, 3000)
+        setTimeout(() => router.push({ name: 'steps-show', params: { id: response.data.step.id! } }), 3000)
+    }).finally(() => {
+        requestStore.setLoading(false)
+    })
+}
+const saveDraft = async () => {
+    if (requestStore.isLoading) return
+    requestStore.setLoading(true)
+    await $repositories.step.saveDraft(createData).then(() => {
+        messageStore.setMessage('ステップが下書き保存されました')
+        setTimeout(() => router.push({ name: 'steps-list' }) , 3000)
     }).finally(() => {
         requestStore.setLoading(false)
     })
@@ -117,16 +125,18 @@ const update = async () => {
 const getStep = () => {
     requestStore.setLoading(true)
         // 編集画面の場合、ステップ情報を取得
-        $repositories.step.find(Number(route.params.id))
+        $repositories.step.findEdit(Number(route.params.id))
             .then(res => {
+                // 下書きを考慮して値が未設定の時は初期値を入れる
                 const step = res.data
                 createData.id = step.id!
-                createData.name = step.name
+                createData.name = step.name ?? ''
+                createData.is_active = step.is_active
                 createData.image_url = step.image_url
                 createData.summary = step.summary
-                createData.category_id = step.category_id
-                createData.achievement_time_type_id = step.achievement_time_type_id
-                createData.time_count = step.time_count
+                createData.category_id = step.category_id ?? 0
+                createData.achievement_time_type_id = step.achievement_time_type_id ?? 1
+                createData.time_count = step.time_count ?? 1
                 createData.sub_steps = step.sub_steps
                 requestStore.setLoading(false)
                 // ログインユーザーとステップのユーザーが異なる場合、ステップ一覧にリダイレクト
@@ -318,6 +328,8 @@ onMounted(() => {
                                     v-model:value="createData.summary"
                                     :errorMessage="''"
                                     height="100"
+                                    counter
+                                    :max="500"
                                     label="概要"
                                 />
                             </div>
@@ -336,7 +348,11 @@ onMounted(() => {
                                             <div class="p-step-edit-form__substep-form-border">
                                                 <BorderLine />
                                             </div>
-                                            <span class="p-step-edit-form__substep-form-handle">
+                                            <!-- ドラッグアイコン -->
+                                            <span
+                                                class="p-step-edit-form__substep-form-handle"
+                                                v-tooltip="{ content: '順序入れ替え', placement: 'bottom', tooltipClass: 'c-tooltip--gray' }"
+                                            >
                                                 <span class="c-icon--drag-indicator material-symbols-outlined">drag_indicator</span>
                                             </span>
                                             <h3 class="c-title--edit-sub-step u-margin-b-2p">サブステップ{{ String(index + 1) }}</h3>
@@ -385,24 +401,33 @@ onMounted(() => {
                                 >
                                     サブステップ追加
                                 </button>
-                            <template v-if="!isEdit">
-                                <button
-                                    @click="create"
-                                    :disabled="disableSubmit"
-                                    class="c-btn c-btn--large c-btn--create"
-                                >
-                                    登録
-                                </button>
-                            </template>
-                            <template v-else>
-                                <button
-                                    @click="update"
-                                    class="c-btn c-btn--large c-btn--update"
-                                >
-                                更新
-                            </button>
-                            </template>
-                        </div>
+                                <template v-if="!isEdit">
+                                    <button
+                                        @click="create"
+                                        :disabled="disableSubmit"
+                                        class="c-btn c-btn--large c-btn--create"
+                                    >
+                                        登録
+                                    </button>
+                                </template>
+                                <template v-else>
+                                    <button
+                                        @click="update"
+                                        :disabled="disableSubmit"
+                                        class="c-btn c-btn--large c-btn--update"
+                                    >
+                                    {{ updateText }}
+                                    </button>
+                                </template>
+                                <template v-if="showDraft">
+                                    <button
+                                        @click="saveDraft"
+                                        class="c-btn c-btn--large c-btn--save-draft"
+                                    >
+                                    下書き保存
+                                    </button>
+                                </template>
+                            </div>
                         </div>
                     </div>
                     <div class="p-preview">
