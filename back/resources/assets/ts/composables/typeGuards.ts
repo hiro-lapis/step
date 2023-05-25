@@ -16,6 +16,10 @@ export const useTypeGuards = () => {
     const isChallengeSubStep = (subStep: SubStep|ChallengeSubStep): subStep is ChallengeSubStep => {
         return (subStep as ChallengeSubStep).status !== undefined
     }
+    const isDraftStep = (step: Step|ChallengeStep): boolean => {
+        if (isChallengeStep(step)) return false
+        return !step.is_active ?? false
+    }
 
-    return { isChallengeStep, isChallengeSubStep }
+    return { isChallengeStep, isChallengeSubStep, isDraftStep }
 }

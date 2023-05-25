@@ -11,6 +11,8 @@ use App\Http\Requests\Steps\DeleteRequest;
 use App\Http\Requests\Steps\UpdateRequest;
 use App\Http\Requests\Steps\IndexRequest;
 use App\Http\Requests\Steps\ShowRequest;
+use App\Http\Requests\Steps\EditRequest;
+use App\Http\Requests\Steps\StoreDraftRequest;
 use App\Services\ChatGptService;
 use App\Services\StepService;
 use Illuminate\Http\JsonResponse;
@@ -46,6 +48,18 @@ class StepController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  StoreDraftRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeDraft(StoreDraftRequest $request): JsonResponse
+    {
+        $result = $this->step_service->storeDraft($request->validated());
+        return response()->json($result['step'], $result['status']);
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  ShowRequest  $request
@@ -54,6 +68,18 @@ class StepController extends Controller
     public function show(ShowRequest $request): JsonResponse
     {
         $result = $this->step_service->show($request->validated()['id']);
+        return response()->json($result);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  EditRequest  $request
+     * @return JsonResponse
+     */
+    public function edit(EditRequest $request): JsonResponse
+    {
+        $result = $this->step_service->edit($request->validated()['id']);
         return response()->json($result);
     }
 

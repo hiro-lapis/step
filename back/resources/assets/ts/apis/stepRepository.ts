@@ -7,18 +7,24 @@ import { ChallengeStep } from '../types/ChallengeStep'
  * Step CRUDリポジトリ
  */
 export class StepRepository {
-    private readonly baseUrl = '/api/steps'
-    private readonly editUrl = '/api/steps/edit'
+    private readonly baseUrl = '/api/steps' // 一覧、新規作成
+    private readonly draftUrl = '/api/steps/draft'
+    private readonly findEditUrl = '/api/steps/{id}/edit'
+    private readonly updateUrl = '/api/steps/update'
     private readonly deleteUrl = '/api/steps/delete'
-    private readonly findUrl = '/api/steps'
+    private readonly showUrl = '/api/steps'
     private readonly challengeFindUrl = '/api/steps'
     private readonly challengeUrl = '/api/steps/challenges'
 
+    async saveDraft(data: {category_id: number, achievement_time_type_id: number, time_count: number, name: string, summary: string }): Promise<any>
+    {
+        return await axios.post(`${this.draftUrl}`, data)
+    }
     async store(data: { category_id: number, achievement_time_type_id: number, time_count: number, name: string, summary: string }): Promise<any> {
         return await axios.post(`${this.baseUrl}`, data)
     }
     async update (data: Step): Promise<AxiosResponse<UpdateResponse>> {
-        return await axios.put(`${this.editUrl}`, data)
+        return await axios.put(`${this.updateUrl}`, data)
     }
     async delete (step_id: number): Promise<any> {
         return await axios.delete(`${this.deleteUrl}`, { data: { id: step_id } })
@@ -28,7 +34,10 @@ export class StepRepository {
         return await axios.get(`${this.baseUrl}`, { params: data })
     }
     async find(step_id: number): Promise<AxiosResponse<FindResponse>> {
-        return await axios.get(`${this.findUrl}/${step_id}`)
+        return await axios.get(`${this.showUrl}/${step_id}`)
+    }
+    async findEdit(step_id: number): Promise<AxiosResponse<FindEditResponse>> {
+        return await axios.get(this.findEditUrl.replace('{id}', step_id.toString()))
     }
     async findChallenge(challenge_step_id: number): Promise<AxiosResponse<FindChallengeResponse>> {
         return await axios.get(`${this.challengeFindUrl}/${challenge_step_id}`)
@@ -48,6 +57,7 @@ type GetResponse = {
 }
 
 type FindResponse = Step
+type FindEditResponse = Step
 type UpdateResponse = {
     status: boolean
     step: Step

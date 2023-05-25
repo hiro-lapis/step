@@ -51,6 +51,14 @@ interface StepRepositoryInterface
     public function findShowData(int $step_id): Step;
 
     /**
+     * 編集画面(下書き中こみ)の情報取得
+     *
+     * @param int $step_id
+     * @return Step
+     */
+    public function findEditData(int $step_id, int $user_id): Step;
+
+    /**
      * ステップIDとユーザーIDをもとにステップ情報の著者かどうかをチェック
      *
      * @param integer $step_id

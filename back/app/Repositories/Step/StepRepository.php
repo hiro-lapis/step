@@ -107,6 +107,23 @@ class StepRepository implements StepRepositoryInterface
     }
 
     /**
+     * 編集画面(公開/非公開両方)の情報取得
+     *
+     * @param int $step_id
+     * @return Step
+     */
+    public function findEditData(int $step_id, int $user_id): Step
+    {
+        return $this->step
+        ->with('category')
+        ->with('user')
+        // 並び順に取得
+        ->with('subSteps')
+        ->writerUser($user_id)
+        ->find($step_id);
+    }
+
+    /**
      * 詳細画面(非公開)の情報取得
 
      * @param int $step_id
@@ -157,7 +174,7 @@ class StepRepository implements StepRepositoryInterface
      */
     public function isExists(int $step_id, int $user_id): bool
     {
-        return $this->step->writerUser($user_id)->stepId($step_id)->exists();
+        return $this->step->writerUser($user_id)->where('steps.id', $step_id)->exists();
     }
 
     /**

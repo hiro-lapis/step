@@ -119,6 +119,21 @@
             }
         }
     }
+    &--save-draft {
+        background-color: #888;
+        border: 1px solid #888;
+        color: #fff;
+        &:hover {
+            background-color: #fff;
+            color: #888;
+            // 使えない時は色も変えない
+            &:disabled {
+                color: #fff;
+                background-color: #888;
+                border: 1px solid #888;
+            }
+        }
+    }
 
 }
 // TOPページ登録ページ

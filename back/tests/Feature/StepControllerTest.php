@@ -409,11 +409,20 @@ class StepControllerTest extends TestCase
                 'achievement_time_type_id' => $this->achievement_time_type->id,
             ])
             ->create();
+        // 未公開のステップを2件登録
+        User::factory()
+            ->count(2)
+            ->hasSteps(2, [
+                'category_id' => $this->category->id,
+                'achievement_time_type_id' => $this->achievement_time_type->id,
+                'is_active' => false,
+            ])
+            ->create();
         $response = $this->getJson('/api/steps');
         $response->dump();
         $paginate = $response['result'];
         // 期待値の判定
-        // 総件数
+        // 総件数(未公開のステップを除いた10件が取得できているか)
         $this->assertSame(10, $paginate['total']);
         // 表示に使うステップの項目があるか
         $step = $response['result']['data'][0];

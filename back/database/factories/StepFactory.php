@@ -23,6 +23,8 @@ class StepFactory extends Factory
             'image_url' => fake()->optional()->imageUrl(),
             'achievement_time_type_id' => null,
             'time_count' => 1,
+            'is_active' => true,
+            'draft' => json_encode([]),
             'summary' => fake()->realText(1000),
         ];
     }

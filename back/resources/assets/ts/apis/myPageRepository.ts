@@ -11,6 +11,7 @@ export class MyPageRepository {
     private readonly updateProfileUrl = '/api/mypage/profile'
     private readonly updatePasswordUrl = '/api/mypage/password'
     private readonly getPostedStepUrl = '/api/mypage/posted-step'
+    private readonly getDraftStepUrl = '/api/mypage/draft-step'
     private readonly getChallengingStepUrl = '/api/mypage/challenging-step'
 
     async user(): Promise<AxiosResponse<UserResponse>> {
@@ -39,6 +40,9 @@ export class MyPageRepository {
     async getPostedStep(): Promise<AxiosResponse<GetPostedStepResponse>> {
         return await axios.get(`${this.getPostedStepUrl}`)
     }
+    async getDraftStep(): Promise<AxiosResponse<GetDraftStepResponse>> {
+        return await axios.get(`${this.getDraftStepUrl}`)
+    }
     async getChallengingStep(): Promise<AxiosResponse<GetChallengingStepResponse>> {
         return await axios.get(`${this.getChallengingStepUrl}`)
     }
@@ -57,6 +61,9 @@ export type UpdateProfileResponse = {
 export type UpdatePasssowrdResponse = {
 }
 export type GetPostedStepResponse = {
+    steps: Step[]
+}
+export type GetDraftStepResponse = {
     steps: Step[]
 }
 export type GetChallengingStepResponse = {
