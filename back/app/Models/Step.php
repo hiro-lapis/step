@@ -38,7 +38,6 @@ class Step extends Model
         'achievement_time',
         'is_challenged',
         'is_cleared',
-        'has_draft',
     ];
 
     public const DEFAULT_IMAGE_URL = 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/ogp-default.png';

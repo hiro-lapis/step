@@ -304,7 +304,7 @@ class StepControllerTest extends TestCase
             'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
         ];
-        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response = $this->actingAs($this->user)->putJson('/api/steps/update', $params);
         $response->assertUnprocessable();
         $response->assertJson(fn (AssertableJson $json) =>
             $json->where('message', '目安達成時間の単位が 分 なので59分以下を入力してください')
@@ -321,7 +321,7 @@ class StepControllerTest extends TestCase
             'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
         ];
-        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response = $this->actingAs($this->user)->putJson('/api/steps/update', $params);
         $response->assertJson(fn (AssertableJson $json) =>
         $json->where('message', '目安達成時間の単位が 時間 なので23時間以下を入力してください')
             ->etc()
@@ -339,7 +339,7 @@ class StepControllerTest extends TestCase
             'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
         ];
-        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response = $this->actingAs($this->user)->putJson('/api/steps/update', $params);
         $response->assertJson(fn (AssertableJson $json) =>
         $json->where('message', '目安達成時間の単位が 日 なので30日以下を入力してください')
             ->etc()
@@ -356,7 +356,7 @@ class StepControllerTest extends TestCase
             'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
         ];
-        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response = $this->actingAs($this->user)->putJson('/api/steps/update', $params);
         $response->assertJson(fn (AssertableJson $json) =>
         $json->where('message', '目安達成時間の単位が 週間 なので4週間以下を入力してください')
             ->etc()
@@ -374,7 +374,7 @@ class StepControllerTest extends TestCase
             'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
         ];
-        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response = $this->actingAs($this->user)->putJson('/api/steps/update', $params);
         $response->assertJson(fn (AssertableJson $json) =>
         $json->where('message', '目安達成時間の単位が 月 なので11ヶ月以下を入力してください')
             ->etc()
@@ -391,7 +391,7 @@ class StepControllerTest extends TestCase
             'summary' => 'テストサマリーだよ',
             'sub_steps' => $sub_steps,
         ];
-        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response = $this->actingAs($this->user)->putJson('/api/steps/update', $params);
         $response->assertJson(fn (AssertableJson $json) =>
         $json->where('message', '目安達成時間の単位が 年 なので10年以下を入力してください')
             ->etc()
@@ -613,7 +613,7 @@ class StepControllerTest extends TestCase
             'name' => '編集後のステップ名',
             'sub_steps' => $sub_steps,
         ];
-        $response = $this->actingAs($this->user)->putJson('/api/steps/edit', $params);
+        $response = $this->actingAs($this->user)->putJson('/api/steps/update', $params);
         $response->assertOk();
         // 更新後の情報と比較
         $step->refresh();

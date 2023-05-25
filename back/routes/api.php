@@ -26,14 +26,17 @@ use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 */
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/user', fn(Request $request) => $request->user());
+    // ステップAPIサジェスト
+    Route::post('/chat-gpt/completion', [StepController::class, 'completion'])->name('steps.completion');
     // ステップ新規作成
     Route::post('/steps', [StepController::class, 'store'])->name('steps.store');
     Route::post('/steps/draft', [StepController::class, 'storeDraft'])->name('steps.storeDraft');
     Route::post('/steps/challenges', [StepController::class, 'challenge'])->name('steps.challenge');
-    Route::post('/chat-gpt/completion', [StepController::class, 'completion'])->name('steps.completion');
     // ステップ更新
     Route::put('/steps/update', [StepController::class, 'update'])->name('steps.update');
+    // ステップ編集情報取得
     Route::get('/steps/{id}/edit', [StepController::class, 'edit'])->name('steps.edit');
+    // ステップ削除
     Route::delete('/steps/delete', [StepController::class, 'destroy'])->name('steps.destroy');
     // チャレンジ中のステップ情報
     Route::group(['prefix' => 'challenge-steps'], function() {
