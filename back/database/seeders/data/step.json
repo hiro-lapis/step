@@ -584,6 +584,31 @@
                 "sort_number": 4
             }
         ]
+    },
+    {
+        "name": "プログラミングでTODOアプリを作る方法",
+        "category_id": 1,
+        "summary": "プログラミングでは様々なアプリを作ることができます。\nその中でも初心者向けとしてよく使われるお題がTODOアプリです。\nここではTODOアプリを作る方法について,解説します！",
+        "image_url": "https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/steps/29/programming.png",
+        "achievement_time_type_id": 5,
+        "time_count": 1,
+        "sub_steps": [
+            {
+                "name": "HTMLファイルの作成",
+                "detail": "最初に、ToDoアプリのためのHTMLファイルを作成します。テキストエディタを開き、新しいファイルを作成し、以下のコードを貼り付けます。\n\n```\n<!DOCTYPE html>\n<html>\n<head>\n    <title>ToDoアプリ<\/title>\n<\/head>\n<body>\n    <h1>ToDoリスト<\/h1>\n\n    <input type=\"text\" id=\"taskInput\" placeholder=\"新しいタスク\">\n    <button onclick=\"addTask()\">追加<\/button>\n\n    <ul id=\"taskList\"><\/ul>\n\n    <script src=\"app.js\"><\/script>\n<\/body>\n<\/html>\n\n```",
+                "sort_number": 1
+            },
+            {
+                "name": "JavaScriptファイルの作成",
+                "detail": "次に、JavaScriptのコードを含むファイルを作成します。テキストエディタで新しいファイルを作成し、以下のコードを貼り付けます。\n\n\n```\nlet tasks = [];\n\nfunction addTask() {\n    const taskInput = document.getElementById(\"taskInput\");\n    const task = taskInput.value;\n\n    if (task.trim() !== \"\") {\n        tasks.push(task);\n        displayTasks();\n        taskInput.value = \"\";\n    }\n}\n\nfunction displayTasks() {\n    const taskList = document.getElementById(\"taskList\");\n    taskList.innerHTML = \"\";\n\n    for (let i = 0; i < tasks.length; i++) {\n        const task = tasks[i];\n        const listItem = document.createElement(\"li\");\n        listItem.innerText = task;\n        taskList.appendChild(listItem);\n    }\n}\n\n```\n\nこのコードでは、tasksという空の配列を宣言し、タスクのリストを格納します。addTask()関数は、テキストフィールドから入力されたタスクを取得し、配列に追加します。また、displayTasks()関数は、タスクのリストをHTMLの<ul>要素に表示します。",
+                "sort_number": 2
+            },
+            {
+                "name": "ブラウザでToDoアプリを表示",
+                "detail": "作成したHTMLファイルをブラウザで開き、ToDoアプリを表示します。ブラウザでHTMLファイルを開くだけで、JavaScriptのコードが読み込まれ、動作します。タスクを入力して追加ボタンをクリックすると、タスクがリストに表示されます。\n\n以上が、JavaScriptでToDoアプリを作成する手順です。",
+                "sort_number": 3
+            }
+        ]
     }
 
 

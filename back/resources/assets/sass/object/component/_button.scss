@@ -134,6 +134,36 @@
             }
         }
     }
+    &--zoom-in {
+        background-color: $wink;
+        border: 1px solid $wink;
+        color: #fff;
+        &:hover {
+            background-color: #fff;
+            color: $wink;
+            // 使えない時は色も変えない
+            &:disabled {
+                color: #fff;
+                background-color: $wink;
+                border: 1px solid $wink;
+            }
+        }
+    }
+    &--zoom-out {
+        background-color: $pink;
+        border: 1px solid $pink;
+        color: #fff;
+        &:hover {
+            background-color: #fff;
+            color: $pink;
+            // 使えない時は色も変えない
+            &:disabled {
+                color: #fff;
+                background-color: $pink;
+                border: 1px solid $pink;
+            }
+        }
+    }
 
 }
 // TOPページ登録ページ
@@ -234,4 +264,27 @@
     font-size: 12px;
     @extend .c-btn--small;
     @extend .c-btn--create;
+}
+
+.c-btn--crop {
+    @extend .c-btn;
+    @extend .c-btn--middle;
+    @extend .c-btn--create;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+        padding-top: 2px;
+    }
+}
+.c-btn--zoom-in,
+.c-btn--zoom-out {
+    @extend .c-btn;
+    @extend .c-btn--middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+        padding-top: 2px;
+    }
 }

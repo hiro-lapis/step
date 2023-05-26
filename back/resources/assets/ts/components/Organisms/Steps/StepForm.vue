@@ -16,6 +16,8 @@ import { useValidation } from '../../../composables/validation'
 import { useAchievementTimeTypeCheck } from '../../../composables/achievementTimeTypeCheck'
 import { repositoryKey } from '../../../types/common/Injection'
 import draggable from 'vuedraggable'
+import VueCropper from 'vue-cropperjs'
+import 'cropperjs/dist/cropper.css'
 
 // utilities
 const requestStore = useRequestStore()
@@ -42,7 +44,7 @@ const createData = reactive<Step>({
     id: 0,
     name: '',
     summary: '',
-    image_url: '',
+    image_url: 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/ogp-default.png',
     category_id: 0,
     achievement_time_type_id: 1,
     time_count: 1,
@@ -139,6 +141,8 @@ const getStep = () => {
                 createData.time_count = step.time_count ?? 1
                 createData.sub_steps = step.sub_steps
                 requestStore.setLoading(false)
+                // 画像切り抜きコンポーネント用URL
+                cropperUrl.value = step.image_url
                 // ログインユーザーとステップのユーザーが異なる場合、ステップ一覧にリダイレクト
                 if ('is_writer' in step && !step.is_writer) {
                     messageStore.setErrorMessage('他のユーザーのステップは編集できません')
@@ -255,6 +259,49 @@ const init = () => {
 onMounted(() => {
     init()
 })
+
+// 画像切り抜き
+const cropperUrl = ref('')
+const setCropperUrl = (e) => {
+    cropperUrl.value = ''
+    // cropper再レンダリングのために少し待つ
+    setTimeout(() => {
+        cropperUrl.value = e
+    }, 100)
+}
+const cropperRef = ref()
+const presignedUploadRef = ref<InstanceType<typeof PresignedUploadInput>>()
+
+const trimmingUpload = async (): Promise<string> => {
+    const fileCanvasData: HTMLCanvasElement = cropperRef.value.getCroppedCanvas()
+    return new Promise<string>((resolve) => {
+        fileCanvasData.toBlob(async (blob) => {
+            let fileName = ''
+            if (createData.image_url) {
+                const tempFileName = createData.image_url.split('/').pop()
+                fileName = tempFileName ?? 'default.png'
+            }
+            fileName = fileName.substring(0, fileName.lastIndexOf('.')) + '.png'
+            // 署名付きURLAPIを使ってファイルアプロ
+            const uploadFilePath = await presignedUploadRef.value!.blobUpload(blob!, fileName, 'image/png')
+            // 更新時URLとして設定
+            createData.image_url = uploadFilePath
+            resolve(uploadFilePath)
+        })
+    })
+}
+const trimmingImage = async () => {
+    const uploadFilePath = await trimmingUpload()
+    // 更新時URLとは別に切り抜きコンポーネントの画像URL設定
+    await setCropperUrl(uploadFilePath)
+}
+watch (
+    () => createData.image_url,
+    async (newData) => await setCropperUrl(newData)
+)
+const zoom = (per: number) => {
+    cropperRef.value.relativeZoom(per)
+}
 </script>
 
 <template>
@@ -267,16 +314,59 @@ onMounted(() => {
                             <h2 class="c-title--step-edit">{{ pageTitle }}</h2>
                         </div>
                         <div class="p-step-edit-form__body">
+
                             <!-- ステップ名 -->
                             <div class="p-step-edit-form__element">
+                                <h2 class="c-title--step-form">1.アイキャッチ画像設定</h2>
+                            </div>
+                            <div class="p-step-edit-form__element">
                                 <PresignedUploadInput
+                                    ref="presignedUploadRef"
                                     :previewMode="false"
                                     optional
                                     recommendSizeText="推奨サイズ: 1200x630px"
-                                    v-model:previewUrl="createData.image_url"
                                     label="サムネイル(10MBまで)"
-                                 />
+                                    v-model:previewUrl="createData.image_url"
+                                />
                             </div>
+                            <!-- 画像切り抜き(URLが設定されるのを待ってレンダリング) -->
+                            <template v-if="cropperUrl">
+                                <div class="p-step-edit-form__element">
+                                    <span class="c-message--cropper u-margin-b-1p">画像の切り抜き</span>
+                                    <span class="c-message--annotation u-margin-b-1p">アイキャッチ表示にフィットするようサイズ調整されています。<br>画像のメイン部分を中央にして切り抜きボタンをおしてください</span>
+                                    <div class="c-image-cropper">
+                                        <VueCropper
+                                            ref="cropperRef"
+                                            :src="cropperUrl"
+                                            autoCrop
+                                            :aspect-ratio="12 / 6.3"
+                                            :min-container-width="400"
+                                            :min-container-height="300"
+                                            :cropBoxResizable="false"
+                                            :img-style="{ 'width': '400px', 'height': '300px' }"
+                                            :zoomable="true"
+                                            :movable="false"
+                                            :zoomOnWheel="false"
+                                            :checkCrossOrigin="false"
+                                            crossorigin="Anonymous"
+                                        ></VueCropper>
+                                    </div>
+                                    <div class="c-image-cropper__btn-box">
+                                        <button class="c-btn--zoom-in u-margin-b-2p" @click="zoom(0.1)">
+                                            <span class="material-symbols-outlined">zoom_in</span>
+                                            ズームイン
+                                        </button>
+                                        <button class="c-btn--zoom-out u-margin-b-2p" @click="zoom(-0.1)">
+                                            <span class="material-symbols-outlined">zoom_in</span>
+                                            ズームアウト
+                                        </button>
+                                        <button class="c-btn--crop u-margin-b-2p" @click="trimmingImage()">
+                                            <span class="material-symbols-outlined">crop</span>
+                                            切り抜き
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
                             <!-- ステップ名 -->
                             <div class="p-step-edit-form__element">
                                 <TextInput

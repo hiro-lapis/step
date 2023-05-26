@@ -19,6 +19,14 @@ export class FileManageRepository {
          } }
         return await axios.put(`${presignedUrl}`, file, config)
     }
+    async blobUpload(presignedUrl: string, blob: Blob, fileName: string, contentType: string): Promise<AxiosResponse<UploadResponse>> {
+        const formData = new FormData()
+        formData.append('file_name', fileName)
+        const config = {
+            headers: { 'Content-Type': contentType }
+        }
+        return await axios.put(`${presignedUrl}`, blob, config)
+    }
     async download(filePath: string): Promise<AxiosResponse<DownloadResponse>> {
         return await axios.get(`${this.presignedDownloadUrl}?file_path=${filePath}`)
     }
@@ -36,11 +44,11 @@ export class FileManageRepository {
 
 type PresignedUrlResponse = {
     upload_path: string,
-    presigned_url: string,
+    presigned_url: string,// 署名付きでファイルアップロードするためURL
 }
 
 type UploadResponse = {
 }
 type DownloadResponse = {
-    presigned_url: string,
+    presigned_url: string, // 署名付きでアップロードした非公開ファイルの参照用URL
 }
