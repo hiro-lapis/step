@@ -58,7 +58,7 @@ app.use(router)
 import { createPinia } from 'pinia'
 const pinia = createPinia()
 app.use(pinia)
-
+// tooltip
 import FloatingVue from 'floating-vue'
 import 'floating-vue/dist/style.css'
 app.use(FloatingVue)

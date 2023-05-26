@@ -16,6 +16,8 @@ import { useValidation } from '../../../composables/validation'
 import { useAchievementTimeTypeCheck } from '../../../composables/achievementTimeTypeCheck'
 import { repositoryKey } from '../../../types/common/Injection'
 import draggable from 'vuedraggable'
+import 'vue-cropper/dist/index.css'
+import { VueCropper }  from 'vue-cropper'
 
 // utilities
 const requestStore = useRequestStore()
@@ -254,6 +256,30 @@ const init = () => {
 }
 onMounted(() => {
     init()
+    // cropper.cropW = 100
+    // cropper.cropH = 100
+})
+
+// 画像切り抜き
+// 達成目安時間
+watch(
+    () => [createData.image_url ],
+    ([newImageUrl ]) => {
+        let result: boolean|string
+        option.img = newImageUrl
+    }
+)
+const option = reactive({
+    img: '',
+    size: 100,
+    outputType: 'png',
+    full: false,
+    // outputSize: 1,
+})
+const cropper = ref(null)
+const previews = reactive({
+    w: 100,
+    h: 100,
 })
 </script>
 
@@ -276,6 +302,24 @@ onMounted(() => {
                                     v-model:previewUrl="createData.image_url"
                                     label="サムネイル(10MBまで)"
                                  />
+                                 <!-- 画像切り抜き -->
+                                 <div class="c-image-croppper">
+                                    <label class="c-image-croppper__label u-margin-b-1p">画像切り抜き</label>
+                                    <VueCropper
+                                        ref="cropper"
+                                        :img="createData.image_url"
+                                        :outputSize="option.size"
+                                        :outputType="'png'"
+                                        :zoomable="false"
+                                        :movable="false"
+                                        :zoomOnWheel="false"
+                                        :checkCrossOrigin="false"
+                                    ></VueCropper>
+                                    <div class="c-image-cropper__btn-box">
+                                        <button>決定</button>
+                                        <button>キャンセル</button>
+                                    </div>
+                                </div>
                             </div>
                             <!-- ステップ名 -->
                             <div class="p-step-edit-form__element">
