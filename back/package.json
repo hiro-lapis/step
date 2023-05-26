@@ -41,7 +41,7 @@
         "dotenv": "^16.0.3",
         "floating-vue": "^2.0.0-beta.20",
         "mix-env-file": "^0.1.1",
-        "vue-cropper": "^1.0.8",
+        "vue-cropperjs": "^5.0.0",
         "vuedraggable": "^4.1.0"
     }
 }

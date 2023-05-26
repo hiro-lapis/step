@@ -3,18 +3,21 @@
  Image Cropper
 ========================================================================== */
 
-.c-image-croppper {
+.c-image-cropper {
     width: 100%;
-    height: 300px;
+    height: 400px;
+    text-align: left;
     @include mq() {
         height: 400px;
     }
     &__label {
-        text-align: left;
+        margin-bottom: 10px;
     }
     &__btn-box {
         display: flex;
         flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
         @include mq() {
             flex-direction: row;
             justify-content: space-around;

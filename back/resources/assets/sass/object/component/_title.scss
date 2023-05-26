@@ -154,3 +154,8 @@
         text-decoration: none;
     }
 }
+
+.c-title--step-form {
+    @extend %c-title--font-size;
+    @extend %c-form-title;
+}

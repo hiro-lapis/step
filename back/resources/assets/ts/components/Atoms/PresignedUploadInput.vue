@@ -39,14 +39,18 @@ const handleFileSelect = async (event: Event) => {
         alert('ファイルの拡張子は.jpegまたは.pngで、サイズは10MB以下である必要があります')
         return
     }
+    await fileUpload(file)
+}
+// inputから入力された画像のアップロード
+const fileUpload = async (file: File) => {
     try {
-        const presignedResponse = await $repositories.file.getSignedUrl(file.name)
+        const presignedUploadResponse = await $repositories.file.getSignedUrl(file.name)
         try {
-            await $repositories.file.upload(presignedResponse.data.presigned_url, file)
-            const uploadUrl = presignedResponse.data.upload_path
-            const res = await $repositories.file.download(uploadUrl)
-            previewUrl.value = res.data.presigned_url
-            emit('update:previewUrl', res.data.presigned_url)
+            await $repositories.file.upload(presignedUploadResponse.data.presigned_url, file)
+            const uploadUrl = presignedUploadResponse.data.upload_path
+            const dlRes = await $repositories.file.download(uploadUrl)
+            previewUrl.value = dlRes.data.presigned_url
+            emit('update:previewUrl', dlRes.data.presigned_url)
             messageStore.setMessage('画像のアップロードに成功しました')
             fileInputRef.value!.blur()
 
@@ -56,6 +60,23 @@ const handleFileSelect = async (event: Event) => {
         }
     } catch (error) {
         throw new Error('署名付きURLの取得に失敗しました')
+    }
+}
+// cropperで切り抜いたblob画像のアップロード
+const blobUpload = async (blob: Blob, fileName: string, contentType: string): Promise<string> => {
+    try {
+        const presignedResponse = await $repositories.file.getSignedUrl(fileName)
+        await $repositories.file.blobUpload(presignedResponse.data.presigned_url, blob, fileName, contentType)
+        const uploadUrl = presignedResponse.data.upload_path
+        const dlRes = await $repositories.file.download(uploadUrl)
+        previewUrl.value = dlRes.data.presigned_url
+        // emit('update:previewUrl', dlRes.data.presigned_url)
+        messageStore.setMessage('画像の切り抜きが完了しました')
+        // サーバーから取得したDL用署名付きURLを返す
+        return dlRes.data.presigned_url
+    } catch (error) {
+        console.log(error)
+        return ''
     }
 }
 
@@ -73,6 +94,10 @@ const reset = () => {
     fileInputRef.value!.value = ''
     emit('update:previewUrl', '')
 }
+defineExpose({
+    fileUpload,
+    blobUpload,
+})
 </script>
 
 <template>
