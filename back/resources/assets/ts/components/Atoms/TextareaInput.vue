@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import RequiredBadge from './RequiredBadge.vue'
 import ErrorMessage from './ErrorMessage.vue'
+import RequirementText from './RequirementText.vue'
 
 // props
 const props = defineProps({
@@ -10,7 +10,8 @@ const props = defineProps({
     label: { required: true, type: String, },
     errorMessage: { required: true, type: String, },
     placeHolder: { required: false, type: String, default: '', },
-    required: { required: false, type: Boolean, default: false },
+    required: { required: false, type: Boolean, default: false, }, // 入力必須マーク
+    optional: { required: false, type: Boolean, default: false, }, // 入力任意マーク
     counter: { required: false, type: Boolean, default: false },
     max: { required: false, type: Number, default: null },
     height: { required: false, type: String, default: '100' }, // textareaの高さ(px)
@@ -48,7 +49,10 @@ const emitKeyPressShiftEnter = () => {
             <label class="c-textarea__label" :for="formId">
                 {{ label }}
                 <template v-if="required">
-                    <RequiredBadge />
+                    <RequirementText />
+                </template>
+                <template v-if="optional">
+                    <RequirementText :isRequired="false" />
                 </template>
                 <slot name="labelAside"></slot>
                 <template v-if="counter">

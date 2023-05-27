@@ -465,10 +465,13 @@ const zoom = (per: number) => {
                             </div>
 
                             <!-- サブステップ -->
-                            <!-- v-model > 配列で、並び替えはしない。List＞並び替えをする.-->
-                            <!-- ghost-classでドラッグ中のスタイル指定（sortable.jsのクラスをつかえる） -->
                             <div class="p-step-edit-form__substep-form__list">
-                                <draggable :list="createData.sub_steps" item-key="sort_number" :animation=300 tag="div">
+                                <draggable :list="createData.sub_steps"
+                                    item-key="sort_number"
+                                    :animation=300
+                                    tag="div"
+                                    handle=".p-step-edit-form__substep-form-handle"
+                                >
                                     <!-- slotで囲う要素は１つにまとめる -->
                                     <template v-slot:item="{ element: subStep, index}">
                                         <div class="p-step-edit-form__substep-form-item">
@@ -502,17 +505,6 @@ const zoom = (per: number) => {
                                                     :label="'詳細'"
                                                     :formId="'substep-' + index.toString()"
                                                 >
-                                                <template v-slot:labelAside>
-                                                    <span
-                                                        @click="completion(index, subStep.name, subStep.detail)"
-                                                    >
-                                                        <img
-                                                            src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/logos/chat-GPT-logo.png"
-                                                            alt="chat-GPTロゴ"
-                                                            class="c-img--chat-gpt"
-                                                        >
-                                                    </span>
-                                                </template>
                                                 </TextareaInput>
                                             </div>
                                             <template v-if="subStep.name || subStep.detail">
