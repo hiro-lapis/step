@@ -87,11 +87,6 @@ const addSubStep = () => {
     createData.sub_steps.push(Object.assign({ sort_number: nextSortNumber }, initialSubStep))
 }
 const getValidTimeCountSpan = computed(() => timeType.getValidTimeCountSpan(createData.achievement_time_type_id))
-// 編集中のサブステップ情報を削除
-const popSubStep = (index: number) => {
-    if (createData.sub_steps.length === 1) return
-    createData.sub_steps.splice(index, 1)
-}
 
 // ステップ新規作成
 const create = async () => {
@@ -457,9 +452,6 @@ const zoom = (per: number) => {
                                                     v-model:value="subStep.name"
                                                     :label="'タイトル'"
                                                 >
-                                                <template v-slot:asideLabel>
-                                                    <i @click="popSubStep(index)" class="c-icon--delete fas fa-times-circle"></i>
-                                                </template>
                                                 </TextInput>
                                             </div>
                                             <div class="p-step-edit-form__element">
