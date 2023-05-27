@@ -7,7 +7,6 @@ import RequirementText from './RequirementText.vue'
 // props
 const props = defineProps({
     className: { required: false, type: String, default: 'c-input--large', }, // クラス名(default: 横幅いっぱい表示のクラス)
-    errorKey: { required: false, type: String, default: '' }, // TODO: 削除
     errorMessage: { required: false, type: String, default: '' }, // エラーメッセージ
     formId: { required: false, type: String, default: '', }, // ラベルとinputを紐付けるid
     inline: { required: false, type: Boolean, default: false, }, // エラーメッセージ不要な時にインライン化

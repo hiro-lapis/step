@@ -31,8 +31,8 @@ class CreateRequest extends FormRequest
             'achievement_time_type_id' => ['required', 'exists:achievement_time_types,id'],
             'time_count' => ['required', 'integer', 'min:1'],
             'sub_steps' => ['array', 'min:1'],
-            'sub_steps.*.name' => ['required', 'string', 'max:255'],
-            'sub_steps.*.detail' => ['required', 'string',],
+            'sub_steps.*.name' => ['nullable', 'string', 'max:255'],
+            'sub_steps.*.detail' => ['nullable', 'string', 'max:2000'],
         ];
 
         $achievement_time_type_id = $this->input('achievement_time_type_id');

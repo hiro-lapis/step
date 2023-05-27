@@ -10,6 +10,7 @@ import NumberInput from '../../Atoms/NumberInput.vue'
 import BorderLine from '../../Atoms/BorderLine.vue'
 import TextareaInput from '../../Atoms/TextareaInput.vue'
 import PresignedUploadInput from '../../Atoms/PresignedUploadInput.vue'
+import CommonModal from '../../Atoms/CommonModal.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { Step } from '../../../types/Step'
 import { useValidation } from '../../../composables/validation'
@@ -57,18 +58,24 @@ const errorMessage = reactive({
     category_id: '',
     achievement_time_type_id: '',
     time_count: '',
-    sub_steps: [ { name: '', detail: '' } ], // TODO: ドラッグしても追随するようにするか、エラーにしてドラッグできなくする
+    sub_steps: '',
+    // sub_steps: [ { name: '', detail: ''} ],
 })
-const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
+const validSubStepCounts = ref(0)
+const partialValidSubStepCounts = ref(0)
 
+const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
+const helpMode = ref(false)
 // computed
 const isEdit = computed(() => props.mode === 'edit')
-const pageTitle = computed(() => isEdit.value ? 'ステップ更新' : '新規作成')
+const pageTitle = computed(() => {
+    if (isEdit.value) {
+        return createData.is_active ? 'ステップ編集' : 'ステップ編集（下書き）'
+    }
+    return '新規作成'
+})
 const disableSubmit = computed(() => {
     const existError = Object.keys(errorMessage).every(element => {
-        if (element === 'sub_steps') {
-            return errorMessage[element].every(subStep => subStep.name.length === 0 && subStep.detail.length === 0)
-        }
         return errorMessage[element].length === 0
     })
     return !existError
@@ -82,15 +89,22 @@ const addSubStep = () => {
     createData.sub_steps.push(Object.assign({ sort_number: nextSortNumber }, initialSubStep))
 }
 const getValidTimeCountSpan = computed(() => timeType.getValidTimeCountSpan(createData.achievement_time_type_id))
-// 編集中のサブステップ情報を削除
-const popSubStep = (index: number) => {
-    if (createData.sub_steps.length === 1) return
-    createData.sub_steps.splice(index, 1)
-}
-
+const validSubStepCount = () => createData.sub_steps.filter(subStep => subStep.name.length > 0 && subStep.detail.length > 0).length
+const partialValidSubStepCount = () => createData.sub_steps.filter(subStep => {
+    return (subStep.name.length > 0 && subStep.detail.length === 0) || (subStep.name.length === 0 && subStep.detail.length > 0)
+}).length
 // ステップ新規作成
 const create = async () => {
     if (requestStore.isLoading) return
+    if (validSubStepCounts.value === 0) {
+        if (!confirm('サブステップが1つも登録されていませんが、このまま公開しますか？\n＊下書きで保存して、サブステップを入力してから公開するのをおすすめします。')) {
+            return
+        }
+    } else if (partialValidSubStepCounts.value > 0) {
+        if (!confirm('一部タイトルもしくは詳細が未入力のサブステップがあります。\nこのまま公開しますか？')) {
+            return
+        }
+    }
     requestStore.setLoading(true)
     await $repositories.step.store(createData).then(() => {
         messageStore.setMessage('ステップが登録されました')
@@ -102,7 +116,15 @@ const create = async () => {
 // ステップ更新
 const update = async () => {
     if (requestStore.isLoading) return
-    categorySelect.value?.validate()
+    if (validSubStepCounts.value === 0) {
+        if (!confirm('サブステップが1つも登録されていませんが、\nこのまま更新しますか？')) {
+            return
+        }
+    } else if (partialValidSubStepCounts.value > 0) {
+        if (!confirm('一部タイトルもしくは詳細が未入力のサブステップがあります。\nこのまま更新しますか？')) {
+            return
+        }
+    }
     requestStore.setLoading(true)
     await $repositories.step.update(createData).then((response) => {
         const operate = !createData.is_active && response.data.step.is_active ? '公開' : '更新'
@@ -185,11 +207,6 @@ const completion = async (subStepIndex: number, title: string, text: string) => 
 const subStepLabel = (index: number): string => {
     return `サブステップ タイトル${(index + 1).toString()}`
 }
-// 入力補完の説明を表示
-const displayComplectionExplain = () => {
-    messageStore.setMessage('*chat GPTサジェストを利用したい方は、サブステップのタイトルと詳細の概要を書いてアイコンをクリック、またはshift + Enter を押してください')
-}
-
 //　ステップの入力状態を見てバリデーション。エラーメッセージの表示を切り替え
 const validate = useValidation()
 // ステップ名
@@ -242,7 +259,14 @@ watch(
         errorMessage.time_count = result !== true ? result : ''
     }
 )
-
+// サブステップ
+watch(
+    () => createData.sub_steps,
+    () => {
+        validSubStepCounts.value = validSubStepCount()
+        partialValidSubStepCounts.value = partialValidSubStepCount()
+    }, { deep: true }
+)
 // 初期化
 const init = () => {
     // 編集画面か判定
@@ -307,6 +331,35 @@ const zoom = (per: number) => {
 <template>
     <BaseView className="p-container--steps-form">
         <template v-slot:content>
+                <CommonModal
+                    title="AI入力補完について"
+                    v-show="helpMode"
+                    @close="helpMode = false"
+                >
+                    <template v-slot:content>
+                        <div class="c-common-modal__how-to-use-ai__container">
+                            <div class="c-how-to-use-ai u-margin-b-1p">
+                                <p class="u-margin-b-2p">執筆中の文章を元にAIがサブステップの具体的な内容を考えてくれます。</p>
+                                <h3 class="u-font-b u-margin-b-1p">[利用手順]</h3>
+                                <div class="c-how-to-use-ai__body">
+                                    <div class="u-margin-b-2p">
+                                        <p class="u-font-b">①サブステップの名前を入力する</p>
+                                        <p>概要をサブステップのタイトル欄に「どんなことをするか」を入力します。</p>
+                                    </div>
+                                    <div class="u-margin-b-2p">
+                                        <p class="u-font-b">②サブステップの詳細を入力する</p>
+                                        <p>詳細に具体的な内容を入力します。1文字でも入力すれば、AIがタイトルから具体的な内容を考え、入力欄に反映してくれます。</p>
+                                    </div>
+                                    <div class="u-margin-b-2p">
+                                        <p  class="u-font-b">③AIが提案した内容を確認する</p>
+                                        <p>AIが提案してくれた内容を確認し、必要に応じて修正を加えます。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </CommonModal>
+
                 <div class="p-step-edit-form">
                     <!-- start:p-step-edit-form__container -->
                     <div class="p-step-edit-form__editor">
@@ -314,17 +367,15 @@ const zoom = (per: number) => {
                             <h2 class="c-title--step-edit">{{ pageTitle }}</h2>
                         </div>
                         <div class="p-step-edit-form__body">
-
                             <!-- ステップ名 -->
                             <div class="p-step-edit-form__element">
-                                <h2 class="c-title--step-form">1.アイキャッチ画像設定</h2>
+                                <h2 class="c-title--step-form">アイキャッチ画像</h2>
                             </div>
                             <div class="p-step-edit-form__element">
                                 <PresignedUploadInput
                                     ref="presignedUploadRef"
                                     :previewMode="false"
                                     optional
-                                    recommendSizeText="推奨サイズ: 1200x630px"
                                     label="サムネイル(10MBまで)"
                                     v-model:previewUrl="createData.image_url"
                                 />
@@ -367,6 +418,12 @@ const zoom = (per: number) => {
                                     </div>
                                 </div>
                             </template>
+                            <div class="p-step-edit-form__element u-margin-b-5p">
+                                <BorderLine />
+                            </div>
+                            <div class="p-step-edit-form__element">
+                                <h2 class="c-title--step-form">基本情報</h2>
+                            </div>
                             <!-- ステップ名 -->
                             <div class="p-step-edit-form__element">
                                 <TextInput
@@ -423,15 +480,21 @@ const zoom = (per: number) => {
                                     label="概要"
                                 />
                             </div>
-                            <!-- chat GPT入力補完について -->
-                            <div class="p-step-edit-form__explain-text">
-                                <span class="c-title--explain-completion" @click="displayComplectionExplain">＊chat GPTサジェストについて</span>
+                            <div class="p-step-edit-form__element u-margin-b-5p">
+                                <BorderLine />
                             </div>
+                            <div class="p-step-edit-form__element">
+                                <h2 class="c-title--step-form">ステップ詳細</h2>
+                            </div>
+
                             <!-- サブステップ -->
-                            <!-- v-model > 配列で、並び替えはしない。List＞並び替えをする.-->
-                            <!-- ghost-classでドラッグ中のスタイル指定（sortable.jsのクラスをつかえる） -->
                             <div class="p-step-edit-form__substep-form__list">
-                                <draggable :list="createData.sub_steps" item-key="sort_number" :animation=300 tag="div">
+                                <draggable :list="createData.sub_steps"
+                                    item-key="sort_number"
+                                    :animation=300
+                                    tag="div"
+                                    handle=".p-step-edit-form__substep-form-handle"
+                                >
                                     <!-- slotで囲う要素は１つにまとめる -->
                                     <template v-slot:item="{ element: subStep, index}">
                                         <div class="p-step-edit-form__substep-form-item">
@@ -448,36 +511,43 @@ const zoom = (per: number) => {
                                             <h3 class="c-title--edit-sub-step u-margin-b-2p">サブステップ{{ String(index + 1) }}</h3>
                                             <div class="p-step-edit-form__element">
                                                 <TextInput
+                                                    optional
+                                                    :errorMessage="''"
                                                     @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
                                                     v-model:value="subStep.name"
                                                     :label="'タイトル'"
                                                 >
-                                                <template v-slot:asideLabel>
-                                                    <i @click="popSubStep(index)" class="c-icon--delete fas fa-times-circle"></i>
-                                                </template>
                                                 </TextInput>
                                             </div>
                                             <div class="p-step-edit-form__element">
                                                 <TextareaInput
+                                                    optional
                                                     @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
                                                     v-model:value="subStep.detail"
                                                     :errorMessage="''"
                                                     height="200"
+                                                    counter
+                                                    :max="2000"
                                                     :label="'詳細'"
                                                     :formId="'substep-' + index.toString()"
                                                 >
-                                                <template v-slot:labelAside>
-                                                    <span
-                                                        @click="completion(index, subStep.name, subStep.detail)"
-                                                    >
-                                                        <img
-                                                            src="https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/logos/chat-GPT-logo.png"
-                                                            alt="chat-GPTロゴ"
-                                                            class="c-img--chat-gpt"
-                                                        >
-                                                    </span>
-                                                </template>
                                                 </TextareaInput>
+                                            </div>
+                                            <span class="c-message--annotation">*タイトル,詳細共に空欄のサブステップは保存されません</span>
+                                            <div class="p-step-edit-form__element">
+                                                <div class="p-step-edit-form__substep-form__completion">
+                                                    <button
+                                                        :disabled="!subStep.name || !subStep.detail"
+                                                        @click="completion(index, subStep.name, subStep.detail)"
+                                                        class="c-btn c-btn--large c-btn--completion"
+                                                    >
+                                                        AIを使って入力補完
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <!-- chat GPT入力補完について -->
+                                            <div class="p-step-edit-form__explain-text u-margin-b-2p">
+                                                <span class="c-title--explain-completion" @click="helpMode = !helpMode">入力補完機能の使い方</span>
                                             </div>
                                         </div>
                                     </template>
@@ -497,7 +567,7 @@ const zoom = (per: number) => {
                                         :disabled="disableSubmit"
                                         class="c-btn c-btn--large c-btn--create"
                                     >
-                                        登録
+                                        登録して公開
                                     </button>
                                 </template>
                                 <template v-else>

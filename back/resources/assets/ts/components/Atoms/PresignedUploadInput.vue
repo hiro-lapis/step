@@ -3,11 +3,12 @@ import { computed, inject, ref } from 'vue'
 import { Repositories } from '../../apis/repositoryFactory'
 import { repositoryKey } from '../../types/common/Injection'
 import RequirementText from './RequirementText.vue'
-import { useMessageInfoStore } from '../../store/globalStore'
+import { useMessageInfoStore, useRequestStore } from '../../store/globalStore'
 
 // utility
 const $repositories = inject<Repositories>(repositoryKey)!
 const messageStore = useMessageInfoStore()
+const requestStore = useRequestStore()
 // props
 const props = defineProps({
     label: { required: false, type: String, default: ''},
@@ -43,6 +44,7 @@ const handleFileSelect = async (event: Event) => {
 }
 // inputから入力された画像のアップロード
 const fileUpload = async (file: File) => {
+    requestStore.setLoading(true)
     try {
         const presignedUploadResponse = await $repositories.file.getSignedUrl(file.name)
         try {
@@ -57,6 +59,8 @@ const fileUpload = async (file: File) => {
         } catch (error) {
             console.error('アップロードエラー:', error)
             alert('ファイルのアップロードに失敗しました')
+        } finally {
+            requestStore.setLoading(false)
         }
     } catch (error) {
         throw new Error('署名付きURLの取得に失敗しました')
@@ -64,6 +68,7 @@ const fileUpload = async (file: File) => {
 }
 // cropperで切り抜いたblob画像のアップロード
 const blobUpload = async (blob: Blob, fileName: string, contentType: string): Promise<string> => {
+    requestStore.setLoading(true)
     try {
         const presignedResponse = await $repositories.file.getSignedUrl(fileName)
         await $repositories.file.blobUpload(presignedResponse.data.presigned_url, blob, fileName, contentType)
@@ -77,6 +82,8 @@ const blobUpload = async (blob: Blob, fileName: string, contentType: string): Pr
     } catch (error) {
         console.log(error)
         return ''
+    } finally {
+        requestStore.setLoading(false)
     }
 }
 

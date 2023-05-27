@@ -175,6 +175,7 @@ watch ([() => user.profile],
                 placeHoler="自己紹介文"
                 counter
                 height="200"
+                :max="1000"
             />
         </div>
         <div class="c-multi-page--profile__element">

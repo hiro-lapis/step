@@ -12,8 +12,12 @@
     &__head {
         margin-bottom: 30px;
     }
-    &__eye_catch {
+    &__eye-catch {
+        position: relative;
         margin-bottom: 30px;
+    }
+    &__challenge-status-icon {
+        display: inline-block;
     }
     &__action-ui {
         margin-bottom: 5px;
@@ -25,9 +29,25 @@
         display: flex;
         align-items: center;
         flex-wrap: wrap;
+        margin-bottom: 10px;
         > *:nth-child(n) { // SPの時は改行時のため余白設定
             margin-right: 10px;
-            margin-bottom: 10px;
+            @include pc() {
+                margin-bottom: 0;
+            }
+        }
+        > *:last-child {
+            margin-right: 0;
+            margin-bottom: 0;
+        }
+    }
+    &__time-information {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+        > *:nth-child(n) { // SPの時は改行時のため余白設定
+            margin-right: 10px;
             @include pc() {
                 margin-bottom: 0;
             }

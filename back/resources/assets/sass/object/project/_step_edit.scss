@@ -33,15 +33,6 @@
         align-items: center;
         margin-bottom: 30px;
     }
-    // &__achievement-time {
-    //     width: 100%;
-    //     display: flex;
-    //     align-items: end;
-    //     flex-direction: column;
-    //     @include mq() {
-    //         flex-direction: row;
-    //     }
-    // }
     &__substep-form__list { // サブステップ入力フォームラッパー
         width: 100%;
     }
@@ -87,6 +78,7 @@
         display: inline-block;
         width: 100%;
         margin-bottom: 20px;
+        text-decoration: underline;
     }
 }
 

@@ -40,7 +40,7 @@ class Step extends Model
         'is_cleared',
     ];
 
-    public const DEFAULT_IMAGE_URL = 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/ogp-default.png';
+    public const DEFAULT_IMAGE_URL = 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/step-card-default.png';
 
     /** mutator */
 

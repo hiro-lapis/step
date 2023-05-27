@@ -43,8 +43,6 @@ const register = async () => {
             requestStore.setLoading(false)
             userStore.setUser(response.data.user)
             userStore.setLogin(true)
-            // 一覧画面へ遷移
-            messageStore.setMessage('登録ありがとうございます！テーマ一覧へ遷移します。')
             router.push({ name: 'steps-list' })
         })
         .finally(() => {

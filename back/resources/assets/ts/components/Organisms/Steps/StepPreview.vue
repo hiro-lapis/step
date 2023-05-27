@@ -47,7 +47,6 @@ const { isChallengeStep, isChallengeSubStep } = useTypeGuards()
 const settedSummary = computed(() => {
     return props.step.summary !== null && props.step.summary !== ''
 })
-// TODO; ページレベルでAPIから取得した値をinject,他のコンポーネントもinjectしたものを使う
 const achievementTimeTypeName = computed(() => {
     switch (props.step.achievement_time_type_id) {
         case 1:
@@ -138,6 +137,18 @@ const clear = async (subStepId: number) => {
                 </div>
                 <!-- ステップ名 -->
                 <h1 class="c-title--step">{{ step.name }}</h1>
+                <div class="c-step-preview__challenge-status-icon">
+                    <template v-if="step.is_cleared!">
+                        <span class="c-icon--cleared__container">
+                            <span class="c-icon--cleared material-symbols-outlined">new_releases</span>クリア済
+                        </span>
+                    </template>
+                    <template v-if="step.is_challenged!">
+                        <span class="c-icon--challenged__container">
+                            <span class="c-icon--challenged material-symbols-outlined">brightness_empty</span>挑戦中
+                        </span>
+                    </template>
+                </div>
                 <div v-if="step.image_url" class="c-step-preview__eye-catch">
                     <img class="c-img--step" :src="step.image_url" alt="step-image" />
                 </div>
@@ -148,6 +159,9 @@ const clear = async (subStepId: number) => {
                     <template v-if="step.achievement_time_type_id && step.time_count">
                         <p>達成目安時間: {{ String(step.time_count) + achievementTimeTypeName  }}</p>
                     </template>
+                </div>
+                <!-- 投稿日、挑戦日時情報 -->
+                <div class="c-step-preview__time-information">
                     <!-- チャレンジ中のステップ情報表示時 -->
                     <template v-if="isChallengeStep(step)">
                         <div class="c-step-preview__challenge-information">
@@ -159,7 +173,7 @@ const clear = async (subStepId: number) => {
                     </template>
                     <!-- ステップ詳細画面 -->
                     <template v-if="!isChallengeStep(step) && !!step.created_at">
-                        <span>投稿日:{{ step.created_at }}</span>
+                        <p>投稿日:{{ step.created_at }}</p>
                     </template>
                 </div>
                 <div v-if="settedSummary" class="c-step-preview__summary">

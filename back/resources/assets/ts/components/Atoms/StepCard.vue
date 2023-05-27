@@ -61,12 +61,12 @@ const moveToEditPage = () => {
             classname="c-step-card__edit-icon"
             v-tooltip="{ content: editTooltopText, placement: 'bottom', tooltipClass: 'c-tooltip--gray' }"
         />
-        <span v-if="step!.is_cleared!" class="c-step-card__cleared-icon">
+        <span v-if="step.is_cleared!" class="c-step-card__cleared-icon">
             <span class="c-icon--cleared__container">
                 <span class="c-icon--cleared material-symbols-outlined">new_releases</span>クリア済
             </span>
         </span>
-        <span v-if="step!.is_challenged!" class="c-step-card__challenged-icon">
+        <span v-if="step.is_challenged!" class="c-step-card__challenged-icon">
             <span class="c-icon--challenged__container">
                 <span class="c-icon--challenged material-symbols-outlined">brightness_empty</span>挑戦中
             </span>

@@ -64,7 +64,6 @@
     // デザイン
     //// アカウント登録
     &--login,
-    &--update,
     &--reset,
     &--show,
     &--add-sub-step,
@@ -87,7 +86,9 @@
     &--send,
     &--edit,
     &--search,
-    &--create {
+    &--create,
+    &--completion,
+    &--update {
         background-color: #1da1f2;
         border: 1px solid #1da1f2;
         color: #fff;
@@ -287,4 +288,10 @@
     span {
         padding-top: 2px;
     }
+}
+
+.c-btn--common-modal-close {
+    @extend %c-btn;
+    @extend .c-btn--middle;
+    @extend .c-btn--save-draft;
 }

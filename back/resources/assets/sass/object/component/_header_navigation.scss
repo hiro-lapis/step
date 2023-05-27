@@ -43,7 +43,7 @@
     text-align: center;
     transition: opacity 0.3s ease-in, visibility 0.3s ease-in 0.3s;
     @include pc() {
-        justify-content: space-between; // TODO:ロゴができたら変更
+        justify-content: space-between;
     }
 }
 
@@ -65,8 +65,14 @@
         list-style: none;
         &-item {
             display: inline-block;
-            margin-right: 35px;
+            margin-right: 20px;
             border: none;
+            @include mq() { // タブレット時のフォントサイズ
+                font-size: 16px;
+            }
+            @include pc() {
+                font-size: 16px;
+            }
         }
         &-link {
             text-decoration: none;

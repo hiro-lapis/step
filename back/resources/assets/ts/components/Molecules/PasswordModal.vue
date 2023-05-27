@@ -106,7 +106,7 @@ watch(
 </script>
 
 <template>
-    <transition>
+    <Transition>
         <aside class="c-password-modal__container">
             <div @click="handleClose" class="c-password-modal__bg">
                 <div @click="stopClose" class="c-password-modal__form">
@@ -152,24 +152,17 @@ watch(
                 </div>
             </div>
         </aside>
-    </transition>
+    </Transition>
 </template>
 
 <style lang="scss" scoped>
-@import "../../../sass/foundation/_breakpoints.scss";
-
-.v-enter,
-.v-leave-to {
-    opacity: 0;
-}
-.v-enter-to,
-.v-leave {
-    opacity: 1;
-}
-.v-enter-active {
-    transition: opacity 400ms;
-}
+.v-enter-active,
 .v-leave-active {
-    transition: opacity 600ms;
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
