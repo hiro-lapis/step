@@ -40,7 +40,17 @@ const handleFileSelect = async (event: Event) => {
         alert('ファイルの拡張子は.jpegまたは.pngで、サイズは10MB以下である必要があります')
         return
     }
+    // ファイル名が拡張子をのぞいて半角英数字のみかチェック
+    if (!validateFileName(file.name)) {
+        alert('ファイル名は半角英数字で入力してください')
+        return
+    }
+
     await fileUpload(file)
+}
+const validateFileName = (fileName: string) => {
+    const regex = /^[a-zA-Z0-9]+$/
+    return regex.test(fileName.split('.')[0])
 }
 // inputから入力された画像のアップロード
 const fileUpload = async (file: File) => {
