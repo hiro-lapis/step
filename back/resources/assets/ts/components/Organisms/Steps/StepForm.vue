@@ -63,7 +63,12 @@ const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 
 // computed
 const isEdit = computed(() => props.mode === 'edit')
-const pageTitle = computed(() => isEdit.value ? 'ステップ更新' : '新規作成')
+const pageTitle = computed(() => {
+    if (isEdit.value) {
+        return createData.is_active ? 'ステップ編集' : 'ステップ編集（下書き）'
+    }
+    return '新規作成'
+})
 const disableSubmit = computed(() => {
     const existError = Object.keys(errorMessage).every(element => {
         if (element === 'sub_steps') {
