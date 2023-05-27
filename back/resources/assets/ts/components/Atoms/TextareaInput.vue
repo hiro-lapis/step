@@ -52,7 +52,10 @@ const emitKeyPressShiftEnter = () => {
                 </template>
                 <slot name="labelAside"></slot>
                 <template v-if="counter">
-                    <span class="c-textare__counter">({{ countText }} 文字)</span>
+                    <span
+                        class="c-textare__counter"
+                        :style="{ color: count > max ? 'red' : 'inherit' }"
+                    >({{ countText }} 文字)</span>
                 </template>
             </label>
         </template>
