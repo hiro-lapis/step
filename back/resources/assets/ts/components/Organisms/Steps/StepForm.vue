@@ -391,7 +391,7 @@ const zoom = (per: number) => {
                                             :src="cropperUrl"
                                             autoCrop
                                             :aspect-ratio="12 / 6.3"
-                                            :min-container-width="400"
+                                            :min-container-width="300"
                                             :min-container-height="300"
                                             :cropBoxResizable="false"
                                             :img-style="{ 'width': '400px', 'height': '300px' }"
