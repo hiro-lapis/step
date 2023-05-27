@@ -9,6 +9,7 @@ import { useMessageInfoStore, useRequestStore } from '../../store/globalStore'
 const $repositories = inject<Repositories>(repositoryKey)!
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
+const DEFULAT_IMAGE_URL = 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/step-card-default.png'
 // props
 const props = defineProps({
     label: { required: false, type: String, default: ''},
@@ -107,9 +108,9 @@ const validateFile = (file: File): boolean => {
     return true
 }
 const reset = () => {
-    previewUrl.value = ''
+    previewUrl.value = DEFULAT_IMAGE_URL
     fileInputRef.value!.value = ''
-    emit('update:previewUrl', '')
+    emit('update:previewUrl', DEFULAT_IMAGE_URL)
 }
 defineExpose({
     fileUpload,
