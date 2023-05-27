@@ -37,7 +37,9 @@ const update = () => {
                 .then(() => {
                     messageStore.setMessage('パスワードを変更しました')
                     // ログインページへ遷移
-                    router.push({ name: 'login' })
+                    setTimeout(() => {
+                        router.push({ name: 'login' })
+                    }, 2000)
                 })
                 .finally(() => {
                     requestStore.setLoading(false)
