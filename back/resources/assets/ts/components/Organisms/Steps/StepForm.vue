@@ -10,6 +10,7 @@ import NumberInput from '../../Atoms/NumberInput.vue'
 import BorderLine from '../../Atoms/BorderLine.vue'
 import TextareaInput from '../../Atoms/TextareaInput.vue'
 import PresignedUploadInput from '../../Atoms/PresignedUploadInput.vue'
+import CommonModal from '../../Atoms/CommonModal.vue'
 import { Repositories } from '../../../apis/repositoryFactory'
 import { Step } from '../../../types/Step'
 import { useValidation } from '../../../composables/validation'
@@ -60,7 +61,7 @@ const errorMessage = reactive({
     sub_steps: [ { name: '', detail: '' } ], // TODO: ドラッグしても追随するようにするか、エラーにしてドラッグできなくする
 })
 const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
-
+const helpMode = ref(false)
 // computed
 const isEdit = computed(() => props.mode === 'edit')
 const pageTitle = computed(() => {
@@ -307,6 +308,35 @@ const zoom = (per: number) => {
 <template>
     <BaseView className="p-container--steps-form">
         <template v-slot:content>
+                <CommonModal
+                    title="AI入力補完について"
+                    v-show="helpMode"
+                    @close="helpMode = false"
+                >
+                    <template v-slot:content>
+                        <div class="c-common-modal__how-to-use-ai__container">
+                            <div class="c-how-to-use-ai u-margin-b-1p">
+                                <p class="u-margin-b-2p">執筆中の文章を元にAIがサブステップの具体的な内容を考えてくれます。</p>
+                                <h3 class="u-font-b u-margin-b-1p">[利用手順]</h3>
+                                <div class="c-how-to-use-ai__body">
+                                    <div class="u-margin-b-2p">
+                                        <p class="u-font-b">①サブステップの名前を入力する</p>
+                                        <p>概要をサブステップのタイトル欄に「どんなことをするか」を入力します。</p>
+                                    </div>
+                                    <div class="u-margin-b-2p">
+                                        <p class="u-font-b">②サブステップの詳細を入力する</p>
+                                        <p>詳細に具体的な内容を入力します。1文字でも入力すれば、AIがタイトルから具体的な内容を考え、入力欄に反映してくれます。</p>
+                                    </div>
+                                    <div class="u-margin-b-2p">
+                                        <p  class="u-font-b">③AIが提案した内容を確認する</p>
+                                        <p>AIが提案してくれた内容を確認し、必要に応じて修正を加えます。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </CommonModal>
+
                 <div class="p-step-edit-form">
                     <!-- start:p-step-edit-form__container -->
                     <div class="p-step-edit-form__editor">
@@ -314,17 +344,15 @@ const zoom = (per: number) => {
                             <h2 class="c-title--step-edit">{{ pageTitle }}</h2>
                         </div>
                         <div class="p-step-edit-form__body">
-
                             <!-- ステップ名 -->
                             <div class="p-step-edit-form__element">
-                                <h2 class="c-title--step-form">1.アイキャッチ画像設定</h2>
+                                <h2 class="c-title--step-form">アイキャッチ画像</h2>
                             </div>
                             <div class="p-step-edit-form__element">
                                 <PresignedUploadInput
                                     ref="presignedUploadRef"
                                     :previewMode="false"
                                     optional
-                                    recommendSizeText="推奨サイズ: 1200x630px"
                                     label="サムネイル(10MBまで)"
                                     v-model:previewUrl="createData.image_url"
                                 />
@@ -367,6 +395,12 @@ const zoom = (per: number) => {
                                     </div>
                                 </div>
                             </template>
+                            <div class="p-step-edit-form__element u-margin-b-5p">
+                                <BorderLine />
+                            </div>
+                            <div class="p-step-edit-form__element">
+                                <h2 class="c-title--step-form">基本情報</h2>
+                            </div>
                             <!-- ステップ名 -->
                             <div class="p-step-edit-form__element">
                                 <TextInput
@@ -423,10 +457,13 @@ const zoom = (per: number) => {
                                     label="概要"
                                 />
                             </div>
-                            <!-- chat GPT入力補完について -->
-                            <div class="p-step-edit-form__explain-text">
-                                <span class="c-title--explain-completion" @click="displayComplectionExplain">＊chat GPTサジェストについて</span>
+                            <div class="p-step-edit-form__element u-margin-b-5p">
+                                <BorderLine />
                             </div>
+                            <div class="p-step-edit-form__element">
+                                <h2 class="c-title--step-form">ステップ詳細</h2>
+                            </div>
+
                             <!-- サブステップ -->
                             <!-- v-model > 配列で、並び替えはしない。List＞並び替えをする.-->
                             <!-- ghost-classでドラッグ中のスタイル指定（sortable.jsのクラスをつかえる） -->
@@ -448,6 +485,7 @@ const zoom = (per: number) => {
                                             <h3 class="c-title--edit-sub-step u-margin-b-2p">サブステップ{{ String(index + 1) }}</h3>
                                             <div class="p-step-edit-form__element">
                                                 <TextInput
+                                                    optional
                                                     @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
                                                     v-model:value="subStep.name"
                                                     :label="'タイトル'"
@@ -456,6 +494,7 @@ const zoom = (per: number) => {
                                             </div>
                                             <div class="p-step-edit-form__element">
                                                 <TextareaInput
+                                                    optional
                                                     @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
                                                     v-model:value="subStep.detail"
                                                     :errorMessage="''"
@@ -476,6 +515,22 @@ const zoom = (per: number) => {
                                                 </template>
                                                 </TextareaInput>
                                             </div>
+                                            <template v-if="subStep.name || subStep.detail">
+                                                <div class="p-step-edit-form__element">
+                                                    <div class="p-step-edit-form__substep-form__completion">
+                                                        <span
+                                                            @click="completion(index, subStep.name, subStep.detail)"
+                                                            class="c-btn c-btn--large c-btn--completion"
+                                                        >
+                                                            AIを使って入力補完
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <!-- chat GPT入力補完について -->
+                                                <div class="p-step-edit-form__explain-text">
+                                                    <span class="c-title--explain-completion" @click="helpMode = !helpMode">入力補完機能の使い方</span>
+                                                </div>
+                                            </template>
                                         </div>
                                     </template>
                                 </draggable>
@@ -494,7 +549,7 @@ const zoom = (per: number) => {
                                         :disabled="disableSubmit"
                                         class="c-btn c-btn--large c-btn--create"
                                     >
-                                        登録
+                                        登録して公開
                                     </button>
                                 </template>
                                 <template v-else>
