@@ -41,11 +41,12 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 // data
+const DEFULAT_IMAGE_URL = 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/step-card-default.png'
 const createData = reactive<Step>({
     id: 0,
     name: '',
     summary: '',
-    image_url: 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/ogp-default.png',
+    image_url: DEFULAT_IMAGE_URL,
     category_id: 0,
     achievement_time_type_id: 1,
     time_count: 1,
@@ -82,6 +83,7 @@ const disableSubmit = computed(() => {
 })
 const updateText = computed(() => createData.is_active ? '更新' : '更新して公開')
 const showDraft = computed(() => !isEdit.value || createData.is_active === false)
+const isInitialImageUrl = computed(() => createData.image_url === DEFULAT_IMAGE_URL || createData.image_url === '')
 // methods
 const addSubStep = () => {
     const initialSubStep = { name: '', detail: '', }
@@ -101,7 +103,7 @@ const create = async () => {
             return
         }
     } else if (partialValidSubStepCounts.value > 0) {
-        if (!confirm('一部タイトルもしくは詳細が未入力のサブステップがあります。\nこのまま公開しますか？')) {
+        if (!confirm('一部、タイトルもしくは詳細が未入力のサブステップがあります。\nこのまま公開しますか？')) {
             return
         }
     }
@@ -380,6 +382,11 @@ const zoom = (per: number) => {
                                     v-model:previewUrl="createData.image_url"
                                 />
                             </div>
+                            <div class="p-step-edit-form__element">
+                                <template v-if="isInitialImageUrl">
+                                    <span class="c-message--annotation">画像未設定の場合は、デフォルトの画像が設定されます</span>
+                                </template>
+                            </div>
                             <!-- 画像切り抜き(URLが設定されるのを待ってレンダリング) -->
                             <template v-if="cropperUrl">
                                 <div class="p-step-edit-form__element">
@@ -391,7 +398,7 @@ const zoom = (per: number) => {
                                             :src="cropperUrl"
                                             autoCrop
                                             :aspect-ratio="12 / 6.3"
-                                            :min-container-width="400"
+                                            :min-container-width="300"
                                             :min-container-height="300"
                                             :cropBoxResizable="false"
                                             :img-style="{ 'width': '400px', 'height': '300px' }"
@@ -476,6 +483,7 @@ const zoom = (per: number) => {
                                     :errorMessage="''"
                                     height="100"
                                     counter
+                                    optional
                                     :max="500"
                                     label="概要"
                                 />

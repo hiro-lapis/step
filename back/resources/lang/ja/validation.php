@@ -35,6 +35,7 @@ return [
     ],
     'boolean'              => ':attributeの値は true もしくは false のみ有効です',
     'confirmed'            => ':attributeを確認用と一致させてください',
+    'current_password'     => '現在のパスワードが正しくありません',
     'date'                 => ':attributeを有効な日付形式にしてください',
     'date_format'          => ':attributeを :format 書式と一致させてください',
     'different'            => ':attributeを :other と違うものにしてください',

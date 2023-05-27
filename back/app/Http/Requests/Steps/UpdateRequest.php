@@ -32,7 +32,7 @@ class UpdateRequest extends FormRequest
             'category_id' => ['required', 'exists:categories,id'],
             'achievement_time_type_id' => ['required', 'exists:achievement_time_types,id'],
             'time_count' => ['required', 'min:1'],
-            'sub_steps' => ['array', 'min:1'],
+            'sub_steps' => ['array',],
             'sub_steps.*.name' => ['nullable', 'string', 'max:255'],
             'sub_steps.*.detail' => ['nullable', 'string', 'max:2000'],
         ];

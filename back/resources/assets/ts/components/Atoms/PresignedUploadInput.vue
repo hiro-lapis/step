@@ -9,6 +9,7 @@ import { useMessageInfoStore, useRequestStore } from '../../store/globalStore'
 const $repositories = inject<Repositories>(repositoryKey)!
 const messageStore = useMessageInfoStore()
 const requestStore = useRequestStore()
+const DEFULAT_IMAGE_URL = 'https://graduation-step.s3.ap-northeast-1.amazonaws.com/public/common/step-card-default.png'
 // props
 const props = defineProps({
     label: { required: false, type: String, default: ''},
@@ -40,7 +41,17 @@ const handleFileSelect = async (event: Event) => {
         alert('ファイルの拡張子は.jpegまたは.pngで、サイズは10MB以下である必要があります')
         return
     }
+    // ファイル名が拡張子をのぞいて半角英数字のみかチェック
+    if (!validateFileName(file.name)) {
+        alert('ファイル名は半角英数字で入力してください')
+        return
+    }
+
     await fileUpload(file)
+}
+const validateFileName = (fileName: string) => {
+    const regex = /^[a-zA-Z0-9]+$/
+    return regex.test(fileName.split('.')[0])
 }
 // inputから入力された画像のアップロード
 const fileUpload = async (file: File) => {
@@ -97,9 +108,9 @@ const validateFile = (file: File): boolean => {
     return true
 }
 const reset = () => {
-    previewUrl.value = ''
+    previewUrl.value = DEFULAT_IMAGE_URL
     fileInputRef.value!.value = ''
-    emit('update:previewUrl', '')
+    emit('update:previewUrl', DEFULAT_IMAGE_URL)
 }
 defineExpose({
     fileUpload,

@@ -19,9 +19,9 @@ const tabs: Tabs = {
 }
 
 const tabGroups = [
-    { label: 'プロフィール編集', value: 'profileEdit', color: '#fff'},
+    { label: 'プロフ編集', value: 'profileEdit', color: '#fff'},
     { label: '登録済/下書きステップ', value: 'postedStep', color: 'red'},
-    { label: 'チャレンジ中ステップ', value: 'challengingStep', color: 'green'},
+    { label: '挑戦中ステップ', value: 'challengingStep', color: 'green'},
 ]
 
 // data

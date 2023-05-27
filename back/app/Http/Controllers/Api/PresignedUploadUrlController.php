@@ -54,20 +54,10 @@ class PresignedUploadUrlController extends Controller
         $file_path = $request->validated()['file_path'];
         /** @var FilesystemManager $s3 */
         $s3 = Storage::disk('s3');
-        $presigned_url = $s3->temporaryUrl($file_path, '+2 minutes');
+        // 公開設定に変更
+        $s3->setVisibility($file_path, 'public');
+        $presigned_url = $s3->url($file_path);
+        // $presigned_url = $s3->temporaryUrl($file_path, '+2 minutes');
         return response()->json(compact('presigned_url'));
-        // $s3Client = new S3Client([
-        //     'region' => config('filesystems.disks.s3.region'),
-        //     'version' => '2006-03-01',
-        //     'signature_version' => 'v4',
-        // ]);
-        // $cmd = $s3Client->getCommand('GetObject', [
-        //     'Bucket' => config('filesystems.disks.s3.bucket'),
-        //     'Key' => $file_path
-        // ]);
-        // $s3_cmd_result = $s3Client->createPresignedRequest($cmd, '+2 minutes');
-        // return response()->json([
-        //     'presigned_url' => (string)$s3_cmd_result->getUri()
-        // ]);
     }
 }

@@ -35,6 +35,7 @@ const isChallengeable = computed(() => {
     // ロード完了後で、ログイン中で、投稿ユーザーでなく、チャレンジ中でもないか
     return isInitialized.value
         && userStore.isLogin
+        && step.value.is_cleared === false
         && userStore.user.id !== step.value.user_id
         && inNotInChallenge.value
 })
