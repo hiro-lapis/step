@@ -28,7 +28,7 @@ const stopClose = (event: Event) => {
                 </template>
                     <slot name="content"></slot>
                     <div class="c-common-modal__btn-box">
-                        <button @click="handleClose">
+                        <button class="c-btn--common-modal-close" @click="handleClose">
                             {{ closeBtnText }}
                         </button>
                     </div>

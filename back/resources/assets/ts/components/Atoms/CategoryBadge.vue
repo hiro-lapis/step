@@ -28,7 +28,6 @@ const ColorTypes = {
     3: '#16A5DE', // blue
     4: '#87C041', // green
 }
-// TODO:DBのデータ使用
 const CategoryType = {
     1: 'プログラミング', // pink
     2: '英語', // lightGreen

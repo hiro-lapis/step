@@ -25,7 +25,6 @@ const ColorTypes = {
     3: '#16A5DE', // blue
     4: '#87C041', // green
 }
-// TODO:DBのデータ使用
 const AchivementTimeType = {
     1: '分',
     2: '時間',
