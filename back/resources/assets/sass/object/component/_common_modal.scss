@@ -1,0 +1,63 @@
+@charset "utf-8";
+/* ==========================================================================
+ Common Modal
+========================================================================== */
+@import "../../foundation/_variable";
+.c-common-modal {
+    &__container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: $common-modal-z-index;
+    }
+    &__bg {
+        background:#8080804d;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+    }
+    &__body {
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 100px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px 40px;
+        box-sizing: border-box;
+        background-color: #fff;
+        box-shadow: 0 0 8px #ccc;
+        border-radius: 1px;
+        @include mq() {
+            width: 400px;
+        }
+    }
+    &__title {
+        margin-bottom: 10px;
+        padding: 10px;
+        color: #494949;
+        border-left: solid 5px #ffec5c;
+    }
+
+    &__element {
+        margin-bottom: 15px;
+    }
+    &__btn-box {
+        display: flex;
+        padding: 0px;
+        justify-content: center;
+    }
+}
+
+.c-common-modal__how-to-use-ai {
+    &__container {
+        line-height: 1.5;
+    }
+    &__body {
+        letter-spacing: .8px;
+    }
+    &__title {
+        @extend .c-common-modal__title;
+    }
+}

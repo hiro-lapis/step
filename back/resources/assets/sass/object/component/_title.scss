@@ -33,6 +33,9 @@
         font-size: 30px;
     }
 }
+%c-title--font-weight--bold {
+    font-weight: bold;
+}
 
 .c-title {
     @extend %c-title;
@@ -156,6 +159,9 @@
 }
 
 .c-title--step-form {
-    @extend %c-title--font-size;
+    font-size: 20px;
+    @include mq() {
+        font-size: 25px;
+    }
     @extend %c-form-title;
 }
