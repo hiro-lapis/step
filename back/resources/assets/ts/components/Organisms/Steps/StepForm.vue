@@ -58,8 +58,12 @@ const errorMessage = reactive({
     category_id: '',
     achievement_time_type_id: '',
     time_count: '',
-    sub_steps: [ { name: '', detail: '' } ], // TODO: ドラッグしても追随するようにするか、エラーにしてドラッグできなくする
+    sub_steps: '',
+    // sub_steps: [ { name: '', detail: ''} ],
 })
+const validSubStepCounts = ref(0)
+const partialValidSubStepCounts = ref(0)
+
 const categorySelect = ref<InstanceType<typeof CategorySelectBox>>()
 const helpMode = ref(false)
 // computed
@@ -72,9 +76,6 @@ const pageTitle = computed(() => {
 })
 const disableSubmit = computed(() => {
     const existError = Object.keys(errorMessage).every(element => {
-        if (element === 'sub_steps') {
-            return errorMessage[element].every(subStep => subStep.name.length === 0 && subStep.detail.length === 0)
-        }
         return errorMessage[element].length === 0
     })
     return !existError
@@ -88,10 +89,22 @@ const addSubStep = () => {
     createData.sub_steps.push(Object.assign({ sort_number: nextSortNumber }, initialSubStep))
 }
 const getValidTimeCountSpan = computed(() => timeType.getValidTimeCountSpan(createData.achievement_time_type_id))
-
+const validSubStepCount = () => createData.sub_steps.filter(subStep => subStep.name.length > 0 && subStep.detail.length > 0).length
+const partialValidSubStepCount = () => createData.sub_steps.filter(subStep => {
+    return (subStep.name.length > 0 && subStep.detail.length === 0) || (subStep.name.length === 0 && subStep.detail.length > 0)
+}).length
 // ステップ新規作成
 const create = async () => {
     if (requestStore.isLoading) return
+    if (validSubStepCounts.value === 0) {
+        if (!confirm('サブステップが1つも登録されていませんが、このまま公開しますか？\n＊下書きで保存して、サブステップを入力してから公開するのをおすすめします。')) {
+            return
+        }
+    } else if (partialValidSubStepCounts.value > 0) {
+        if (!confirm('一部タイトルもしくは詳細が未入力のサブステップがあります。\nこのまま公開しますか？')) {
+            return
+        }
+    }
     requestStore.setLoading(true)
     await $repositories.step.store(createData).then(() => {
         messageStore.setMessage('ステップが登録されました')
@@ -103,7 +116,15 @@ const create = async () => {
 // ステップ更新
 const update = async () => {
     if (requestStore.isLoading) return
-    categorySelect.value?.validate()
+    if (validSubStepCounts.value === 0) {
+        if (!confirm('サブステップが1つも登録されていませんが、\nこのまま更新しますか？')) {
+            return
+        }
+    } else if (partialValidSubStepCounts.value > 0) {
+        if (!confirm('一部タイトルもしくは詳細が未入力のサブステップがあります。\nこのまま更新しますか？')) {
+            return
+        }
+    }
     requestStore.setLoading(true)
     await $repositories.step.update(createData).then((response) => {
         const operate = !createData.is_active && response.data.step.is_active ? '公開' : '更新'
@@ -186,11 +207,6 @@ const completion = async (subStepIndex: number, title: string, text: string) => 
 const subStepLabel = (index: number): string => {
     return `サブステップ タイトル${(index + 1).toString()}`
 }
-// 入力補完の説明を表示
-const displayComplectionExplain = () => {
-    messageStore.setMessage('*chat GPTサジェストを利用したい方は、サブステップのタイトルと詳細の概要を書いてアイコンをクリック、またはshift + Enter を押してください')
-}
-
 //　ステップの入力状態を見てバリデーション。エラーメッセージの表示を切り替え
 const validate = useValidation()
 // ステップ名
@@ -243,7 +259,14 @@ watch(
         errorMessage.time_count = result !== true ? result : ''
     }
 )
-
+// サブステップ
+watch(
+    () => createData.sub_steps,
+    () => {
+        validSubStepCounts.value = validSubStepCount()
+        partialValidSubStepCounts.value = partialValidSubStepCount()
+    }, { deep: true }
+)
 // 初期化
 const init = () => {
     // 編集画面か判定
@@ -489,6 +512,7 @@ const zoom = (per: number) => {
                                             <div class="p-step-edit-form__element">
                                                 <TextInput
                                                     optional
+                                                    :errorMessage="''"
                                                     @key-down:shift-enter="completion(index, subStep.name, subStep.detail)"
                                                     v-model:value="subStep.name"
                                                     :label="'タイトル'"
@@ -502,27 +526,29 @@ const zoom = (per: number) => {
                                                     v-model:value="subStep.detail"
                                                     :errorMessage="''"
                                                     height="200"
+                                                    counter
+                                                    :max="2000"
                                                     :label="'詳細'"
                                                     :formId="'substep-' + index.toString()"
                                                 >
                                                 </TextareaInput>
                                             </div>
-                                            <template v-if="subStep.name || subStep.detail">
-                                                <div class="p-step-edit-form__element">
-                                                    <div class="p-step-edit-form__substep-form__completion">
-                                                        <span
-                                                            @click="completion(index, subStep.name, subStep.detail)"
-                                                            class="c-btn c-btn--large c-btn--completion"
-                                                        >
-                                                            AIを使って入力補完
-                                                        </span>
-                                                    </div>
+                                            <span class="c-message--annotation">*タイトル,詳細共に空欄のサブステップは保存されません</span>
+                                            <div class="p-step-edit-form__element">
+                                                <div class="p-step-edit-form__substep-form__completion">
+                                                    <button
+                                                        :disabled="!subStep.name || !subStep.detail"
+                                                        @click="completion(index, subStep.name, subStep.detail)"
+                                                        class="c-btn c-btn--large c-btn--completion"
+                                                    >
+                                                        AIを使って入力補完
+                                                    </button>
                                                 </div>
-                                                <!-- chat GPT入力補完について -->
-                                                <div class="p-step-edit-form__explain-text">
-                                                    <span class="c-title--explain-completion" @click="helpMode = !helpMode">入力補完機能の使い方</span>
-                                                </div>
-                                            </template>
+                                            </div>
+                                            <!-- chat GPT入力補完について -->
+                                            <div class="p-step-edit-form__explain-text u-margin-b-2p">
+                                                <span class="c-title--explain-completion" @click="helpMode = !helpMode">入力補完機能の使い方</span>
+                                            </div>
                                         </div>
                                     </template>
                                 </draggable>

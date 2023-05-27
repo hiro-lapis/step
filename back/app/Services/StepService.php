@@ -53,9 +53,15 @@ class StepService
             // ステップ登録
             $step = $this->step_respository->create($params)->fresh();
             // 子ステップ登録
-            $sub_step_params = collect($params['sub_steps']);
+            $sub_step_params = collect($params['sub_steps'])
+                ->filter(fn ($sub_step) => !empty($sub_step['name']) || !empty($sub_step['detail']))
+                ->map(function ($sub_step) {
+                    return [
+                        'name' => $sub_step['name'] ?? '',
+                        'detail' => $sub_step['detail'] ?? '',
+                    ];
+                });
             $count = $this->step_respository->updateOrCreateSubSteps($step, $sub_step_params);
-            if ($count !== $sub_step_params->count()) throw new Exception('子ステップの更新件数が一致しません');
 
             // 一時ディレクトリの画像をステップのディレクトリに保存
             $this->uploadAndUpdateImageUrl($step, $image_url);
@@ -101,9 +107,15 @@ class StepService
             $this->step_respository->update($step, collect($params)->except('sub_steps')->toArray());
             // 子ステップ更新
             $this->sub_step_respository->forceDeleteByStepId($step->id);
-            $sub_step_params = collect($params['sub_steps']);
+            $sub_step_params = collect($params['sub_steps'])
+                ->filter(fn ($sub_step) => !empty($sub_step['name']) || !empty($sub_step['detail']))
+                ->map(function ($sub_step) {
+                    return [
+                        'name' => $sub_step['name'] ?? '',
+                        'detail' => $sub_step['detail'] ?? '',
+                    ];
+                });
             $count = $this->step_respository->updateOrCreateSubSteps($step, $sub_step_params);
-            if ($count !== $sub_step_params->count()) throw new Exception('子ステップの更新件数が一致しません');
             // 画像情報更新
             $this->uploadAndUpdateImageUrl($step, $image_url);
             DB::commit();

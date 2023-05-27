@@ -289,3 +289,9 @@
         padding-top: 2px;
     }
 }
+
+.c-btn--common-modal-close {
+    @extend %c-btn;
+    @extend .c-btn--middle;
+    @extend .c-btn--save-draft;
+}

@@ -53,6 +53,10 @@
 .c-common-modal__how-to-use-ai {
     &__container {
         line-height: 1.5;
+        font-size: 14px;
+        @include mq() {
+            font-size: 16px;
+        }
     }
     &__body {
         letter-spacing: .8px;

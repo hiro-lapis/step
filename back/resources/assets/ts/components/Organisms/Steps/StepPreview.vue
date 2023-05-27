@@ -47,7 +47,6 @@ const { isChallengeStep, isChallengeSubStep } = useTypeGuards()
 const settedSummary = computed(() => {
     return props.step.summary !== null && props.step.summary !== ''
 })
-// TODO; ページレベルでAPIから取得した値をinject,他のコンポーネントもinjectしたものを使う
 const achievementTimeTypeName = computed(() => {
     switch (props.step.achievement_time_type_id) {
         case 1:
