@@ -476,6 +476,7 @@ const zoom = (per: number) => {
                                     :errorMessage="''"
                                     height="100"
                                     counter
+                                    optional
                                     :max="500"
                                     label="概要"
                                 />
