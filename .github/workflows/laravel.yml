@@ -36,20 +36,29 @@ jobs:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
         php-version: '8.1'
-    - uses: actions/checkout@v3
-    # - name: cache vendor
-    #   uses: actions/cache@v2
+    - name: Make Composer Cache Directory
+      id: composer-cache # cache-name
+      uses: actions/cache@v3
+      with:
+        path: ./back/vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-
+    # - name: Make Node modules Cache Directory
+    #   id: npm-cache
+    #   uses: actions/checkout@v3
     #   with:
-    #     path: ./back/vendor
-    #     key: ${{ runner.os }}-vendor-${{ hashFiles('**/composer.lock') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-vendor-
+    #     path: ./back/node_modules
+    #     key: ${{ runner.os }}-node-${{ hashFiles('**/.node-version') }}-${{ hashFiles('**/package-lock.json') }}
+    - uses: actions/checkout@v3
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       working-directory: ./back
     - name: Install Dependencies
-      # if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.composer-cache.outputs.cache-hit != 'true' # if composer.local has changed
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      working-directory: ./back
+    - name: composer dump autoload # replace of install, make autoload file
+      run: composer dump-autoload
       working-directory: ./back
     - name: Generate key
       run: php artisan key:generate
@@ -60,8 +69,12 @@ jobs:
     - name: migrate
       run: php artisan migrate
       working-directory: ./back
-    - name: frontend build
-      run: npm install && npm run dev
+    - name: Frontend setup if not cache-hit
+      # if: steps.npm-cache.outputs.cache-hit != "true"
+      run: npm ci
+      working-directory: ./back
+    - name: Frontend build
+      run: npm run dev
       working-directory: ./back
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/phpunit
